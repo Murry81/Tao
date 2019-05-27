@@ -1,0 +1,77 @@
+﻿@using TaoDatabaseService
+@using TaoWebApplication.Models
+@model TartalomjegyzekModel
+
+@{
+    ViewBag.Title = "Home Page";
+    var currentPage = @Model.Pages.FirstOrDefault(p => p.Name == "Tartalomjegyzek"); 
+    }
+
+<div class="jumbotron">
+    <h3>@currentPage.CaptionText</h3>
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <h3>A Társaság azonosító adatai</h3>
+    </div>
+</div>
+@foreach (var field in @Model.PageDescriptors)
+{
+
+    var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
+    var color = fieldDescriptor.IsEditable ? "yellow" : "white";
+    <div class="row">
+        <div class="col-md-1">
+            @fieldDescriptor.Title <br />
+        </div>
+
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
+            {
+
+                var MyList = new List<SelectListItem>();
+                foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
+                {
+                    MyList.Add(new SelectListItem { Value = item, Text = item });
+                }
+
+
+                @Html.DropDownListFor(m => fieldDescriptor, MyList, new { style = "width:100%; background-color:yellow;" })
+
+            }
+            else
+            {
+                <input id="@fieldDescriptor.Id" type="text" style="width:100%; background-color:@color" value="@fieldDescriptor.FieldValue" /> <br />
+            }
+        </div>
+
+        <div class="col-md-4">
+            @field.Description <br />
+        </div>
+
+    </div>
+}
+
+<br /><br />
+
+<div class="row">
+    <div class="col-md-1">
+        <h4>Lap</h4>
+    </div>
+    <div class="col-md-3">
+        <h4>Megnevezés</h4>
+    </div>
+</div>
+
+@foreach (var page in Model.Pages)
+{
+    <div class="row">
+        <div class="col-md-1">
+            @page.Number <br />
+        </div>
+        <div class="col-md-3">
+                @page.Title <br />
+       </div>
+    </div>
+}

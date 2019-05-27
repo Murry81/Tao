@@ -1,0 +1,540 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CustomerNameTaoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Line1" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Line2" Type="nvarchar" MaxLength="250" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="County" Type="nvarchar" MaxLength="250" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ContactDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="Email2" Type="nvarchar" MaxLength="250" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="250" />
+          <Property Name="Phone2" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="TaxNumber" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="ContactDetailId" Type="int" />
+        </EntityType>
+        <EntityType Name="FieldDescriptor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IsEditable" Type="bit" Nullable="false" />
+          <Property Name="IsCalculated" Type="bit" Nullable="false" />
+          <Property Name="IsMandatory" Type="bit" Nullable="false" />
+          <Property Name="AnykId" Type="nvarchar" MaxLength="250" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+          <Property Name="Caption" Type="nvarchar" MaxLength="250" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeOptions" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="FieldValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FieldDescriptorId" Type="int" Nullable="false" />
+          <Property Name="DecimalValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="StringValue" Type="nvarchar(max)" />
+          <Property Name="SessionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Page">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+          <Property Name="Number" Type="nchar" MaxLength="10" />
+          <Property Name="CaptionText" Type="nvarchar" MaxLength="250" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PageDescriptor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Order" Type="int" Nullable="false" />
+          <Property Name="OrderCharacter" Type="nchar" MaxLength="10" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ValueId" Type="int" />
+          <Property Name="PageId" Type="int" Nullable="false" />
+          <Property Name="SectionGroup" Type="int" />
+          <Property Name="FieldId" Type="int" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartDateTime" Type="datetime" Nullable="false" />
+          <Property Name="LastModifyDate" Type="datetime" Nullable="false" />
+          <Property Name="Creator" Type="nvarchar" MaxLength="250" />
+          <Property Name="LastModifer" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_Address_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Address" Type="Self.Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_ContactDetail">
+          <End Role="ContactDetail" Type="Self.ContactDetail" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="ContactDetailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldValue_FieldDescriptor1">
+          <End Role="FieldDescriptor" Type="Self.FieldDescriptor" Multiplicity="1" />
+          <End Role="FieldValue" Type="Self.FieldValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldValue">
+              <PropertyRef Name="FieldDescriptorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldValue_Session">
+          <End Role="Session" Type="Self.Session" Multiplicity="1" />
+          <End Role="FieldValue" Type="Self.FieldValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldValue">
+              <PropertyRef Name="SessionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PageDescriptor_FieldDescriptor">
+          <End Role="FieldDescriptor" Type="Self.FieldDescriptor" Multiplicity="0..1" />
+          <End Role="PageDescriptor" Type="Self.PageDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PageDescriptor">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PageDescriptor_Pages">
+          <End Role="Page" Type="Self.Page" Multiplicity="1" />
+          <End Role="PageDescriptor" Type="Self.PageDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Page">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PageDescriptor">
+              <PropertyRef Name="PageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CustomerNameTaoModelStoreContainer">
+          <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContactDetail" EntityType="Self.ContactDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldDescriptor" EntityType="Self.FieldDescriptor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldValue" EntityType="Self.FieldValue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Page" EntityType="Self.Page" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PageDescriptor" EntityType="Self.PageDescriptor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Session" EntityType="Self.Session" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Address_Customer" Association="Self.FK_Address_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Address" EntitySet="Address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_ContactDetail" Association="Self.FK_Customer_ContactDetail">
+            <End Role="ContactDetail" EntitySet="ContactDetail" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldValue_FieldDescriptor1" Association="Self.FK_FieldValue_FieldDescriptor1">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="FieldValue" EntitySet="FieldValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldValue_Session" Association="Self.FK_FieldValue_Session">
+            <End Role="Session" EntitySet="Session" />
+            <End Role="FieldValue" EntitySet="FieldValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PageDescriptor_FieldDescriptor" Association="Self.FK_PageDescriptor_FieldDescriptor">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="PageDescriptor" EntitySet="PageDescriptor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PageDescriptor_Pages" Association="Self.FK_PageDescriptor_Pages">
+            <End Role="Page" EntitySet="Page" />
+            <End Role="PageDescriptor" EntitySet="PageDescriptor" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CustomerNameTaoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CustomerNameTaoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Address" EntityType="CustomerNameTaoModel.Address" />
+          <EntitySet Name="ContactDetail" EntityType="CustomerNameTaoModel.ContactDetail" />
+          <EntitySet Name="Customer" EntityType="CustomerNameTaoModel.Customer" />
+          <EntitySet Name="FieldValue" EntityType="CustomerNameTaoModel.FieldValue" />
+          <EntitySet Name="Page" EntityType="CustomerNameTaoModel.Page" />
+          <EntitySet Name="Session" EntityType="CustomerNameTaoModel.Session" />
+          <AssociationSet Name="FK_Address_Customer" Association="CustomerNameTaoModel.FK_Address_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Address" EntitySet="Address" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_ContactDetail" Association="CustomerNameTaoModel.FK_Customer_ContactDetail">
+            <End Role="ContactDetail" EntitySet="ContactDetail" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldValue_Session" Association="CustomerNameTaoModel.FK_FieldValue_Session">
+            <End Role="Session" EntitySet="Session" />
+            <End Role="FieldValue" EntitySet="FieldValue" />
+          </AssociationSet>
+          <EntitySet Name="FieldDescriptor" EntityType="CustomerNameTaoModel.FieldDescriptor" />
+          <EntitySet Name="PageDescriptor" EntityType="CustomerNameTaoModel.PageDescriptor" />
+          <AssociationSet Name="FK_FieldValue_FieldDescriptor1" Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="FieldValue" EntitySet="FieldValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PageDescriptor_FieldDescriptor" Association="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="PageDescriptor" EntitySet="PageDescriptor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PageDescriptor_Pages" Association="CustomerNameTaoModel.FK_PageDescriptor_Pages">
+            <End Role="Page" EntitySet="Page" />
+            <End Role="PageDescriptor" EntitySet="PageDescriptor" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Line1" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Line2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="County" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="CustomerNameTaoModel.FK_Address_Customer" FromRole="Address" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="ContactDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Email2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Phone2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="CustomerNameTaoModel.FK_Customer_ContactDetail" FromRole="ContactDetail" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TaxNumber" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ContactDetailId" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="CustomerNameTaoModel.FK_Address_Customer" FromRole="Customer" ToRole="Address" />
+          <NavigationProperty Name="ContactDetail" Relationship="CustomerNameTaoModel.FK_Customer_ContactDetail" FromRole="Customer" ToRole="ContactDetail" />
+        </EntityType>
+        <EntityType Name="FieldValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
+          <Property Name="DecimalValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SessionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="FieldValue" ToRole="Session" />
+          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldValue" ToRole="FieldDescriptor" />
+        </EntityType>
+        <EntityType Name="Page">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Number" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="CaptionText" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_Pages" FromRole="Page" ToRole="PageDescriptor" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Creator" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="LastModifer" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="Session" ToRole="FieldValue" />
+        </EntityType>
+        <Association Name="FK_Address_Customer">
+          <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.Address" Role="Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Address">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_ContactDetail">
+          <End Type="CustomerNameTaoModel.ContactDetail" Role="ContactDetail" Multiplicity="0..1" />
+          <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactDetail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="ContactDetailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldValue_Session">
+          <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldValue">
+              <PropertyRef Name="SessionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FieldDescriptor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsEditable" Type="Boolean" Nullable="false" />
+          <Property Name="IsCalculated" Type="Boolean" Nullable="false" />
+          <Property Name="IsMandatory" Type="Boolean" Nullable="false" />
+          <Property Name="AnykId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeOptions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldDescriptor" ToRole="FieldValue" />
+          <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" FromRole="FieldDescriptor" ToRole="PageDescriptor" />
+        </EntityType>
+        <EntityType Name="PageDescriptor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Order" Type="Int32" Nullable="false" />
+          <Property Name="OrderCharacter" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ValueId" Type="Int32" />
+          <Property Name="PageId" Type="Int32" Nullable="false" />
+          <Property Name="SectionGroup" Type="Int32" />
+          <Property Name="FieldId" Type="Int32" />
+          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" FromRole="PageDescriptor" ToRole="FieldDescriptor" />
+          <NavigationProperty Name="Page" Relationship="CustomerNameTaoModel.FK_PageDescriptor_Pages" FromRole="PageDescriptor" ToRole="Page" />
+        </EntityType>
+        <Association Name="FK_FieldValue_FieldDescriptor1">
+          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldValue">
+              <PropertyRef Name="FieldDescriptorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PageDescriptor_FieldDescriptor">
+          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="0..1" />
+          <End Type="CustomerNameTaoModel.PageDescriptor" Role="PageDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PageDescriptor">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PageDescriptor_Pages">
+          <End Type="CustomerNameTaoModel.Page" Role="Page" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.PageDescriptor" Role="PageDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Page">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PageDescriptor">
+              <PropertyRef Name="PageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CustomerNameTaoModelStoreContainer" CdmEntityContainer="CustomerNameTaoEntities">
+          <EntitySetMapping Name="Address">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="Line2" ColumnName="Line2" />
+                <ScalarProperty Name="Line1" ColumnName="Line1" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContactDetail">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.ContactDetail">
+              <MappingFragment StoreEntitySet="ContactDetail">
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email2" ColumnName="Email2" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="ContactDetailId" ColumnName="ContactDetailId" />
+                <ScalarProperty Name="TaxNumber" ColumnName="TaxNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldValue">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldValue">
+              <MappingFragment StoreEntitySet="FieldValue">
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
+                <ScalarProperty Name="DecimalValue" ColumnName="DecimalValue" />
+                <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Page">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.Page">
+              <MappingFragment StoreEntitySet="Page">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CaptionText" ColumnName="CaptionText" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Session">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.Session">
+              <MappingFragment StoreEntitySet="Session">
+                <ScalarProperty Name="LastModifer" ColumnName="LastModifer" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldDescriptor">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldDescriptor">
+              <MappingFragment StoreEntitySet="FieldDescriptor">
+                <ScalarProperty Name="TypeOptions" ColumnName="TypeOptions" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Caption" ColumnName="Caption" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="AnykId" ColumnName="AnykId" />
+                <ScalarProperty Name="IsMandatory" ColumnName="IsMandatory" />
+                <ScalarProperty Name="IsCalculated" ColumnName="IsCalculated" />
+                <ScalarProperty Name="IsEditable" ColumnName="IsEditable" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PageDescriptor">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.PageDescriptor">
+              <MappingFragment StoreEntitySet="PageDescriptor">
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="SectionGroup" ColumnName="SectionGroup" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+                <ScalarProperty Name="ValueId" ColumnName="ValueId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OrderCharacter" ColumnName="OrderCharacter" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

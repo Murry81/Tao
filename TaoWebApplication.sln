@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoWebApplication", "TaoWebApplication\TaoWebApplication.csproj", "{B70B9677-2C9F-4061-8A2B-6670D8909E44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoWebApplication.Tests", "TaoWebApplication.Tests\TaoWebApplication.Tests.csproj", "{B7D62E77-099B-46BF-BD7B-3CE4B4183A50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoDatabaseService", "TaoDatabaseService\TaoDatabaseService.csproj", "{53F25495-84B0-4E2B-97EE-D7F849584C69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B70B9677-2C9F-4061-8A2B-6670D8909E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B70B9677-2C9F-4061-8A2B-6670D8909E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B70B9677-2C9F-4061-8A2B-6670D8909E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B70B9677-2C9F-4061-8A2B-6670D8909E44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D62E77-099B-46BF-BD7B-3CE4B4183A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D62E77-099B-46BF-BD7B-3CE4B4183A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D62E77-099B-46BF-BD7B-3CE4B4183A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D62E77-099B-46BF-BD7B-3CE4B4183A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4EF3E102-AD68-473C-B12D-1E276E6E1F29}
+	EndGlobalSection
+EndGlobal
