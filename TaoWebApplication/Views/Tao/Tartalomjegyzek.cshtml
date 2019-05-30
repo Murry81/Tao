@@ -35,19 +35,17 @@
                 @if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
                 {
 
-                    var MyList = new List<SelectListItem>();
+                    var comboItems = new List<SelectListItem>();
                     foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
                     {
-                        MyList.Add(new SelectListItem { Value = item, Text = item });
+                        comboItems.Add(new SelectListItem { Value = item, Text = item });
                     }
 
-                    @Html.DropDownListFor(m => fieldDescriptor, MyList, new { @id = fieldDescriptor.Id, @Name =fieldDescriptor.Id,  style = "width:100%; background-color:yellow;" })
+                    @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.FieldValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id,  style = $"width:100%; background-color:{@color};" })
                 }
                 else
                 {
-                    <!--   @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, name = fieldDescriptor.Id, style = "width:100%; background-color:yellow;" })-->
-
-                    <input id="@fieldDescriptor.Id" name="@fieldDescriptor.Id" type="text" style="width:100%; background-color:@color" value="@fieldDescriptor.FieldValue" /> <br />
+                       @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
                 }
             </div>
 
