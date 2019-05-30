@@ -53,6 +53,10 @@ namespace TaoDatabaseService.Mappers
                 result.FieldValueId = currentValue.Id;
                 result.FieldValue = fieldDescriptor.TypeName == "numeric" ? (object)currentValue.DecimalValue : currentValue.StringValue;
             }
+            else
+            {
+                result.FieldValueId = null;
+            }
             return result;
         }
     }

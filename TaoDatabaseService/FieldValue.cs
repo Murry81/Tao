@@ -14,13 +14,13 @@ namespace TaoDatabaseService
     
     public partial class FieldValue
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public int FieldDescriptorId { get; set; }
         public Nullable<decimal> DecimalValue { get; set; }
         public string StringValue { get; set; }
         public int SessionId { get; set; }
     
-        public virtual Session Session { get; set; }
         public virtual FieldDescriptor FieldDescriptor { get; set; }
+        public virtual Session Session { get; set; }
     }
 }

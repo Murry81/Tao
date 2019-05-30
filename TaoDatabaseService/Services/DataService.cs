@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using TaoDatabaseService.Contracts;
 using TaoDatabaseService.Interfaces;
@@ -56,9 +59,47 @@ namespace TaoDatabaseService.Services
             return result;
         }
 
+        public List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, int sessionId)
+        {
+            var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldIds.Contains(f.Id));
+            var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId).ToList();
+
+            var result = new List<FieldDescriptorDto>();
+
+            foreach (var field in fieldDescriptor)
+            {
+                result.Add(field.ToFieldDescriptorDto(fieldValues.ToList()));
+            }
+            return result;
+        }
+
         public void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, int sessionId)
         {
+            foreach(var field in updatedFields)
+            {
+                var myEntity = new FieldValue
+                {
+                    FieldDescriptorId = field.Id,
+                    Id = field.FieldValueId.HasValue ? field.FieldValueId.Value : Guid.NewGuid(),
+                    SessionId = sessionId
+                };
 
+                //set up value
+                if(field.TypeName != "numeric")
+                {
+                    myEntity.StringValue = field.FieldValue.ToString();
+                }
+                else
+                {
+                    if (decimal.TryParse(field.FieldValue.ToString(), out var decimalValue))
+                    {
+                        myEntity.DecimalValue = decimalValue;
+                    }
+                }
+
+                entities.FieldValue.AddOrUpdate(myEntity);
+            }
+            entities.SaveChanges();
         }
     }
 }

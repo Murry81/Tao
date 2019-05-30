@@ -14,7 +14,7 @@ namespace TaoDatabaseService.Contracts
         public bool IsMandatory { get; set; }
         public string Title { get; set; }
         public string Caption { get; set; }
-        public int FieldValueId { get; set; }
+        public Guid? FieldValueId { get; set; }
         public object FieldValue { get; set; }
         public string TypeName { get; set; }
         public string TypeOptions { get; set; }

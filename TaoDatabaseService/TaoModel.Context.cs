@@ -28,10 +28,10 @@ namespace TaoDatabaseService
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<ContactDetail> ContactDetail { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<FieldValue> FieldValue { get; set; }
         public virtual DbSet<Page> Page { get; set; }
         public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<FieldDescriptor> FieldDescriptor { get; set; }
         public virtual DbSet<PageDescriptor> PageDescriptor { get; set; }
+        public virtual DbSet<FieldValue> FieldValue { get; set; }
     }
 }

@@ -15,5 +15,6 @@ namespace TaoDatabaseService.Interfaces
 
         void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, int sessionId);
 
+        List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, int sessionId);
     }
 }

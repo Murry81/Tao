@@ -55,7 +55,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="FieldDescriptorId" Type="int" Nullable="false" />
           <Property Name="DecimalValue" Type="decimal" Precision="18" Scale="2" />
           <Property Name="StringValue" Type="nvarchar(max)" />
@@ -208,7 +208,6 @@
           <EntitySet Name="Address" EntityType="CustomerNameTaoModel.Address" />
           <EntitySet Name="ContactDetail" EntityType="CustomerNameTaoModel.ContactDetail" />
           <EntitySet Name="Customer" EntityType="CustomerNameTaoModel.Customer" />
-          <EntitySet Name="FieldValue" EntityType="CustomerNameTaoModel.FieldValue" />
           <EntitySet Name="Page" EntityType="CustomerNameTaoModel.Page" />
           <EntitySet Name="Session" EntityType="CustomerNameTaoModel.Session" />
           <AssociationSet Name="FK_Address_Customer" Association="CustomerNameTaoModel.FK_Address_Customer">
@@ -219,16 +218,8 @@
             <End Role="ContactDetail" EntitySet="ContactDetail" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK_FieldValue_Session" Association="CustomerNameTaoModel.FK_FieldValue_Session">
-            <End Role="Session" EntitySet="Session" />
-            <End Role="FieldValue" EntitySet="FieldValue" />
-          </AssociationSet>
           <EntitySet Name="FieldDescriptor" EntityType="CustomerNameTaoModel.FieldDescriptor" />
           <EntitySet Name="PageDescriptor" EntityType="CustomerNameTaoModel.PageDescriptor" />
-          <AssociationSet Name="FK_FieldValue_FieldDescriptor1" Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1">
-            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
-            <End Role="FieldValue" EntitySet="FieldValue" />
-          </AssociationSet>
           <AssociationSet Name="FK_PageDescriptor_FieldDescriptor" Association="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor">
             <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
@@ -236,6 +227,15 @@
           <AssociationSet Name="FK_PageDescriptor_Pages" Association="CustomerNameTaoModel.FK_PageDescriptor_Pages">
             <End Role="Page" EntitySet="Page" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
+          </AssociationSet>
+          <EntitySet Name="FieldValue" EntityType="CustomerNameTaoModel.FieldValue" />
+          <AssociationSet Name="FK_FieldValue_FieldDescriptor1" Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="FieldValue" EntitySet="FieldValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldValue_Session" Association="CustomerNameTaoModel.FK_FieldValue_Session">
+            <End Role="Session" EntitySet="Session" />
+            <End Role="FieldValue" EntitySet="FieldValue" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Address">
@@ -273,18 +273,6 @@
           <Property Name="ContactDetailId" Type="Int32" />
           <NavigationProperty Name="Address" Relationship="CustomerNameTaoModel.FK_Address_Customer" FromRole="Customer" ToRole="Address" />
           <NavigationProperty Name="ContactDetail" Relationship="CustomerNameTaoModel.FK_Customer_ContactDetail" FromRole="Customer" ToRole="ContactDetail" />
-        </EntityType>
-        <EntityType Name="FieldValue">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
-          <Property Name="DecimalValue" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SessionId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="FieldValue" ToRole="Session" />
-          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldValue" ToRole="FieldDescriptor" />
         </EntityType>
         <EntityType Name="Page">
           <Key>
@@ -332,18 +320,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_FieldValue_Session">
-          <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="1" />
-          <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Session">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="FieldValue">
-              <PropertyRef Name="SessionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="FieldDescriptor">
           <Key>
             <PropertyRef Name="Id" />
@@ -357,8 +333,8 @@
           <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TypeOptions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldDescriptor" ToRole="FieldValue" />
           <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" FromRole="FieldDescriptor" ToRole="PageDescriptor" />
+          <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldDescriptor" ToRole="FieldValue" />
         </EntityType>
         <EntityType Name="PageDescriptor">
           <Key>
@@ -375,18 +351,6 @@
           <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" FromRole="PageDescriptor" ToRole="FieldDescriptor" />
           <NavigationProperty Name="Page" Relationship="CustomerNameTaoModel.FK_PageDescriptor_Pages" FromRole="PageDescriptor" ToRole="Page" />
         </EntityType>
-        <Association Name="FK_FieldValue_FieldDescriptor1">
-          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
-          <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FieldDescriptor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="FieldValue">
-              <PropertyRef Name="FieldDescriptorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PageDescriptor_FieldDescriptor">
           <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="0..1" />
           <End Type="CustomerNameTaoModel.PageDescriptor" Role="PageDescriptor" Multiplicity="*" />
@@ -408,6 +372,42 @@
             </Principal>
             <Dependent Role="PageDescriptor">
               <PropertyRef Name="PageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FieldValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
+          <Property Name="DecimalValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SessionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldValue" ToRole="FieldDescriptor" />
+          <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="FieldValue" ToRole="Session" />
+        </EntityType>
+        <Association Name="FK_FieldValue_FieldDescriptor1">
+          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldValue">
+              <PropertyRef Name="FieldDescriptorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldValue_Session">
+          <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldValue">
+              <PropertyRef Name="SessionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -448,17 +448,6 @@
                 <ScalarProperty Name="ContactDetailId" ColumnName="ContactDetailId" />
                 <ScalarProperty Name="TaxNumber" ColumnName="TaxNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FieldValue">
-            <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldValue">
-              <MappingFragment StoreEntitySet="FieldValue">
-                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
-                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
-                <ScalarProperty Name="DecimalValue" ColumnName="DecimalValue" />
-                <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -510,6 +499,17 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="OrderCharacter" ColumnName="OrderCharacter" />
                 <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldValue">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldValue">
+              <MappingFragment StoreEntitySet="FieldValue">
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
+                <ScalarProperty Name="DecimalValue" ColumnName="DecimalValue" />
+                <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

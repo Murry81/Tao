@@ -6,7 +6,7 @@ using TaoDatabaseService.Contracts;
 
 namespace TaoWebApplication.Models
 {
-    public class TartalomjegyzekModel
+    public class TartalomjegyzekModel : ModelBase
     {
         public List<PageDto> Pages { get; set; }
         public List<PageDescriptorDto> PageDescriptors { get; set; }
