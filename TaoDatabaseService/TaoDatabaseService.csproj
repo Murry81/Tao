@@ -60,9 +60,14 @@
     <Compile Include="Contracts\FieldDescriptorDto.cs" />
     <Compile Include="Contracts\PageDescriptorDto.cs" />
     <Compile Include="Contracts\PageDto.cs" />
+    <Compile Include="Currency.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataServiceConfiguration.cs" />
     <Compile Include="FieldDescriptor.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IDataServiceConfiguration.cs" />
     <Compile Include="Mappers\EntityMappers.cs" />
     <Compile Include="Page.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>

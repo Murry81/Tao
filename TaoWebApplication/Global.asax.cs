@@ -7,6 +7,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using TaoDatabaseService;
+using TaoDatabaseService.Interfaces;
+using TaoDatabaseService.Services;
 
 namespace TaoWebApplication
 {
@@ -22,6 +25,9 @@ namespace TaoWebApplication
             var builder = new ContainerBuilder();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
+
+            builder.RegisterType<DataServiceConfiguration>().As<IDataServiceConfiguration>();
+            builder.RegisterType<DataService>().As<IDataService>().SingleInstance();
 
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();

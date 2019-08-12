@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using TaoDatabaseService.Contracts;
@@ -13,9 +12,9 @@ namespace TaoDatabaseService.Services
     {
         TaoDatabaseService.CustomerNameTaoEntities entities;
 
-        public DataService(string databaseName)
+        public DataService(IDataServiceConfiguration configuration)
         {
-            entities = new TaoDatabaseService.CustomerNameTaoEntities(databaseName);
+            entities = new CustomerNameTaoEntities(configuration.DataBaseName);
         }
 
         public List<PageDto> GetAllPage()
