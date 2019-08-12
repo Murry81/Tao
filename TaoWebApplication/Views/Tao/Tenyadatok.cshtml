@@ -1,17 +1,78 @@
-﻿
+﻿@using TaoDatabaseService
+@using TaoWebApplication.Models
+@using Newtonsoft.Json
+@model TenyadatokModel
+
 @{
-    Layout = null;
+    ViewBag.Title = "Home Page";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Tenyadatok</title>
-</head>
-<body>
-    <div> 
+<div style="text-align: center; color: red;">A végleges bevallás készítése során a korrekciós munkalap nem elérhető. <br /> Kitöltött cellák száma: 0 <br /> 
+    A kitölött cellákban szereplő értékek törléséhez állítsd vissza a típust a feltöltésre a Tartalomjegyzég fülön! <br />
+                                                                                                                    <br /><br />
     </div>
-</body>
-</html>
+
+@using (Html.BeginForm("Tenyadatok", "Tao", FormMethod.Post))
+{
+    <div class="container pull-left" style="width: 100%">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 3%"></th>
+                    <th class="col-md-5">Megnevezés</th>
+                    <th class="col-md-1 text-right">eFt</th>
+                    <th class="col-md-6">Megjegyzés</th>
+                </tr>
+            </thead>
+            <tbody>
+                    @for (int i = 0; i < Model.PageDescriptors.Count; i++)
+                    {
+
+                        var field = Model.PageDescriptors[i];
+                        var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
+                        if (fieldDescriptor.IsSpecial.HasValue && fieldDescriptor.IsSpecial.Value)
+                        {
+                            continue;
+                        }
+                        var color = fieldDescriptor.IsEditable ? "yellow" : "white";
+
+                    <tr>
+                        <td>@fieldDescriptor.OrderCharacter</td>
+                        <td>@fieldDescriptor.Title</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
+                            {
+
+                                var comboItems = new List<SelectListItem>();
+                                foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
+                                {
+                                    comboItems.Add(new SelectListItem { Value = item, Text = item });
+                                }
+
+                                @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.FieldValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" })
+                            }
+                            else
+                            {
+                                var index = Model.Fields.IndexOf(fieldDescriptor);
+                                if (fieldDescriptor.TypeName == "numeric")
+                                {
+                                    var specifier = "#;(#)";
+
+                                    @Html.TextBox(Model.Fields[i].Id.ToString(), Model.Fields[i].FieldValue != null ? decimal.Parse(Model.Fields[i].FieldValue).ToString(specifier) : "", new { @id = Model.Fields[i].Id, @Name = Model.Fields[i].Id, @class = "text-right form-control", @style = $"width:100%; background-color:{@color};" })
+                                    @Html.ValidationMessage(Model.Fields[i].Id.ToString(), "", new { @Name = Model.Fields[i].Id })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                }
+                            }
+                        </td>
+                        <td> @field.Description</td>
+                    </tr>
+                    }
+            </tbody>
+        </table>
+
+
+        <input type="submit" value="Save 2" class="btn btn-default" />
+    </div>
+}

@@ -25,7 +25,11 @@ namespace TaoDatabaseService
         public System.DateTime LastModifyDate { get; set; }
         public string Creator { get; set; }
         public string LastModifer { get; set; }
+        public Nullable<bool> IsClosed { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> CustomerId { get; set; }
     
+        public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FieldValue> FieldValue { get; set; }
     }

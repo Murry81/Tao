@@ -1,4 +1,6 @@
 ﻿<!DOCTYPE html>
+@using TaoWebApplication.Models
+@model ModelBase
 <html>
 <head>
     <meta charset="utf-8" />
@@ -6,6 +8,12 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,15 +30,20 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Tartalomjegyzék", "Tartalomjegyzek", "Tao")</li>
+                    <li>@Html.ActionLink("Tenyadatok", "Tenyadatok", "Tao")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container-fluid body-content">
+        <div>
+            <img src="~/Images/logo.png" style="height: 150px; display:block; margin-left:auto; margin-right:auto;" />
+            <h3 style="text-align: center;">@(Model?.CurrentPage?.CaptionText)</h3>
+        </div>
+
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer class="pull-left">
         </footer>
     </div>
 

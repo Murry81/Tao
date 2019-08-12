@@ -1,6 +1,4 @@
-﻿@using TaoDatabaseService
-@using TaoWebApplication.Models
-@using Newtonsoft.Json
+﻿@using TaoWebApplication.Models
 @model TartalomjegyzekModel
 
 @{
@@ -10,12 +8,6 @@
 
 @using (Html.BeginForm("Tartalomjegyzek", "Tao", FormMethod.Post))
 {
-    @Html.HiddenFor(m => m.SessionId);
-    @Html.HiddenFor(m => m.CustomerId);
-    <div class="jumbotron">
-        <h3>@currentPage.CaptionText</h3>
-    </div>
-
     <div class="row">
         <div class="col-md-10">
             <h3>A Társaság azonosító adatai</h3>
@@ -41,11 +33,11 @@
                         comboItems.Add(new SelectListItem { Value = item, Text = item });
                     }
 
-                    @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.FieldValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id,  style = $"width:100%; background-color:{@color};" })
+                    @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.FieldValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" })
                 }
                 else
                 {
-                       @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                    @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};"})
                 }
             </div>
 

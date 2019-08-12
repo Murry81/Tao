@@ -5,6 +5,10 @@ namespace TaoDatabaseService.Interfaces
 {
     public interface IDataService
     {
+        List<CustomerDto> GetCustomers();
+
+        CustomerDto GetCustomer(int id);
+
         List<PageDto> GetAllPage();
 
         PageDto GetPage(string name);

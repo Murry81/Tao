@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -53,9 +54,15 @@
     <Compile Include="Address.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\AddressDto.cs" />
+    <Compile Include="Contracts\CurrencyDto.cs" />
+    <Compile Include="Contracts\CustomerDto.cs" />
     <Compile Include="Contracts\FieldDescriptorDto.cs" />
     <Compile Include="Contracts\PageDescriptorDto.cs" />
     <Compile Include="Contracts\PageDto.cs" />
+    <Compile Include="FieldDescriptor.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Mappers\EntityMappers.cs" />
     <Compile Include="Page.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
@@ -67,9 +74,6 @@
     <Compile Include="Customer.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="FieldDescriptor.cs">
-      <DependentUpon>TaoModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="FieldValue.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
@@ -78,6 +82,7 @@
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CustomerNameTaoEntities.cs" />
     <Compile Include="Session.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>

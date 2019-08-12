@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 10px;
     padding-bottom: 20px;
 }
 
@@ -21,4 +21,10 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.quantity::-webkit-inner-spin-button,
+.quantity::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

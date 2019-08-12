@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,13 @@ namespace TaoDatabaseService.Contracts
         public string Title { get; set; }
         public string Caption { get; set; }
         public Guid? FieldValueId { get; set; }
-        public object FieldValue { get; set; }
+
+        [RegularExpression("^[1-9][0-9]+", ErrorMessage = "Számot kell megadni.")]
+        public string FieldValue { get; set; }
         public string TypeName { get; set; }
         public string TypeOptions { get; set; }
+        public string OrderCharacter { get; set; }
+        public string Description { get; set; }
+        public bool? IsSpecial { get; set; }
     }
 }

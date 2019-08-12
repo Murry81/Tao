@@ -8,8 +8,6 @@ namespace TaoWebApplication.Models
 {
     public class TartalomjegyzekModel : ModelBase
     {
-        public List<PageDto> Pages { get; set; }
-        public List<PageDescriptorDto> PageDescriptors { get; set; }
-        public List<FieldDescriptorDto> Fields { get; set; }
+
     }
 }

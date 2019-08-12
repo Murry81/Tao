@@ -12,32 +12,23 @@ namespace TaoDatabaseService
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class Currency
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Customer()
+        public Currency()
         {
-            this.Address = new HashSet<Address>();
-            this.Session = new HashSet<Session>();
+            this.Customer = new HashSet<Customer>();
+            this.Customer1 = new HashSet<Customer>();
         }
     
         public int Id { get; set; }
-        public string Nev { get; set; }
-        public string SharePointId { get; set; }
-        public int ContactDetailId { get; set; }
-        public string WLSzam { get; set; }
-        public string Adoszam { get; set; }
-        public string KSHSzam { get; set; }
-        public string Cegjegyzekszam { get; set; }
-        public Nullable<int> KonyvelesPenzneme { get; set; }
-        public Nullable<int> BeszamoloPenzneme { get; set; }
+        public string Megnevezes { get; set; }
+        public Nullable<int> Egyseg { get; set; }
+        public string ISO { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Address> Address { get; set; }
-        public virtual ContactDetail ContactDetail { get; set; }
-        public virtual Currency Currency { get; set; }
-        public virtual Currency Currency1 { get; set; }
+        public virtual ICollection<Customer> Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Session> Session { get; set; }
+        public virtual ICollection<Customer> Customer1 { get; set; }
     }
 }
