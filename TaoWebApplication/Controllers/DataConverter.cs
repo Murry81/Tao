@@ -28,14 +28,7 @@ namespace TaoWebApplication.Controllers
                         break;
                     }
                 case "bool":
-                    if (bool.TryParse(value, out var boolValue))
-                    {
-                        field.BoolFieldValue = boolValue;
-                    }
-                    else
-                    {
-                        field.BoolFieldValue = false;
-                    }
+                        field.BoolFieldValue = value.ToLower().Contains("true");
                     break;
                 case "date":
                     if (DateTimeOffset.TryParse(value, out var dateValue))

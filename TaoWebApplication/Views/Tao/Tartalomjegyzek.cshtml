@@ -73,7 +73,7 @@
                                 }
                                 else if (fieldDescriptor.TypeName == "bool")
                                 {
-                                    Html.CheckBox(fieldDescriptor.Id.ToString(), fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id, Name = fieldDescriptor.Id });
+                                    @Html.CheckBox(fieldDescriptor.Id.ToString(), fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id, Name = fieldDescriptor.Id });
                                 }
                                 else if (fieldDescriptor.TypeName == "date")
                                 {
