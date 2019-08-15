@@ -10,30 +10,46 @@ namespace TaoWebApplication.Controllers
     public static class DataConverter
     {
 
-        public static object GetTypedValue(FieldDescriptorDto field, string value)
+        public static void GetTypedValue(FieldDescriptorDto field, string value)
         {
+
             switch (field.TypeName)
             {
-                case "bool":
-                    return value.Contains("true");
                 case "numeric":
                     {
                         if (decimal.TryParse(value, out var decimalValue))
                         {
-                            return decimalValue;
+                            field.DecimalValue = decimalValue;
                         }
-                        return 0;
-                    }
-                case "date":
-                    {
-                        if (DateTime.TryParse(value, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out var dateValue))
+                        else
                         {
-                            return dateValue;
+                            field.DecimalValue = null;
                         }
-                        return null;
+                        break;
                     }
+                case "bool":
+                    if (bool.TryParse(value, out var boolValue))
+                    {
+                        field.BoolFieldValue = boolValue;
+                    }
+                    else
+                    {
+                        field.BoolFieldValue = false;
+                    }
+                    break;
+                case "date":
+                    if (DateTimeOffset.TryParse(value, out var dateValue))
+                    {
+                        field.DateValue = dateValue;
+                    }
+                    else
+                    {
+                        field.DateValue = null;
+                    }
+                    break;
                 default:
-                    return value;
+                    field.StringValue = value;
+                    break;
             }
         }
     }

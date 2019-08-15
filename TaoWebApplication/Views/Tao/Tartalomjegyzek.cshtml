@@ -21,7 +21,7 @@
                         <th class="col-md-1">#</th>
                         <th class="col-md-3">Leírás</th>
                         <th class="col-md-2">Érték</th>
-                        <th class="col-md-4">Megjegyzés</th>
+                        <th class="col-md-3">Megjegyzés</th>
                     </tr>
                 </thead>
 
@@ -43,42 +43,56 @@
                             <td>
                                 @if (!fieldDescriptor.IsEditable || fieldDescriptor.IsCaculated)
                                 {
-                                    @Html.LabelFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                    switch (fieldDescriptor.TypeName)
+                                    {
+                                        case "bool":
+                                            @Html.Label(fieldDescriptor.BoolFieldValue ? "Igen" : "Nem", new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                            break;
+                                        case "numeric":
+                                            @Html.Label(fieldDescriptor.DecimalValue?.ToString(), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                            break;
+                                        case "date":
+                                            @Html.Label(fieldDescriptor.DateValue?.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                            break;
+                                        default:
+                                            @Html.Label(fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                            break;
+                                    }
                                 }
+
                                 else if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
                                 {
 
-                                    var comboItems = new List<SelectListItem>
-                                        ();
+                                    var comboItems = new List<SelectListItem>();
                                     foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
                                     {
                                         comboItems.Add(new SelectListItem { Value = item, Text = item });
                                     }
 
                                     @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" });
-
-
-                                }                            }
-                                else
+                                }
+                                else if (fieldDescriptor.TypeName == "bool")
                                 {
-                                if (fieldDescriptor.TypeName == "bool")
-                                {
-
-                                Html.CheckBox(fieldDescriptor.Id.ToString(),  fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id,  Name = fieldDescriptor.Id});
-
-
+                                    Html.CheckBox(fieldDescriptor.Id.ToString(), fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id, Name = fieldDescriptor.Id });
                                 }
                                 else if (fieldDescriptor.TypeName == "date")
                                 {
-
-                                @Html.TextBoxFor(model => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
-
-
+                                    if (fieldDescriptor.DateValue == null)
+                                    {
+                                         @Html.TextBoxFor(model => fieldDescriptor.DateValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBox(fieldDescriptor.Id.ToString(), fieldDescriptor.DateValue.Value.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
+                                    }
+                                }
+                                else if (fieldDescriptor.TypeName == "numeric")
+                                {
+                                    @Html.TextBoxFor(m => fieldDescriptor.DecimalValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
                                 }
                                 else
                                 {
-                                @Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
-
+                                    @Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
                                 }
                             </td>
 
@@ -105,7 +119,7 @@
             </div>
 
             @foreach (var page in Model.Pages)
-            {
+                                        {
                 <div class="row">
                     <div class="col-md-1">
                         @page.Number <br />

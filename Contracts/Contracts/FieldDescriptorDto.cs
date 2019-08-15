@@ -12,7 +12,7 @@ namespace TaoContracts.Contracts
         public string Caption { get; set; }
         public Guid? FieldValueId { get; set; }
         public string StringValue { get; set; }
-        public bool? BoolFieldValue { get; set; }
+        public bool BoolFieldValue { get; set; }
         public DateTimeOffset? DateValue { get; set; }
         public decimal? DecimalValue { get; set; }
         public string TypeName { get; set; }

@@ -76,7 +76,7 @@ namespace TaoWebApplication.Controllers
                     {
                         if (!field.IsCaculated && field.IsEditable)
                         {
-                            field.StringValue = DataConverter.GetTypedValue(field,  Request.Form[field.Id.ToString()]);
+                            DataConverter.GetTypedValue(field,  Request.Form[field.Id.ToString()]);
                         }
                     }
                 }

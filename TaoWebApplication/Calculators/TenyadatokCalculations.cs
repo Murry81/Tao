@@ -29,22 +29,22 @@ namespace TaoWebApplication.Calculators
                         }
                     case 36: // Előlegfizetési időszak kezdete
                         {
-                            field.StringValue = Calculate36(field, fields.FirstOrDefault(f => f.Id == 32));
+                            field.DateValue = Calculate36(field, fields.FirstOrDefault(f => f.Id == 32));
                             break;
                         }
                     case 37: // Előlegfizetési időszak vége
                         {
-                            field.StringValue = Calculate37(field, fields.FirstOrDefault(f => f.Id == 32));
+                            field.DateValue = Calculate37(field, fields.FirstOrDefault(f => f.Id == 32));
                             break;
                         }
                     case 38: // Első előlegrészlet esedékessége
                         {
-                            field.StringValue = Calculate38(field, fields.FirstOrDefault(f => f.Id == 36));
+                            field.DateValue = Calculate38(field, fields.FirstOrDefault(f => f.Id == 36));
                             break;
                         }
                     case 39: // Második előlegrészlet esedékessége
                         {
-                            field.StringValue = Calculate39(field, fields.FirstOrDefault(f => f.Id == 36));
+                            field.DateValue = Calculate39(field, fields.FirstOrDefault(f => f.Id == 36));
                             break;
                         }
                 }
@@ -56,43 +56,43 @@ namespace TaoWebApplication.Calculators
             if (uzletiEvVegefield == null)
                 return false;
 
-            return ((DateTime)uzletiEvVegefield.StringValue).Month != 12 || ((DateTime)uzletiEvVegefield.StringValue).Day != 31;
+            return uzletiEvVegefield.DateValue?.Month != 12 || uzletiEvVegefield.DateValue?.Day != 31;
         }
 
-        private static DateTime Calculate36(FieldDescriptorDto field, FieldDescriptorDto uzletiEvVegefield)
+        private static DateTimeOffset? Calculate36(FieldDescriptorDto field, FieldDescriptorDto uzletiEvVegefield)
         {
-            if (uzletiEvVegefield == null)
-                return DateTime.MinValue;
+            if (uzletiEvVegefield == null || !uzletiEvVegefield.DateValue.HasValue)
+                return null;
 
-            var result = ((DateTime)uzletiEvVegefield.StringValue).AddMonths(7);
-            return new DateTime(result.Year, result.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+            var result = uzletiEvVegefield.DateValue.Value.AddMonths(7);
+            return new DateTimeOffset(result.Year, result.Month, 1, 0, 0, 0, TimeSpan.Zero);
         }
 
-        private static DateTime Calculate37(FieldDescriptorDto field, FieldDescriptorDto uzletiEvVegefield)
+        private static DateTimeOffset? Calculate37(FieldDescriptorDto field, FieldDescriptorDto uzletiEvVegefield)
         {
-            if (uzletiEvVegefield == null)
-                return DateTime.MinValue;
+            if (uzletiEvVegefield == null || !uzletiEvVegefield.DateValue.HasValue)
+                return null;
 
-            var result = ((DateTime)uzletiEvVegefield.StringValue).AddMonths(13);
-            return new DateTime(result.Year, result.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddDays(-1);
+            var result = uzletiEvVegefield.DateValue.Value.AddMonths(13);
+            return new DateTimeOffset(result.Year, result.Month, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1);
         }
 
-        private static DateTime Calculate38(FieldDescriptorDto field, FieldDescriptorDto fieldFrom)
+        private static DateTimeOffset? Calculate38(FieldDescriptorDto field, FieldDescriptorDto fieldFrom)
         {
-            if (fieldFrom == null)
-                return DateTime.MinValue;
+            if (fieldFrom == null || !fieldFrom.DateValue.HasValue)
+                return null;
 
-            var result = ((DateTime)fieldFrom.StringValue).AddMonths(2);
-            return new DateTime(result.Year, result.Month, 15, 0, 0, 0, DateTimeKind.Utc);
+            var result = fieldFrom.DateValue.Value.AddMonths(2);
+            return new DateTimeOffset(result.Year, result.Month, 15, 0, 0, 0, TimeSpan.Zero);
         }
 
-        private static DateTime Calculate39(FieldDescriptorDto field, FieldDescriptorDto fieldFrom)
+        private static DateTimeOffset? Calculate39(FieldDescriptorDto field, FieldDescriptorDto fieldFrom)
         {
-            if (fieldFrom == null)
-                return DateTime.MinValue;
+            if (fieldFrom == null || !fieldFrom.DateValue.HasValue)
+                return null;
 
-            var result = ((DateTime)fieldFrom.StringValue).AddMonths(8);
-            return new DateTime(result.Year, result.Month, 15, 0, 0, 0, DateTimeKind.Utc);
+            var result = fieldFrom.DateValue.Value.AddMonths(8);
+            return new DateTimeOffset(result.Year, result.Month, 15, 0, 0, 0, TimeSpan.Zero);
         }
     }
 }

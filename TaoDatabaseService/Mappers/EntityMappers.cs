@@ -60,7 +60,7 @@ namespace TaoDatabaseService.Mappers
                         result.DecimalValue = currentValue.DecimalValue;
                         break;
                     case "bool":
-                        result.BoolFieldValue = currentValue.BoolValue;
+                        result.BoolFieldValue = currentValue.BoolValue.HasValue ? currentValue.BoolValue.Value : false;
                         break;
                     case "date":
                         result.DateValue = currentValue.DateValue;
