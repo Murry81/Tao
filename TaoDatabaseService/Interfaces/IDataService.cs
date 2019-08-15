@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TaoDatabaseService.Contracts;
+using TaoContracts.Contracts;
 
 namespace TaoDatabaseService.Interfaces
 {
@@ -11,6 +11,8 @@ namespace TaoDatabaseService.Interfaces
 
         List<PageDto> GetAllPage();
 
+        List<DocumentDto> GetAllDocumentType();
+
         PageDto GetPage(string name);
 
         List<PageDescriptorDto> GetPageDescriptor(int pageId);
@@ -20,5 +22,7 @@ namespace TaoDatabaseService.Interfaces
         void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, int sessionId);
 
         List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, int sessionId);
+
+        List<SessionDto> GetCustomerSessions(int customerId);
     }
 }

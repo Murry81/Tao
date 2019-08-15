@@ -1,4 +1,5 @@
-﻿@using TaoWebApplication.Models
+﻿@using TaoDatabaseService
+@using TaoWebApplication.Models
 @model TartalomjegyzekModel
 
 @{
@@ -6,69 +7,116 @@
     var currentPage = @Model.Pages.FirstOrDefault(p => p.Name == "Tartalomjegyzek");
 }
 
+<div>
+    Ide is jöhet bármilyen szép és hangzatos felirat<br /><br />
+</div>
+
 @using (Html.BeginForm("Tartalomjegyzek", "Tao", FormMethod.Post))
 {
-    <div class="row">
-        <div class="col-md-10">
-            <h3>A Társaság azonosító adatai</h3>
-        </div>
-    </div>
-    foreach (var field in @Model.PageDescriptors)
-    {
+    <div>
+        <div class="InnerLeft" style="width: 60%; float:left; border:outset;">
+            <table class="CustomerDataTable table">
+                <thead>
+                    <tr>
+                        <th class="col-md-1">#</th>
+                        <th class="col-md-3">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-4">Megjegyzés</th>
+                    </tr>
+                </thead>
 
-        var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
-        var color = fieldDescriptor.IsEditable ? "yellow" : "white";
-        <div class="row">
-            <div class="col-md-1">
-                @fieldDescriptor.Title <br />
-            </div>
-
-            <div class="col-md-4">
-                @if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
+                @foreach (var field in @Model.PageDescriptors)
                 {
 
-                    var comboItems = new List<SelectListItem>();
-                    foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
-                    {
-                        comboItems.Add(new SelectListItem { Value = item, Text = item });
-                    }
+                    <tr>
+                        <td>
+                            @field.Order
+                        </td>
+                        @{
+                            var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
+                            var color = fieldDescriptor.IsEditable ? "yellow" : "white";
 
-                    @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.FieldValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" })
+                            <td>
+                                @fieldDescriptor.Title
+                            </td>
+
+                            <td>
+                                @if (!fieldDescriptor.IsEditable || fieldDescriptor.IsCaculated)
+                                {
+                                    @Html.LabelFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                }
+                                else if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
+                                {
+
+                                    var comboItems = new List<SelectListItem>
+                                        ();
+                                    foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
+                                    {
+                                        comboItems.Add(new SelectListItem { Value = item, Text = item });
+                                    }
+
+                                    @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" });
+
+
+                                }                            }
+                                else
+                                {
+                                if (fieldDescriptor.TypeName == "bool")
+                                {
+
+                                Html.CheckBox(fieldDescriptor.Id.ToString(),  fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id,  Name = fieldDescriptor.Id});
+
+
+                                }
+                                else if (fieldDescriptor.TypeName == "date")
+                                {
+
+                                @Html.TextBoxFor(model => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
+
+
+                                }
+                                else
+                                {
+                                @Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+
+                                }
+                            </td>
+
+                            <td>
+                                @field.Description
+                            </td>
+                        }
+                    </tr>
                 }
-                else
-                {
-                    @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};"})
-                }
+            </table>
+            <div>
+                <input type="submit" value="Mentés" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div class="InnerRight" style="width: 30%; float:left; margin-left:40px; margin-bottom:40px; border:outset">
+            <div class="row">
+                <div class="col-md-1">
+                    <h4>Lap</h4>
+                </div>
+                <div class="col-md-6">
+                    <h4>Megnevezés</h4>
+                </div>
             </div>
 
-            <div class="col-md-4">
-                @field.Description <br />
-            </div>
-
-        </div>
-    }
-
-    <input type="submit" value="Save 2" class="btn btn-default" />
-    <br /><br />
-
-    <div class="row">
-        <div class="col-md-1">
-            <h4>Lap</h4>
-        </div>
-        <div class="col-md-3">
-            <h4>Megnevezés</h4>
+            @foreach (var page in Model.Pages)
+            {
+                <div class="row">
+                    <div class="col-md-1">
+                        @page.Number <br />
+                    </div>
+                    <div class="col-md-6">
+                        @page.Title <br />
+                    </div>
+                </div>
+            }
         </div>
     </div>
 
-    foreach (var page in Model.Pages)
-    {
-        <div class="row">
-            <div class="col-md-1">
-                @page.Number <br />
-            </div>
-            <div class="col-md-3">
-                @page.Title <br />
-            </div>
-        </div>
-    }
+
 }

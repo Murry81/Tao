@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TaoDatabaseService.Contracts;
+using TaoContracts.Contracts;
 
 namespace TaoDatabaseService.Mappers
 {
@@ -54,7 +54,21 @@ namespace TaoDatabaseService.Mappers
             if(currentValue != null)
             {
                 result.FieldValueId = currentValue.Id;
-                result.FieldValue = fieldDescriptor.TypeName == "numeric" ? currentValue.DecimalValue.ToString() : currentValue.StringValue;
+                switch(fieldDescriptor.TypeName)
+                {
+                    case "numeric":
+                        result.DecimalValue = currentValue.DecimalValue;
+                        break;
+                    case "bool":
+                        result.BoolFieldValue = currentValue.BoolValue;
+                        break;
+                    case "date":
+                        result.DateValue = currentValue.DateValue;
+                        break;
+                    default:
+                        result.StringValue = currentValue.StringValue;
+                        break;
+                }
             }
             else
             {
@@ -107,6 +121,30 @@ namespace TaoDatabaseService.Mappers
                 Phone2 = customer.ContactDetail.Phone2,
                 SharePointId = customer.SharePointId,
                 WLSzam = customer.WLSzam
+            };
+        }
+
+        public static SessionDto ToSession(this Session session)
+        {
+            return new SessionDto
+            {
+                Creator = session.Creator,
+                CustomerId = session.CustomerId,
+                DocumentState = session.DocumentState.State,
+                DocumentType = session.DocumentType.DocumentName,
+                Id = session.Id,
+                LastModifer = session.LastModifer,
+                LastModifyDate = session.LastModifyDate,
+                StartDateTime = session.StartDateTime
+            };
+        }
+
+        public static DocumentDto ToDocument(this DocumentType docType)
+        {
+            return new DocumentDto
+            {
+                Id = docType.Id,
+                DocumentName = docType.DocumentName
             };
         }
     }

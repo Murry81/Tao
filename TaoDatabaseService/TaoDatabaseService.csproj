@@ -54,16 +54,16 @@
     <Compile Include="Address.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Contracts\AddressDto.cs" />
-    <Compile Include="Contracts\CurrencyDto.cs" />
-    <Compile Include="Contracts\CustomerDto.cs" />
-    <Compile Include="Contracts\FieldDescriptorDto.cs" />
-    <Compile Include="Contracts\PageDescriptorDto.cs" />
-    <Compile Include="Contracts\PageDto.cs" />
     <Compile Include="Currency.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DataServiceConfiguration.cs" />
+    <Compile Include="DocumentState.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentType.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="FieldDescriptor.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
@@ -135,6 +135,11 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\TaoContracts.csproj">
+      <Project>{e0ba08cf-d963-4c16-88b5-c782e8dcb2b0}</Project>
+      <Name>TaoContracts</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

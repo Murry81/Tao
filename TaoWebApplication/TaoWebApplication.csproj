@@ -134,13 +134,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Calculators\TenyadatokCalculations.cs" />
     <Compile Include="Controllers\ControllerHelper.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\DataConverter.cs" />
+    <Compile Include="Controllers\SelectorController.cs" />
     <Compile Include="Controllers\TaoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\SelectorModel.cs" />
     <Compile Include="Models\TartalomjegyzekModel.cs" />
     <Compile Include="Models\TenyadatokModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -184,7 +187,7 @@
     <Content Include="Views\Tao\Tenyadatok.cshtml" />
     <Content Include="Views\Tao\TenyadatKorrekcio.cshtml" />
     <Content Include="Views\Tao\IpaNemKapcsolt.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Tao\Selector.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -207,6 +210,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\TaoContracts.csproj">
+      <Project>{e0ba08cf-d963-4c16-88b5-c782e8dcb2b0}</Project>
+      <Name>TaoContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaoDatabaseService\TaoDatabaseService.csproj">
       <Project>{53f25495-84b0-4e2b-97ee-d7f849584c69}</Project>
       <Name>TaoDatabaseService</Name>

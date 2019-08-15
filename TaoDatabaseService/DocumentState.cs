@@ -12,27 +12,18 @@ namespace TaoDatabaseService
     using System;
     using System.Collections.Generic;
     
-    public partial class Session
+    public partial class DocumentState
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Session()
+        public DocumentState()
         {
-            this.FieldValue = new HashSet<FieldValue>();
+            this.Session = new HashSet<Session>();
         }
     
         public int Id { get; set; }
-        public System.DateTime StartDateTime { get; set; }
-        public System.DateTime LastModifyDate { get; set; }
-        public string Creator { get; set; }
-        public string LastModifer { get; set; }
-        public int CustomerId { get; set; }
-        public int DocumentTypeId { get; set; }
-        public int DocumentStateId { get; set; }
+        public string State { get; set; }
     
-        public virtual Customer Customer { get; set; }
-        public virtual DocumentState DocumentState { get; set; }
-        public virtual DocumentType DocumentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FieldValue> FieldValue { get; set; }
+        public virtual ICollection<Session> Session { get; set; }
     }
 }

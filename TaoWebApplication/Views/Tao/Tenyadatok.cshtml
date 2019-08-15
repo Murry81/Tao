@@ -1,6 +1,5 @@
 ﻿@using TaoDatabaseService
 @using TaoWebApplication.Models
-@using Newtonsoft.Json
 @model TenyadatokModel
 
 @{
@@ -35,7 +34,7 @@
                         }
                         var color = fieldDescriptor.IsEditable ? "yellow" : "white";
 
-                    <tr>
+                     <tr>
                         <td>@fieldDescriptor.OrderCharacter</td>
                         <td>@fieldDescriptor.Title</td>
                         <td>
@@ -48,7 +47,7 @@
                                     comboItems.Add(new SelectListItem { Value = item, Text = item });
                                 }
 
-                                @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.FieldValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" })
+                                @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" })
                             }
                             else
                             {
@@ -57,17 +56,17 @@
                                 {
                                     var specifier = "#;(#)";
 
-                                    @Html.TextBox(Model.Fields[i].Id.ToString(), Model.Fields[i].FieldValue != null ? decimal.Parse(Model.Fields[i].FieldValue).ToString(specifier) : "", new { @id = Model.Fields[i].Id, @Name = Model.Fields[i].Id, @class = "text-right form-control", @style = $"width:100%; background-color:{@color};" })
+                                    @Html.TextBox(Model.Fields[i].Id.ToString(), Model.Fields[i].DecimalValue != null ? Model.Fields[i].DecimalValue.Value.ToString(specifier) : "", new { @id = Model.Fields[i].Id, @Name = Model.Fields[i].Id, @class = "text-right form-control", @style = $"width:100%; background-color:{@color};" })
                                     @Html.ValidationMessage(Model.Fields[i].Id.ToString(), "", new { @Name = Model.Fields[i].Id })
                                 }
                                 else
                                 {
-                                    @Html.TextBoxFor(m => fieldDescriptor.FieldValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
+                                    @Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
                                 }
                             }
                         </td>
                         <td> @field.Description</td>
-                    </tr>
+                     </tr>
                     }
             </tbody>
         </table>

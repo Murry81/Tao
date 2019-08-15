@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TaoDatabaseService.Contracts
+namespace TaoContracts.Contracts
 {
     public class FieldDescriptorDto
     {
@@ -16,9 +11,10 @@ namespace TaoDatabaseService.Contracts
         public string Title { get; set; }
         public string Caption { get; set; }
         public Guid? FieldValueId { get; set; }
-
-        [RegularExpression("^[1-9][0-9]+", ErrorMessage = "Számot kell megadni.")]
-        public string FieldValue { get; set; }
+        public string StringValue { get; set; }
+        public bool? BoolFieldValue { get; set; }
+        public DateTimeOffset? DateValue { get; set; }
+        public decimal? DecimalValue { get; set; }
         public string TypeName { get; set; }
         public string TypeOptions { get; set; }
         public string OrderCharacter { get; set; }

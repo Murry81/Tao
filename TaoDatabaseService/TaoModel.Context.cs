@@ -29,6 +29,8 @@ namespace TaoDatabaseService
         public virtual DbSet<ContactDetail> ContactDetail { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<DocumentState> DocumentState { get; set; }
+        public virtual DbSet<DocumentType> DocumentType { get; set; }
         public virtual DbSet<FieldDescriptor> FieldDescriptor { get; set; }
         public virtual DbSet<FieldValue> FieldValue { get; set; }
         public virtual DbSet<Page> Page { get; set; }

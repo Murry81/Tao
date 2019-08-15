@@ -1,4 +1,4 @@
-﻿namespace TaoDatabaseService.Contracts
+﻿namespace TaoContracts.Contracts
 {
     public class AddressDto
     {

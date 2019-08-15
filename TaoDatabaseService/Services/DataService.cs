@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using TaoDatabaseService.Contracts;
+using TaoContracts.Contracts;
 using TaoDatabaseService.Interfaces;
 using TaoDatabaseService.Mappers;
 
@@ -39,7 +39,7 @@ namespace TaoDatabaseService.Services
 
         public List<CustomerDto> GetCustomers()
         {
-            return entities.Customer.Select(t => t.ToCustomer()).ToList();
+            return entities.Customer.ToList().Select(t => t.ToCustomer()).ToList();
         }
 
         public List<PageDescriptorDto> GetPageDescriptor(int pageId)
@@ -83,6 +83,22 @@ namespace TaoDatabaseService.Services
             return result;
         }
 
+        public List<SessionDto> GetCustomerSessions(int customerId)
+        {
+            var sessions = entities.Session.Where(s => s.CustomerId == customerId);
+            if (sessions == null || sessions.Count() == 0)
+            {
+                return null;
+            }
+
+            return sessions.ToList().Select(s => s.ToSession()).ToList();
+        }
+
+        public List<DocumentDto> GetAllDocumentType()
+        {
+            return entities.DocumentType.ToList().Select(d => d.ToDocument()).ToList();
+        }
+
         public void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, int sessionId)
         {
             foreach(var field in updatedFields)
@@ -94,20 +110,24 @@ namespace TaoDatabaseService.Services
                 SessionId = sessionId
                 };
 
-                //set up value
-                if(field.TypeName != "numeric")
+
+                switch(field.TypeName)
                 {
-                    myEntity.StringValue = field.FieldValue.ToString();
-                }
-                else
-                {
-                    if (decimal.TryParse(field.FieldValue.ToString(), out var decimalValue))
-                    {
-                        myEntity.DecimalValue = decimalValue;
-                    }
+                    case "numeric":
+                        myEntity.DecimalValue = field.DecimalValue;
+                        break;
+                    case "bool":
+                        myEntity.BoolValue = field.BoolFieldValue;
+                        break;
+                    case "date":
+                        myEntity.DateValue = field.DateValue;
+                        break;
+                    default:
+                        myEntity.StringValue = field.StringValue;
+                        break;
                 }
 
-                if (myEntity.StringValue == null && myEntity.DecimalValue == null)
+                if (myEntity.StringValue == null && myEntity.DecimalValue == null && myEntity.DateValue == null && myEntity.BoolValue == null)
                 {
                     if (field.FieldValueId.HasValue)
                     {

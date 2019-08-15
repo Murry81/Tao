@@ -28,3 +28,17 @@ textarea {
     -webkit-appearance: none;
     margin: 0;
 }
+
+div.InnerLeft {
+    width: 50%;
+    position: relative;
+    background: #CCCCCC;
+    float: left;
+}
+
+div.InnerRight {
+    width: 49%;
+    position: relative;
+    background: #AAAAFF;
+    float: right;
+}

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace TaoDatabaseService.Contracts
+namespace TaoContracts.Contracts
 {
     public class CustomerDto
     {
@@ -25,5 +21,10 @@ namespace TaoDatabaseService.Contracts
         public string Email2 { get; set; }
         public string Phone { get; set; }
         public string Phone2 { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Nev} ({Adoszam})";
+        }
     }
 }

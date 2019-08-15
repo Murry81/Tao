@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using TaoDatabaseService.Contracts;
+﻿using System.Collections.Generic;
+using TaoContracts.Contracts;
 
 namespace TaoWebApplication.Models
 {

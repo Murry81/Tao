@@ -52,11 +52,25 @@
           <Property Name="KonyvelesPenzneme" Type="int" />
           <Property Name="BeszamoloPenzneme" Type="int" />
         </EntityType>
+        <EntityType Name="DocumentState">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="State" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DocumentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="DocumentName" Type="nvarchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="FieldDescriptor">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="IsEditable" Type="bit" Nullable="false" />
           <Property Name="IsCalculated" Type="bit" Nullable="false" />
           <Property Name="IsMandatory" Type="bit" Nullable="false" />
@@ -76,6 +90,8 @@
           <Property Name="DecimalValue" Type="decimal" Precision="18" Scale="2" />
           <Property Name="StringValue" Type="nvarchar(max)" />
           <Property Name="SessionId" Type="int" Nullable="false" />
+          <Property Name="DateValue" Type="datetimeoffset" Precision="7" />
+          <Property Name="BoolValue" Type="bit" />
         </EntityType>
         <EntityType Name="Page">
           <Key>
@@ -109,9 +125,9 @@
           <Property Name="LastModifyDate" Type="datetime" Nullable="false" />
           <Property Name="Creator" Type="nvarchar" MaxLength="250" />
           <Property Name="LastModifer" Type="nvarchar" MaxLength="250" />
-          <Property Name="IsClosed" Type="bit" />
-          <Property Name="Name" Type="nvarchar" MaxLength="250" />
-          <Property Name="CustomerId" Type="int" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="DocumentTypeId" Type="int" Nullable="false" />
+          <Property Name="DocumentStateId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
@@ -210,7 +226,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Session_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
           <End Role="Session" Type="Self.Session" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -221,11 +237,37 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Session_DocumentState">
+          <End Role="DocumentState" Type="Self.DocumentState" Multiplicity="1" />
+          <End Role="Session" Type="Self.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentState">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="DocumentStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_DocumentType">
+          <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="1" />
+          <End Role="Session" Type="Self.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CustomerNameTaoModelStoreContainer">
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContactDetail" EntityType="Self.ContactDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentState" EntityType="Self.DocumentState" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldDescriptor" EntityType="Self.FieldDescriptor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldValue" EntityType="Self.FieldValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Page" EntityType="Self.Page" Schema="dbo" store:Type="Tables" />
@@ -267,6 +309,14 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Session" EntitySet="Session" />
           </AssociationSet>
+          <AssociationSet Name="FK_Session_DocumentState" Association="Self.FK_Session_DocumentState">
+            <End Role="DocumentState" EntitySet="DocumentState" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_DocumentType" Association="Self.FK_Session_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentType" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -277,6 +327,8 @@
           <EntitySet Name="ContactDetail" EntityType="CustomerNameTaoModel.ContactDetail" />
           <EntitySet Name="Currency" EntityType="CustomerNameTaoModel.Currency" />
           <EntitySet Name="Customer" EntityType="CustomerNameTaoModel.Customer" />
+          <EntitySet Name="DocumentState" EntityType="CustomerNameTaoModel.DocumentState" />
+          <EntitySet Name="DocumentType" EntityType="CustomerNameTaoModel.DocumentType" />
           <EntitySet Name="FieldDescriptor" EntityType="CustomerNameTaoModel.FieldDescriptor" />
           <EntitySet Name="FieldValue" EntityType="CustomerNameTaoModel.FieldValue" />
           <EntitySet Name="Page" EntityType="CustomerNameTaoModel.Page" />
@@ -300,6 +352,14 @@
           </AssociationSet>
           <AssociationSet Name="FK_Session_Customer" Association="CustomerNameTaoModel.FK_Session_Customer">
             <End Role="Customer" EntitySet="Customer" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_DocumentState" Association="CustomerNameTaoModel.FK_Session_DocumentState">
+            <End Role="DocumentState" EntitySet="DocumentState" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_DocumentType" Association="CustomerNameTaoModel.FK_Session_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentType" />
             <End Role="Session" EntitySet="Session" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldValue_FieldDescriptor1" Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1">
@@ -375,11 +435,27 @@
           <NavigationProperty Name="Currency1" Relationship="CustomerNameTaoModel.FK_Customer_Currency1" FromRole="Customer" ToRole="Currency" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_Customer" FromRole="Customer" ToRole="Session" />
         </EntityType>
+        <EntityType Name="DocumentState">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="State" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_DocumentState" FromRole="DocumentState" ToRole="Session" />
+        </EntityType>
+        <EntityType Name="DocumentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="DocumentName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="DocumentType" ToRole="Session" />
+        </EntityType>
         <EntityType Name="FieldDescriptor">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="IsEditable" Type="Boolean" Nullable="false" />
           <Property Name="IsCalculated" Type="Boolean" Nullable="false" />
           <Property Name="IsMandatory" Type="Boolean" Nullable="false" />
@@ -401,6 +477,8 @@
           <Property Name="DecimalValue" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
+          <Property Name="DateValue" Type="DateTimeOffset" Precision="7" />
+          <Property Name="BoolValue" Type="Boolean" />
           <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldValue" ToRole="FieldDescriptor" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="FieldValue" ToRole="Session" />
         </EntityType>
@@ -439,10 +517,12 @@
           <Property Name="LastModifyDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Creator" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="LastModifer" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IsClosed" Type="Boolean" />
-          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="DocumentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="DocumentStateId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="CustomerNameTaoModel.FK_Session_Customer" FromRole="Session" ToRole="Customer" />
+          <NavigationProperty Name="DocumentState" Relationship="CustomerNameTaoModel.FK_Session_DocumentState" FromRole="Session" ToRole="DocumentState" />
+          <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="Session" ToRole="DocumentType" />
           <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="Session" ToRole="FieldValue" />
         </EntityType>
         <Association Name="FK_Address_Customer">
@@ -494,7 +574,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Session_Customer">
-          <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="1" />
           <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -502,6 +582,30 @@
             </Principal>
             <Dependent Role="Session">
               <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_DocumentState">
+          <End Type="CustomerNameTaoModel.DocumentState" Role="DocumentState" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentState">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="DocumentStateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_DocumentType">
+          <End Type="CustomerNameTaoModel.DocumentType" Role="DocumentType" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="DocumentTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -610,6 +714,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DocumentState">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentState">
+              <MappingFragment StoreEntitySet="DocumentState">
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentType">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentType">
+              <MappingFragment StoreEntitySet="DocumentType">
+                <ScalarProperty Name="DocumentName" ColumnName="DocumentName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="FieldDescriptor">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldDescriptor">
               <MappingFragment StoreEntitySet="FieldDescriptor">
@@ -629,6 +749,8 @@
           <EntitySetMapping Name="FieldValue">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldValue">
               <MappingFragment StoreEntitySet="FieldValue">
+                <ScalarProperty Name="BoolValue" ColumnName="BoolValue" />
+                <ScalarProperty Name="DateValue" ColumnName="DateValue" />
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="StringValue" ColumnName="StringValue" />
                 <ScalarProperty Name="DecimalValue" ColumnName="DecimalValue" />
@@ -665,9 +787,9 @@
           <EntitySetMapping Name="Session">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.Session">
               <MappingFragment StoreEntitySet="Session">
+                <ScalarProperty Name="DocumentStateId" ColumnName="DocumentStateId" />
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="IsClosed" ColumnName="IsClosed" />
                 <ScalarProperty Name="LastModifer" ColumnName="LastModifer" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
                 <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />

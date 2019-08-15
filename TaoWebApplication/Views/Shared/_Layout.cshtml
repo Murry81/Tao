@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 @using TaoWebApplication.Models
-@model ModelBase
 <html>
 <head>
     <meta charset="utf-8" />
@@ -24,11 +23,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Ipa kalkuláció", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Kezdőlap", "Index", "Selector")</li>
                     <li>@Html.ActionLink("Tartalomjegyzék", "Tartalomjegyzek", "Tao")</li>
                     <li>@Html.ActionLink("Tenyadatok", "Tenyadatok", "Tao")</li>
                 </ul>
@@ -38,7 +36,7 @@
     <div class="container-fluid body-content">
         <div>
             <img src="~/Images/logo.png" style="height: 150px; display:block; margin-left:auto; margin-right:auto;" />
-            <h3 style="text-align: center;">@(Model?.CurrentPage?.CaptionText)</h3>
+          
         </div>
 
         @RenderBody()

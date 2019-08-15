@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoWebApplication.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoDatabaseService", "TaoDatabaseService\TaoDatabaseService.csproj", "{53F25495-84B0-4E2B-97EE-D7F849584C69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaoContracts", "Contracts\TaoContracts.csproj", "{E0BA08CF-D963-4C16-88B5-C782E8DCB2B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53F25495-84B0-4E2B-97EE-D7F849584C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0BA08CF-D963-4C16-88B5-C782E8DCB2B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0BA08CF-D963-4C16-88B5-C782E8DCB2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0BA08CF-D963-4C16-88B5-C782E8DCB2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0BA08CF-D963-4C16-88B5-C782E8DCB2B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
