@@ -1,5 +1,6 @@
 ﻿@using TaoDatabaseService
 @using TaoWebApplication.Models
+@using TaoContracts.Contracts
 @model TartalomjegyzekModel
 
 @{
@@ -14,7 +15,7 @@
 @using (Html.BeginForm("Tartalomjegyzek", "Tao", FormMethod.Post))
 {
     <div>
-        <div class="InnerLeft" style="width: 60%; float:left; border:outset;">
+        <div class="InnerLeft" style="width: 45%; float:left; border:outset;">
             <table class="CustomerDataTable table">
                 <thead>
                     <tr>
@@ -25,112 +26,135 @@
                     </tr>
                 </thead>
 
-                @foreach (var field in @Model.PageDescriptors)
+                @foreach (var field in @Model.PageDescriptors.Where(f => f.SectionGroup != 2).OrderBy(s => s.Order))
                 {
+
+                    var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
+                    var color = fieldDescriptor.IsEditable ? "yellow" : "white";
 
                     <tr>
                         <td>
                             @field.Order
                         </td>
-                        @{
-                            var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
-                            var color = fieldDescriptor.IsEditable ? "yellow" : "white";
+                        <td>
+                            @fieldDescriptor.Title
+                        </td>
+                        <td>
+                            @CreateField(fieldDescriptor)
+                        </td>
 
-                            <td>
-                                @fieldDescriptor.Title
-                            </td>
+                        <td>
+                            @field.Description
+                        </td>
+                    </tr>
 
-                            <td>
-                                @if (!fieldDescriptor.IsEditable || fieldDescriptor.IsCaculated)
-                                {
-                                    switch (fieldDescriptor.TypeName)
-                                    {
-                                        case "bool":
-                                            @Html.Label(fieldDescriptor.BoolFieldValue ? "Igen" : "Nem", new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
-                                            break;
-                                        case "numeric":
-                                            @Html.Label(fieldDescriptor.DecimalValue?.ToString(), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
-                                            break;
-                                        case "date":
-                                            @Html.Label(fieldDescriptor.DateValue?.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
-                                            break;
-                                        default:
-                                            @Html.Label(fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
-                                            break;
-                                    }
-                                }
+                }
+            </table>
 
-                                else if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
-                                {
+        </div>
 
-                                    var comboItems = new List<SelectListItem>();
-                                    foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
-                                    {
-                                        comboItems.Add(new SelectListItem { Value = item, Text = item });
-                                    }
+        <div class="InnerRight" style="width: 45%; float:left; margin-left:40px; margin-bottom:40px; border:outset">
+            <table class="CustomerDataTable table">
+                <thead>
+                    <tr>
+                        <th class="col-md-1">#</th>
+                        <th class="col-md-4">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-3">Megjegyzés</th>
+                    </tr>
+                </thead>
 
-                                    @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" });
-                                }
-                                else if (fieldDescriptor.TypeName == "bool")
-                                {
-                                    @Html.CheckBox(fieldDescriptor.Id.ToString(), fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id, Name = fieldDescriptor.Id });
-                                }
-                                else if (fieldDescriptor.TypeName == "date")
-                                {
-                                    if (fieldDescriptor.DateValue == null)
-                                    {
-                                         @Html.TextBoxFor(model => fieldDescriptor.DateValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
-                                    }
-                                    else
-                                    {
-                                        @Html.TextBox(fieldDescriptor.Id.ToString(), fieldDescriptor.DateValue.Value.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
-                                    }
-                                }
-                                else if (fieldDescriptor.TypeName == "numeric")
-                                {
-                                    @Html.TextBoxFor(m => fieldDescriptor.DecimalValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
-                                }
-                                else
-                                {
-                                    @Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
-                                }
-                            </td>
+                @foreach (var field in @Model.PageDescriptors.Where(f => f.SectionGroup == 2).OrderBy(s => s.Order))
+                {
 
-                            <td>
-                                @field.Description
-                            </td>
-                        }
+                    var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
+                    <tr>
+                        <td>
+                            @field.Order
+                        </td>
+                        <td>
+                            @fieldDescriptor.Title
+                        </td>
+                        <td>
+                            @CreateField(fieldDescriptor)
+                        </td>
+
+                        <td>
+                            @field.Description
+                        </td>
                     </tr>
                 }
             </table>
-            <div>
-                <input type="submit" value="Mentés" class="btn btn-default" />
-            </div>
         </div>
 
-        <div class="InnerRight" style="width: 30%; float:left; margin-left:40px; margin-bottom:40px; border:outset">
-            <div class="row">
-                <div class="col-md-1">
-                    <h4>Lap</h4>
-                </div>
-                <div class="col-md-6">
-                    <h4>Megnevezés</h4>
-                </div>
-            </div>
-
-            @foreach (var page in Model.Pages)
-                                        {
-                <div class="row">
-                    <div class="col-md-1">
-                        @page.Number <br />
-                    </div>
-                    <div class="col-md-6">
-                        @page.Title <br />
-                    </div>
-                </div>
-            }
-        </div>
+    </div>
+    <div class="InnerLeft" style="width: 45%; float:left; border:outset;">
+        <input type="submit" value="Mentés" class="btn btn-default" />
     </div>
 
+}
 
+@functions {
+
+    public HtmlString CreateField(FieldDescriptorDto fieldDescriptor)
+    {
+        var color = fieldDescriptor.IsEditable ? "yellow" : "white";
+
+        if (!fieldDescriptor.IsEditable || fieldDescriptor.IsCaculated)
+        {
+            switch (fieldDescriptor.TypeName)
+            {
+                case "bool":
+                    return @Html.Label(fieldDescriptor.BoolFieldValue ? "Igen" : "Nem", new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+
+                case "numeric":
+                    return @Html.Label(fieldDescriptor.DecimalValue?.ToString(), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+
+
+                case "date":
+                    return @Html.Label(fieldDescriptor.DateValue?.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+
+
+                default:
+                    return @Html.Label(fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+
+
+            }
+        }
+
+        else if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
+        {
+
+            var comboItems = new List<SelectListItem>();
+            foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
+            {
+                comboItems.Add(new SelectListItem { Value = item, Text = item });
+            }
+
+            return @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" });
+        }
+        else if (fieldDescriptor.TypeName == "bool")
+        {
+            return @Html.CheckBox(fieldDescriptor.Id.ToString(), fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id, Name = fieldDescriptor.Id });
+        }
+        else if (fieldDescriptor.TypeName == "date")
+        {
+            if (fieldDescriptor.DateValue == null)
+            {
+                return @Html.TextBoxFor(model => fieldDescriptor.DateValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
+            }
+            else
+            {
+                return @Html.TextBox(fieldDescriptor.Id.ToString(), fieldDescriptor.DateValue.Value.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "form-control datepicker", @style = $"background-color:{@color};" });
+            }
+        }
+        else if (fieldDescriptor.TypeName == "numeric")
+        {
+            return Html.TextBoxFor(m => fieldDescriptor.DecimalValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+        }
+        else
+        {
+            return Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+        }
+    }
 }
