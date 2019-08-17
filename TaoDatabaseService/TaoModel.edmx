@@ -89,9 +89,9 @@
           <Property Name="FieldDescriptorId" Type="int" Nullable="false" />
           <Property Name="DecimalValue" Type="decimal" Precision="18" Scale="2" />
           <Property Name="StringValue" Type="nvarchar(max)" />
-          <Property Name="SessionId" Type="int" Nullable="false" />
           <Property Name="DateValue" Type="datetimeoffset" Precision="7" />
           <Property Name="BoolValue" Type="bit" />
+          <Property Name="SessionId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Page">
           <Key>
@@ -102,6 +102,7 @@
           <Property Name="Number" Type="nchar" MaxLength="10" />
           <Property Name="CaptionText" Type="nvarchar" MaxLength="250" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PageDescriptor">
           <Key>
@@ -120,7 +121,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="StartDateTime" Type="datetime" Nullable="false" />
           <Property Name="LastModifyDate" Type="datetime" Nullable="false" />
           <Property Name="Creator" Type="nvarchar" MaxLength="250" />
@@ -198,6 +199,18 @@
             </Principal>
             <Dependent Role="FieldValue">
               <PropertyRef Name="SessionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Page_DocumentType">
+          <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="1" />
+          <End Role="Page" Type="Self.Page" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Page">
+              <PropertyRef Name="DocumentTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -297,6 +310,10 @@
             <End Role="Session" EntitySet="Session" />
             <End Role="FieldValue" EntitySet="FieldValue" />
           </AssociationSet>
+          <AssociationSet Name="FK_Page_DocumentType" Association="Self.FK_Page_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentType" />
+            <End Role="Page" EntitySet="Page" />
+          </AssociationSet>
           <AssociationSet Name="FK_PageDescriptor_FieldDescriptor" Association="Self.FK_PageDescriptor_FieldDescriptor">
             <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
@@ -378,6 +395,10 @@
             <End Role="Page" EntitySet="Page" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
           </AssociationSet>
+          <AssociationSet Name="FK_Page_DocumentType" Association="CustomerNameTaoModel.FK_Page_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentType" />
+            <End Role="Page" EntitySet="Page" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Address">
           <Key>
@@ -450,6 +471,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="DocumentName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="DocumentType" ToRole="Session" />
+          <NavigationProperty Name="Page" Relationship="CustomerNameTaoModel.FK_Page_DocumentType" FromRole="DocumentType" ToRole="Page" />
         </EntityType>
         <EntityType Name="FieldDescriptor">
           <Key>
@@ -476,9 +498,9 @@
           <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
           <Property Name="DecimalValue" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="StringValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="DateValue" Type="DateTimeOffset" Precision="7" />
           <Property Name="BoolValue" Type="Boolean" />
+          <Property Name="SessionId" Type="Guid" Nullable="false" />
           <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldValue" ToRole="FieldDescriptor" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="FieldValue" ToRole="Session" />
         </EntityType>
@@ -492,6 +514,8 @@
           <Property Name="CaptionText" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_Pages" FromRole="Page" ToRole="PageDescriptor" />
+          <Property Name="DocumentTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_Page_DocumentType" FromRole="Page" ToRole="DocumentType" />
         </EntityType>
         <EntityType Name="PageDescriptor">
           <Key>
@@ -512,7 +536,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastModifyDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Creator" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
@@ -657,6 +681,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Page_DocumentType">
+          <End Type="CustomerNameTaoModel.DocumentType" Role="DocumentType" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.Page" Role="Page" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Page">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -749,9 +785,9 @@
           <EntitySetMapping Name="FieldValue">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldValue">
               <MappingFragment StoreEntitySet="FieldValue">
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="BoolValue" ColumnName="BoolValue" />
                 <ScalarProperty Name="DateValue" ColumnName="DateValue" />
-                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="StringValue" ColumnName="StringValue" />
                 <ScalarProperty Name="DecimalValue" ColumnName="DecimalValue" />
                 <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />
@@ -762,6 +798,7 @@
           <EntitySetMapping Name="Page">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.Page">
               <MappingFragment StoreEntitySet="Page">
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CaptionText" ColumnName="CaptionText" />
                 <ScalarProperty Name="Number" ColumnName="Number" />

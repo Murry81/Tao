@@ -18,6 +18,7 @@ namespace TaoDatabaseService
         public DocumentType()
         {
             this.Session = new HashSet<Session>();
+            this.Page = new HashSet<Page>();
         }
     
         public int Id { get; set; }
@@ -25,5 +26,7 @@ namespace TaoDatabaseService
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Session> Session { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Page> Page { get; set; }
     }
 }

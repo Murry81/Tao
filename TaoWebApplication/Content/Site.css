@@ -30,15 +30,29 @@ textarea {
 }
 
 div.InnerLeft {
-    width: 50%;
+    width: 48%;
     position: relative;
-    background: #CCCCCC;
+    background: #e6f2ff;
     float: left;
+    border: outset;
+    padding-bottom:0px;
 }
 
 div.InnerRight {
-    width: 49%;
+    width: 48%;
     position: relative;
-    background: #AAAAFF;
-    float: right;
+    background: #e6f2ff;
+    float: left;
+    border: outset;
+    margin-left: 40px;
+    padding-bottom: 0px;
+}
+
+.TaoControl {
+    height: 25px;
+}
+
+.TaoDataTable
+{
+    margin-bottom: 0px;
 }

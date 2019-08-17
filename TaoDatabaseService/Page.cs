@@ -25,8 +25,10 @@ namespace TaoDatabaseService
         public string Number { get; set; }
         public string CaptionText { get; set; }
         public string Name { get; set; }
+        public int DocumentTypeId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PageDescriptor> PageDescriptor { get; set; }
+        public virtual DocumentType DocumentType { get; set; }
     }
 }

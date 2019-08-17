@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using TaoContracts.Contracts;
 using TaoDatabaseService.Interfaces;
 using TaoWebApplication.Calculators;
+using TaoWebApplication.Models;
 
 namespace TaoWebApplication.Controllers
 {
@@ -24,7 +25,23 @@ namespace TaoWebApplication.Controllers
         {
             var model = new Models.TartalomjegyzekModel();
             var currentpage = _service.GetPage("Tartalomjegyzek");
-            int sessionId = int.Parse(Request.Form["Continue"]);
+            Guid sessionId = Guid.Empty;
+
+            if (Request.Form.AllKeys.Contains("StartNew"))
+            {
+                var result = _service.CreateSession(new SessionDto
+                {
+                    CustomerId = int.Parse(Request.Form["SelectedCustomer.Id"]),
+                    DocumentType = new DocumentDto { Id = int.Parse(Request.Form["SelectedDocumentType"]) }
+                });
+
+                sessionId = result.Id;
+            }
+            else
+            {
+                sessionId = Guid.Parse(Request.Form["Continue"]);
+            }
+
             model = ControllerHelper.FillModel(model, _service, currentpage, sessionId) as Models.TartalomjegyzekModel;
             
             Session["SessionId"] = sessionId.ToString();
@@ -34,13 +51,13 @@ namespace TaoWebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Tartalomjegyzek(string id)
+        public ActionResult Tartalomjegyzek(string buttonAction, List<PageDescriptorDto> fc)
         {
             SaveValues(TenyadatokCalculation.CalculateValues, 1);
        
             var model = new Models.TartalomjegyzekModel();
             var currentpage = _service.GetPage("Tartalomjegyzek");
-            model = ControllerHelper.FillModel(model, _service, currentpage, int.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TartalomjegyzekModel;
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TartalomjegyzekModel;
  
             return View(model);
         }
@@ -49,7 +66,7 @@ namespace TaoWebApplication.Controllers
         {
             var model = new Models.TenyadatokModel();
             var currentpage = _service.GetPage("Tenyadatok");
-            ControllerHelper.FillModel(model, _service, currentpage, int.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()));
+            ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()));
             return View(model);
         }
 
@@ -60,13 +77,13 @@ namespace TaoWebApplication.Controllers
 
             var model = new Models.TenyadatokModel();
             var currentpage = _service.GetPage("Tenyadatok");
-            model = ControllerHelper.FillModel(model, _service, currentpage, int.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TenyadatokModel;
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TenyadatokModel;
             return View(model);
         }
 
         private void SaveValues(Action<List<FieldDescriptorDto>, IDataService> calulator, int pageId)
         {
-            if (int.TryParse(System.Web.HttpContext.Current.Session["SessionId"]?.ToString(), out var sessionId))
+            if (Guid.TryParse(System.Web.HttpContext.Current.Session["SessionId"]?.ToString(), out var sessionId))
             {
                 var fields = _service.GetPageFields(pageId, sessionId);
 

@@ -16,7 +16,7 @@
 {
 
     <div class="container pull-left" style="width: 100%">
-        Válasszon ki egy rögzítésre szánt céget. <br /><br />
+        Válasszon ki egy rögzítésre szánt céget:<br />
         @Html.DropDownListFor(m => m.SelectedCustomerId, new SelectList(Model.Customers, "Id", "Nev"), new { onchange = "this.form.submit();", style = $"width:100%; background-color:yellow;" })
     </div>
 }
@@ -28,8 +28,8 @@
 </div>
 
 <div>
-    <div class="InnerLeft" style="width: 40%; float:left; border:outset;">
-        <table class="CustomerDataTable table">
+    <div class="InnerLeft">
+        <table class="CustomerDataTable table" style="margin-bottom:0px"">
 
             <tr>
                 <td>Cég név</td>
@@ -93,12 +93,12 @@
         </table>
     </div>
 
-    @using (Html.BeginForm("TartalomjegyzekContinue", "Tao", FormMethod.Post))
+    @using (Html.BeginForm("TartalomjegyzekStart", "Tao", FormMethod.Post))
     {
         @Html.HiddenFor(m => Model.SelectedCustomer.Id);
 
-        <div class="InnerRight" style="width: 50%; float:left; margin-left:40px; margin-bottom:40px; border:outset">
-            <table class="StateTable table">
+        <div class="InnerRight">
+            <table class="StateTable table" style="margin-bottom:0px">
                 <tbody>
                     <tr>
                         <td>
@@ -111,10 +111,8 @@
             </table>
         </div>
     }
-   
-       
-    <div class="InnerRight" style="width: 50%; float:left; margin-left:40px; border:outset">
-        <table class="StateTable table">
+    <div class="InnerRight">
+        <table class="StateTable table" style="margin-bottom:0px">
             <thead>
                 <tr>
                     <th class="col-md-3">Dokumentum típusa</th>
@@ -130,7 +128,7 @@
                     foreach (var session in Model.CustomerSessions)
                     {
                         <tr>
-                            <td>@session.DocumentType</td>
+                            <td>@session.DocumentType.DocumentName</td>
                             <td>@session.DocumentState</td>
                             <td>@session.StartDateTime.ToString("yyyy-MM-dd")</td>
                             <td>@session.LastModifyDate.ToString("yyyy-MM-dd")</td>

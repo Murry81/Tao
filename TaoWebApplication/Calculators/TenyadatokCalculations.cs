@@ -9,14 +9,22 @@ namespace TaoWebApplication.Calculators
 {
     public class TenyadatokCalculation
     {
-
-        private static List<int> calculatedFields = new List<int> { 35, 36, 37, 38, 39 };
-
         public static void CalculateValues(List<FieldDescriptorDto> fields, IDataService service)
         {
 
             foreach (var field in fields.OrderBy(s => s.Id))
             {
+
+                if(field.Id == 5)
+                {
+                    var jellegField = fields.FirstOrDefault(f => f.Id == 29);
+                    if(jellegField != null && jellegField.StringValue == "Végleges kalkuláció")
+                    {
+                        field.StringValue = "12";
+                    }
+                    continue;
+                }
+
                 if (!field.IsCaculated)
                     continue;
 

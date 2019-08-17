@@ -17,10 +17,10 @@ namespace TaoDatabaseService.Services
             entities = new CustomerNameTaoEntities(configuration.DataBaseName);
         }
 
-        public List<PageDto> GetAllPage()
+        public List<PageDto> GetAllPage(int documentTypeId)
         {
             List<PageDto> result = new List<PageDto>();
-            foreach(var page in entities.Page)
+            foreach(var page in entities.Page.Where(p => p.DocumentTypeId == documentTypeId))
             {
                 result.Add(page.ToPage());
             }
@@ -52,7 +52,7 @@ namespace TaoDatabaseService.Services
             return result;
         }
 
-        public List<FieldDescriptorDto> GetPageFields(int pageId, int sessionId)
+        public List<FieldDescriptorDto> GetPageFields(int pageId, Guid sessionId)
         {
             var query = entities.Page.FirstOrDefault(p => p.Id == pageId).PageDescriptor;
 
@@ -69,7 +69,7 @@ namespace TaoDatabaseService.Services
             return result;
         }
 
-        public List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, int sessionId)
+        public List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId)
         {
             var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldIds.Contains(f.Id));
             var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId).ToList();
@@ -99,7 +99,7 @@ namespace TaoDatabaseService.Services
             return entities.DocumentType.ToList().Select(d => d.ToDocument()).ToList();
         }
 
-        public void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, int sessionId)
+        public void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, Guid sessionId)
         {
             foreach(var field in updatedFields)
             {
@@ -143,7 +143,29 @@ namespace TaoDatabaseService.Services
                     entities.FieldValue.AddOrUpdate(myEntity);
                 }
             }
+
+            var sessionEntity = entities.Session.First(e => e.Id == sessionId);
+            sessionEntity.LastModifyDate = DateTime.UtcNow;
             entities.SaveChanges();
+        }
+
+        public SessionDto CreateSession(SessionDto session)
+        {
+            var sessionCreated = new Session
+            {
+                CustomerId = session.CustomerId,
+                DocumentStateId = 1,
+                DocumentState = entities.DocumentState.First(ds => ds.Id == 1),
+                DocumentTypeId = session.DocumentType.Id,
+                StartDateTime = DateTime.UtcNow,
+                LastModifyDate = DateTime.UtcNow,
+                Id = Guid.NewGuid()
+            };
+
+            entities.Session.Add(sessionCreated);
+            entities.SaveChanges();
+
+            return sessionCreated.ToSession();
         }
     }
 }

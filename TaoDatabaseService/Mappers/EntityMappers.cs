@@ -14,7 +14,8 @@ namespace TaoDatabaseService.Mappers
                 Title = page.Title,
                 Name = page.Name,
                 CaptionText = page.CaptionText,
-                Number = page.Number
+                Number = page.Number,
+                DocumentTypeId = page.DocumentTypeId
             };
         }
 
@@ -131,7 +132,7 @@ namespace TaoDatabaseService.Mappers
                 Creator = session.Creator,
                 CustomerId = session.CustomerId,
                 DocumentState = session.DocumentState.State,
-                DocumentType = session.DocumentType.DocumentName,
+                DocumentType = session.DocumentType.ToDocument(),
                 Id = session.Id,
                 LastModifer = session.LastModifer,
                 LastModifyDate = session.LastModifyDate,

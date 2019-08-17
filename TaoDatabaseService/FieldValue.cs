@@ -18,9 +18,9 @@ namespace TaoDatabaseService
         public int FieldDescriptorId { get; set; }
         public Nullable<decimal> DecimalValue { get; set; }
         public string StringValue { get; set; }
-        public int SessionId { get; set; }
         public Nullable<System.DateTimeOffset> DateValue { get; set; }
         public Nullable<bool> BoolValue { get; set; }
+        public System.Guid SessionId { get; set; }
     
         public virtual FieldDescriptor FieldDescriptor { get; set; }
         public virtual Session Session { get; set; }

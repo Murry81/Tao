@@ -20,7 +20,7 @@ namespace TaoDatabaseService
             this.FieldValue = new HashSet<FieldValue>();
         }
     
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public System.DateTime StartDateTime { get; set; }
         public System.DateTime LastModifyDate { get; set; }
         public string Creator { get; set; }

@@ -12,6 +12,7 @@
 
         public string Number { get; set; }
 
+        public int DocumentTypeId { get; set; }
 
     }
 }
