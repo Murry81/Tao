@@ -20,5 +20,7 @@ namespace TaoContracts.Contracts
         public string OrderCharacter { get; set; }
         public string Description { get; set; }
         public bool? IsSpecial { get; set; }
+        public int Order { get; set; }
+        public int? SectionGroup { get; set; }
     }
 }

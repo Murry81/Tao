@@ -3,7 +3,7 @@ using TaoContracts.Contracts;
 
 namespace TaoWebApplication.Models
 {
-    public class ModelBase
+    public class ModelBase : IFieldList
     {
         public int SessionId { get; set; }
         public string CustomerId { get; set; }

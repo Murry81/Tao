@@ -13,7 +13,7 @@ namespace TaoWebApplication.Controllers
             model.CurrentPage = page;
             model.Pages = service.GetAllPage(page.DocumentTypeId);
             model.PageDescriptors = service.GetPageDescriptor(page.Id).OrderBy(p => p.SectionGroup).ThenBy(p => p.Order).ToList();
-            model.Fields = service.GetPageFields(page.Id, sessionId);
+            model.Fields = service.GetPageFields(page.Id, sessionId).OrderBy(p => p.SectionGroup).ThenBy(p => p.Order).ToList();
             return model;
         }
     }

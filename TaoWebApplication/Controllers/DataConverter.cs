@@ -10,38 +10,23 @@ namespace TaoWebApplication.Controllers
     public static class DataConverter
     {
 
-        public static void GetTypedValue(FieldDescriptorDto field, string value)
+        public static void GetTypedValue(FieldDescriptorDto field, List<FieldDescriptorDto> allFields)
         {
+            var currentField = allFields.FirstOrDefault(f => f.Id == field.Id);
 
             switch (field.TypeName)
             {
                 case "numeric":
-                    {
-                        if (decimal.TryParse(value, out var decimalValue))
-                        {
-                            field.DecimalValue = decimalValue;
-                        }
-                        else
-                        {
-                            field.DecimalValue = null;
-                        }
-                        break;
-                    }
+                    field.DecimalValue = currentField.DecimalValue;
+                    break;
                 case "bool":
-                        field.BoolFieldValue = value.ToLower().Contains("true");
+                    field.BoolFieldValue = currentField.BoolFieldValue;
                     break;
                 case "date":
-                    if (DateTimeOffset.TryParse(value, out var dateValue))
-                    {
-                        field.DateValue = dateValue;
-                    }
-                    else
-                    {
-                        field.DateValue = null;
-                    }
+                    field.DateValue = currentField.DateValue;
                     break;
                 default:
-                    field.StringValue = value;
+                    field.StringValue = currentField.StringValue;
                     break;
             }
         }

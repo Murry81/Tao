@@ -60,7 +60,7 @@ namespace TaoDatabaseService.Services
             var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId).ToList(); 
 
             var result = new List<FieldDescriptorDto>();
-            var pageDescriptor = query.FirstOrDefault(p => p.PageId == pageId);
+            var pageDescriptor = query.Where(p => p.PageId == pageId).ToList();
 
             foreach (var field in fieldDescriptor)
             {

@@ -51,15 +51,24 @@ namespace TaoWebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Tartalomjegyzek(string buttonAction, List<PageDescriptorDto> fc)
+        public ActionResult Tartalomjegyzek(string buttonAction, TartalomjegyzekModel fc)
         {
-            SaveValues(TenyadatokCalculation.CalculateValues, 1);
+            SaveValues(fc.Fields, TenyadatokCalculation.CalculateValues, 1);
        
-            var model = new Models.TartalomjegyzekModel();
-            var currentpage = _service.GetPage("Tartalomjegyzek");
-            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TartalomjegyzekModel;
- 
-            return View(model);
+            if(buttonAction == "Previous")
+            {
+                return RedirectToAction("Index", "Selector");
+            }
+            if (buttonAction == "Save")
+            {
+                var model = new Models.TartalomjegyzekModel();
+                var currentpage = _service.GetPage("Tartalomjegyzek");
+                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TartalomjegyzekModel;
+
+                return View(model);
+            }
+
+            return RedirectToAction("Tenyadatok", "Tao");
         }
 
         public ActionResult Tenyadatok()
@@ -73,7 +82,7 @@ namespace TaoWebApplication.Controllers
         [HttpPost]
         public ActionResult Tenyadatok(string id)
         {
-            SaveValues(null, 2);
+            //SaveValues(null, 2);
 
             var model = new Models.TenyadatokModel();
             var currentpage = _service.GetPage("Tenyadatok");
@@ -81,7 +90,7 @@ namespace TaoWebApplication.Controllers
             return View(model);
         }
 
-        private void SaveValues(Action<List<FieldDescriptorDto>, IDataService> calulator, int pageId)
+        private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService> calulator, int pageId)
         {
             if (Guid.TryParse(System.Web.HttpContext.Current.Session["SessionId"]?.ToString(), out var sessionId))
             {
@@ -89,12 +98,9 @@ namespace TaoWebApplication.Controllers
 
                 foreach (var field in fields)
                 {
-                    if (Request.Form.AllKeys.Contains(field.Id.ToString()))
+                    if (!field.IsCaculated && field.IsEditable)
                     {
-                        if (!field.IsCaculated && field.IsEditable)
-                        {
-                            DataConverter.GetTypedValue(field,  Request.Form[field.Id.ToString()]);
-                        }
+                        DataConverter.GetTypedValue(field, fieldValues);
                     }
                 }
 

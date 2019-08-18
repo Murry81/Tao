@@ -34,8 +34,10 @@ namespace TaoDatabaseService.Mappers
             };
         }
 
-        public static FieldDescriptorDto ToFieldDescriptorDto(this FieldDescriptor fieldDescriptor, List<FieldValue> values, PageDescriptor pageDescriptor)
+        public static FieldDescriptorDto ToFieldDescriptorDto(this FieldDescriptor fieldDescriptor, List<FieldValue> values, List<PageDescriptor> pageDescriptorList)
         {
+            var pageDescriptor = pageDescriptorList.FirstOrDefault(p => p.FieldId == fieldDescriptor.Id);
+
             var result = new FieldDescriptorDto
             {
                 Caption = fieldDescriptor.Caption,
@@ -48,7 +50,9 @@ namespace TaoDatabaseService.Mappers
                 TypeOptions = fieldDescriptor.TypeOptions,
                 Description = pageDescriptor?.Description,
                 OrderCharacter = pageDescriptor?.OrderCharacter,
-                IsSpecial = fieldDescriptor.IsSpecial
+                IsSpecial = fieldDescriptor.IsSpecial,
+                SectionGroup = pageDescriptor.SectionGroup,
+                Order = pageDescriptor.Order
             };
 
             var currentValue = values.FirstOrDefault(v => v.FieldDescriptorId == fieldDescriptor.Id);

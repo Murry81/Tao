@@ -26,33 +26,35 @@
                     </tr>
                 </thead>
 
-                @foreach (var field in @Model.PageDescriptors.Where(f => f.SectionGroup != 2).OrderBy(s => s.Order))
+                @for (int i = 0; i < Model.Fields.Count; i++)
                 {
-                    var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
-                    var color = fieldDescriptor.IsEditable ? "yellow" : "white";
+                    if (Model.Fields[i].SectionGroup == 2)
+                    {
+                        continue;
+                    }
 
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
                     <tr>
                         <td>
-                            @field.OrderCharacter
+                            @Model.Fields[i].OrderCharacter
                         </td>
                         <td>
-                            @fieldDescriptor.Title
+                            @Model.Fields[i].Title
                         </td>
                         <td>
-                            @CreateField(fieldDescriptor)
+                            @CreateField(Model, i)
                         </td>
                         <td>
-                            @field.Description
+                            @Model.Fields[i].Description
                         </td>
                     </tr>
                 }
             </table>
-
         </div>
 
         <div class="InnerRight">
             <table class="TaoDataTable table">
-                <thead >
+                <thead>
                     <tr>
                         <th width="5%" style="text-align:center">#</th>
                         <th class="col-md-4">Leírás</th>
@@ -61,22 +63,26 @@
                     </tr>
                 </thead>
 
-                @foreach (var field in @Model.PageDescriptors.Where(f => f.SectionGroup == 2).OrderBy(s => s.Order))
+                @for (int i = 0; i < Model.Fields.Count; i++)
                 {
-                    var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
+                    if (Model.Fields[i].SectionGroup != 2)
+                    {
+                        continue;
+                    }
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
                     <tr>
                         <td>
-                            @field.OrderCharacter
+                            @Model.Fields[i].OrderCharacter
                         </td>
                         <td>
-                            @fieldDescriptor.Title
+                            @Model.Fields[i].Title
                         </td>
                         <td>
-                            @CreateField(fieldDescriptor)
+                            @CreateField(Model, i)
                         </td>
 
                         <td>
-                            @field.Description
+                            @Model.Fields[i].Description
                         </td>
                     </tr>
                 }
@@ -84,83 +90,70 @@
         </div>
     </div>
     <div class="InnerLeft">
-        @*<button type="submit" value="SaveAndContinueBackward" name="SaveAndContinue" class="btn btn-default">Mentés és előző</button>
-        <button type="submit" value="Save" name="Save" class="btn btn-default">Mentés</button>
-        <button type="submit" value="SaveAndContinueForward" name="SaveAndContinue" class="btn btn-default">Mentés és következő</button>*@
-
-
-        <input type="submit" value="Mentés és előző" name="buttonAction" class="btn btn-default" />
-        <input type="submit" value="Mentés" name="buttonAction" class="btn btn-default" />
-        <input type="submit" value="Mentés és következő" name="buttonAction" class="btn btn-default" />
+        <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+        <button type="submit" value="Save" name="buttonAction" class="btn btn-default">Mentés</button>
+        <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
     </div>
 }
 
 @functions {
 
-    public HtmlString CreateField(FieldDescriptorDto fieldDescriptor)
+    public HtmlString CreateField(IFieldList model , int i)
     {
-        var color = fieldDescriptor.IsEditable ? "yellow" : "#e6f2ff";
+        var color = model.Fields[i].IsEditable ? "yellow" : "#e6f2ff";
 
-        if (!fieldDescriptor.IsEditable || fieldDescriptor.IsCaculated)
+        if (!model.Fields[i].IsEditable || model.Fields[i].IsCaculated)
         {
-            switch (fieldDescriptor.TypeName)
+            switch (model.Fields[i].TypeName)
             {
                 case "bool":
-                    return @Html.Label(fieldDescriptor.BoolFieldValue ? "Igen" : "Nem", new { @class="TaoControl", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+                    return @Html.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class="TaoControl", @style = $"width:100%; background-color:{@color};" });
 
                 case "numeric":
-                    return @Html.Label(fieldDescriptor.DecimalValue?.ToString(), new { @class="TaoControl", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color}; text-align:right;" });
-
-
+                    return @Html.Label(model.Fields[i].DecimalValue?.ToString(), new { @class="TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;" });
                 case "date":
-                    if(fieldDescriptor.DateValue == null)
+                    if(model.Fields[i].DateValue == null)
                     {
-                        return @Html.Label("", new { @class="TaoControl", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
+                        return @Html.Label("", new { @class="TaoControl",  @style = $"width:100%; background-color:{@color};" });
                     }
-                    return @Html.Label(fieldDescriptor.DateValue?.ToString("yyyy-MM-dd"), new { @class="TaoControl", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
-
-
+                    return @Html.Label(model.Fields[i].DateValue?.ToString("yyyy-MM-dd"), new { @class="TaoControl", @style = $"width:100%; background-color:{@color};" });
                 default:
-                    return @Html.Label(fieldDescriptor.StringValue, new { @class="TaoControl", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" });
-
-
+                    return @Html.Label(model.Fields[i].StringValue, new { @class="TaoControl", @style = $"width:100%; background-color:{@color};" });
             }
         }
 
-        else if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
+        else if (!string.IsNullOrEmpty(model.Fields[i].TypeOptions))
         {
-
             var comboItems = new List<SelectListItem>();
-            foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
+            foreach (var item in model.Fields[i].TypeOptions.Split(';'))
             {
                 comboItems.Add(new SelectListItem { Value = item, Text = item });
             }
 
-            return @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new {@class="TaoControl", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" });
+            return @Html.DropDownListFor(m => model.Fields[i].StringValue, new SelectList(comboItems, "Value", "Text", model.Fields[i].StringValue), new {@class="TaoControl", style = $"width:100%; background-color:{@color};" });
         }
-        else if (fieldDescriptor.TypeName == "bool")
+        else if (model.Fields[i].TypeName == "bool")
         {
-            return @Html.CheckBox(fieldDescriptor.Id.ToString(), fieldDescriptor.BoolFieldValue, new { id = fieldDescriptor.Id, Name = fieldDescriptor.Id , @class="TaoControl", @style="width:25px; height:25px;" });
+            return @Html.CheckBoxFor(m => model.Fields[i].BoolFieldValue, new { @class="TaoControl", @style="width:25px; height:25px;" });
         }
-        else if (fieldDescriptor.TypeName == "date")
+        else if (model.Fields[i].TypeName == "date")
         {
-            if (fieldDescriptor.DateValue == null)
+            if (model.Fields[i].DateValue == null)
             {
-                return @Html.TextBoxFor(model => fieldDescriptor.DateValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                return @Html.TextBoxFor(m => model.Fields[i].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
             }
             else
             {
-                return @Html.TextBox(fieldDescriptor.Id.ToString(), fieldDescriptor.DateValue.Value.ToString("yyyy-MM-dd"), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                return @Html.TextBoxFor(m => model.Fields[i].DateValue, model.Fields[i].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
             }
         }
-        else if (fieldDescriptor.TypeName == "numeric")
+        else if (model.Fields[i].TypeName == "numeric")
         {
-            var specifier = "#;(#.#)";
-            return Html.TextBox(fieldDescriptor.Id.ToString(), fieldDescriptor.DecimalValue != null ? fieldDescriptor.DecimalValue.Value.ToString(specifier) : "", new {@type= "number", @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
+            return @Html.TextBoxFor(m => model.Fields[i].DecimalValue, new {@type= "number", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
         }
         else
         {
-            return Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @class="TaoControl", @style = $"width:100%; background-color:{@color};" });
+            return @Html.TextBoxFor(m => model.Fields[i].StringValue, new { @class="TaoControl", @style = $"width:100%; background-color:{@color};" });
         }
     }
 }
