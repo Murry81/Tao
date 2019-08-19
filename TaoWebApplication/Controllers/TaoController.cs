@@ -50,10 +50,20 @@ namespace TaoWebApplication.Controllers
             return View("~/Views/Tao/Tartalomjegyzek.cshtml", model);
         }
 
+        public ActionResult Tartalomjegyzek()
+        {
+            var model = new Models.TartalomjegyzekModel();
+            var currentpage = _service.GetPage("Tartalomjegyzek");
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TartalomjegyzekModel;
+
+            return View(model);
+        }
+
+
         [HttpPost]
         public ActionResult Tartalomjegyzek(string buttonAction, TartalomjegyzekModel fc)
         {
-            SaveValues(fc.Fields, TenyadatokCalculation.CalculateValues, 1);
+            SaveValues(fc.Fields, TartalomCalculation.CalculateValues, 1);
        
             if(buttonAction == "Previous")
             {
@@ -80,17 +90,52 @@ namespace TaoWebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Tenyadatok(string id)
+        public ActionResult Tenyadatok(string buttonAction, TenyadatokModel fc)
         {
-            //SaveValues(null, 2);
+            SaveValues(fc.Fields, TenyadatokCalculation.CalculateValues, 2);
 
-            var model = new Models.TenyadatokModel();
-            var currentpage = _service.GetPage("Tenyadatok");
-            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TenyadatokModel;
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Tartalomjegyzek", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                var model = new Models.TenyadatokModel();
+                var currentpage = _service.GetPage("Tenyadatok");
+                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TenyadatokModel;
+                return View(model);
+            }
+            return RedirectToAction("TenyadatKorrekcio", "Tao");
+        }
+
+        public ActionResult TenyadatKorrekcio()
+        {
+            var model = new Models.TenyadatKorrekcioModel();
+            var currentpage = _service.GetPage("TenyadatKorrekcio");
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TenyadatKorrekcioModel;
             return View(model);
         }
 
-        private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService> calulator, int pageId)
+        [HttpPost]
+        public ActionResult TenyadatKorrekcio(string buttonAction, TenyadatokModel fc)
+        {
+            SaveValues(fc.Fields, TenyadatKorreckcioCalculation.CalculateValues, 3);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Tenyadatok", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                var model = new Models.TenyadatKorrekcioModel();
+                var currentpage = _service.GetPage("TenyadatKorrekcio");
+                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as Models.TenyadatKorrekcioModel;
+                return View(model);
+            }
+            return RedirectToAction("TenyadatKorrekcio", "Tao");
+        }
+
+        private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)
         {
             if (Guid.TryParse(System.Web.HttpContext.Current.Session["SessionId"]?.ToString(), out var sessionId))
             {
@@ -106,7 +151,7 @@ namespace TaoWebApplication.Controllers
 
                 if (calulator != null)
                 {
-                    calulator(fields, _service);
+                    calulator(fields, _service, sessionId);
                 }
 
                 _service.UpdateFieldValues(fields, sessionId);

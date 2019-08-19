@@ -5,29 +5,29 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f672a146a0fb4db48b7e25998485516b" Name="Diagram1">
-        <EntityTypeShape EntityType="CustomerNameTaoModel.Address" Width="1.5" PointX="5.125" PointY="7.625" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.ContactDetail" Width="1.5" PointX="0.75" PointY="1.625" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.Currency" Width="1.5" PointX="0.75" PointY="4.625" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.Customer" Width="1.5" PointX="3" PointY="3.75" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentState" Width="1.5" PointX="7" PointY="2.125" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentType" Width="1.5" PointX="7.375" PointY="7.625" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.FieldDescriptor" Width="1.5" PointX="9.75" PointY="2.875" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.FieldValue" Width="1.5" PointX="7.5" PointY="4.375" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.Page" Width="1.5" PointX="9.75" PointY="7.5" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.PageDescriptor" Width="1.5" PointX="12" PointY="3.125" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.Session" Width="1.5" PointX="5.25" PointY="4" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.Address" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.ContactDetail" Width="1.5" PointX="0.625" PointY="1.125" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.Currency" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.Customer" Width="1.5" PointX="3" PointY="3.875" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentState" Width="1.5" PointX="7.5" PointY="6.5" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentType" Width="1.5" PointX="7.625" PointY="2.375" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.FieldDescriptor" Width="1.5" PointX="9.875" PointY="1.125" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.FieldValue" Width="1.5" PointX="5.25" PointY="0.875" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.Page" Width="1.5" PointX="10" PointY="4.75" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.PageDescriptor" Width="1.5" PointX="12.125" PointY="3.375" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.Session" Width="1.5" PointX="5.25" PointY="4.125" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Address_Customer" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Customer_ContactDetail" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Customer_Currency" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Customer_Currency1" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Session_Customer" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Session_DocumentState" />
+        <AssociationConnector Association="CustomerNameTaoModel.FK_Page_DocumentType" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_Session_DocumentType" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_FieldValue_Session" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_PageDescriptor_Pages" />
-        <AssociationConnector Association="CustomerNameTaoModel.FK_Page_DocumentType" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

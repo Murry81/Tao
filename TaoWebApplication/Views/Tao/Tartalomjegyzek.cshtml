@@ -149,8 +149,9 @@
         }
         else if (model.Fields[i].TypeName == "numeric")
         {
-            return @Html.TextBoxFor(m => model.Fields[i].DecimalValue, new {@type= "number", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
-        }
+           
+                return @Html.TextBoxFor(m => model.Fields[i].DecimalValue, "{0:G29}", new { @type = "number", step="any",  @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
+          }
         else
         {
             return @Html.TextBoxFor(m => model.Fields[i].StringValue, new { @class="TaoControl", @style = $"width:100%; background-color:{@color};" });

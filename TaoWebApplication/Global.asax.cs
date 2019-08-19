@@ -6,6 +6,7 @@ using System.Web.Routing;
 using TaoDatabaseService;
 using TaoDatabaseService.Interfaces;
 using TaoDatabaseService.Services;
+using TaoWebApplication.Models;
 
 namespace TaoWebApplication
 {
@@ -18,6 +19,9 @@ namespace TaoWebApplication
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
+           ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
+    
             var builder = new ContainerBuilder();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);

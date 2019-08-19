@@ -1,17 +1,155 @@
-﻿
+﻿@using TaoDatabaseService
+@using TaoWebApplication.Models
+@model TenyadatKorrekcioModel
+
 @{
-    Layout = null;
+    ViewBag.Title = "Home Page";
 }
 
-<!DOCTYPE html>
+@using (Html.BeginForm("TenyadatKorrekcio", "Tao", FormMethod.Post))
+{
+    <div>
+        <div class="InnerLeft">
+            <table class="TaoDataTable table" style="margin-bottom:0px;">
+                <thead>
+                    <tr>
+                        <th width="5%" style="text-align:center">#</th>
+                        <th class="col-md-5">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-2">Megjegyzés</th>
+                    </tr>
+                </thead>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>TenyadatKorrekcio</title>
-</head>
-<body>
-    <div> 
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                    if (Model.Fields[i].SectionGroup != 1)
+                    {
+                        continue;
+                    }
+
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
+                    <tr>
+                        <td>
+                            @Model.Fields[i].OrderCharacter
+                        </td>
+                        <td>
+                            <b>  @Model.Fields[i].Title</b>
+                        </td>
+                        <td>
+                            @CreateField(Model, i)                         
+                        </td>
+                        <td>
+                            @Model.Fields[i].Description
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+        <div class="InnerRight">
+            <table class="TaoDataTable table">
+                <thead>
+                    <tr>
+                        <th width="5%" style="text-align:center">#</th>
+                        <th class="col-md-5">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-2">Megjegyzés</th>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                    if (Model.Fields[i].SectionGroup != 2)
+                    {
+                        continue;
+                    }
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
+                    <tr>
+                        <td>
+                            @Model.Fields[i].OrderCharacter
+                        </td>
+                        <td>
+                            @Model.Fields[i].Title
+                        </td>
+                        <td>
+                            @CreateField(Model, i)
+                        </td>
+
+                        <td>
+                            @Model.Fields[i].Description
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
     </div>
-</body>
-</html>
+        <div class="InnerLeft">
+            <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+            <button type="submit" value="Save" name="buttonAction" class="btn btn-default">Mentés</button>
+            <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+        </div>
+}
+
+
+@functions {
+
+    public HtmlString CreateField(IFieldList model, int i)
+    {
+        var color = model.Fields[i].IsEditable ? "yellow" : "#e6f2ff";
+
+        if (!model.Fields[i].IsEditable || model.Fields[i].IsCaculated)
+        {
+            switch (model.Fields[i].TypeName)
+            {
+                case "bool":
+                    return @Html.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+
+                case "numeric":
+                    return @Html.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue?.ToString() : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;" });
+                case "date":
+                    if (model.Fields[i].DateValue == null)
+                    {
+                        return @Html.Label("", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    }
+                    return @Html.Label(model.Fields[i].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                default:
+                    return @Html.Label(model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+            }
+        }
+
+        else if (!string.IsNullOrEmpty(model.Fields[i].TypeOptions))
+        {
+            var comboItems = new List<SelectListItem>();
+            foreach (var item in model.Fields[i].TypeOptions.Split(';'))
+            {
+                comboItems.Add(new SelectListItem { Value = item, Text = item });
+            }
+
+            return @Html.DropDownListFor(m => model.Fields[i].StringValue, new SelectList(comboItems, "Value", "Text", model.Fields[i].StringValue), new { @class = "TaoControl", style = $"width:100%; background-color:{@color};" });
+        }
+        else if (model.Fields[i].TypeName == "bool")
+        {
+            return @Html.CheckBoxFor(m => model.Fields[i].BoolFieldValue, new { @class = "TaoControl", @style = "width:25px; height:25px;" });
+        }
+        else if (model.Fields[i].TypeName == "date")
+        {
+            if (model.Fields[i].DateValue == null)
+            {
+                return @Html.TextBoxFor(m => model.Fields[i].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+            }
+            else
+            {
+                return @Html.TextBoxFor(m => model.Fields[i].DateValue, model.Fields[i].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+            }
+        }
+        else if (model.Fields[i].TypeName == "numeric")
+        {
+            return @Html.TextBoxFor(m => model.Fields[i].DecimalValue,"{0:G29}", new { @type = "number", @step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
+        }
+        else
+        {
+            return @Html.TextBoxFor(m => model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+        }
+    }
+}

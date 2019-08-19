@@ -17,7 +17,7 @@ namespace TaoDatabaseService.Interfaces
         PageDto GetPage(string name);
 
         SessionDto CreateSession(SessionDto session);
-
+        
         List<PageDescriptorDto> GetPageDescriptor(int pageId);
 
         List<FieldDescriptorDto> GetPageFields(int pageId, Guid sessionId);

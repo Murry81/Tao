@@ -36,7 +36,7 @@ namespace TaoDatabaseService.Mappers
 
         public static FieldDescriptorDto ToFieldDescriptorDto(this FieldDescriptor fieldDescriptor, List<FieldValue> values, List<PageDescriptor> pageDescriptorList)
         {
-            var pageDescriptor = pageDescriptorList.FirstOrDefault(p => p.FieldId == fieldDescriptor.Id);
+            var pageDescriptor = pageDescriptorList?.FirstOrDefault(p => p.FieldId == fieldDescriptor.Id);
 
             var result = new FieldDescriptorDto
             {
@@ -51,8 +51,8 @@ namespace TaoDatabaseService.Mappers
                 Description = pageDescriptor?.Description,
                 OrderCharacter = pageDescriptor?.OrderCharacter,
                 IsSpecial = fieldDescriptor.IsSpecial,
-                SectionGroup = pageDescriptor.SectionGroup,
-                Order = pageDescriptor.Order
+                SectionGroup = pageDescriptor?.SectionGroup,
+                Order = pageDescriptor?.Order
             };
 
             var currentValue = values.FirstOrDefault(v => v.FieldDescriptorId == fieldDescriptor.Id);

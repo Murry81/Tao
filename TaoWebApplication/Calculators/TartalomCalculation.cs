@@ -7,9 +7,9 @@ using TaoDatabaseService.Interfaces;
 
 namespace TaoWebApplication.Calculators
 {
-    public class TenyadatokCalculation
+    public class TartalomCalculation
     {
-        public static void CalculateValues(List<FieldDescriptorDto> fields, IDataService service)
+        public static void CalculateValues(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
 
             foreach (var field in fields.OrderBy(s => s.Id))

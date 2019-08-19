@@ -5,73 +5,196 @@
 @{
     ViewBag.Title = "Home Page";
 }
-<div style="text-align: center; color: red;">A végleges bevallás készítése során a korrekciós munkalap nem elérhető. <br /> Kitöltött cellák száma: 0 <br /> 
+<div style="text-align: center; color: red;">
+    A végleges bevallás készítése során a korrekciós munkalap nem elérhető. <br /> Kitöltött cellák száma: 0 <br />
     A kitölött cellákban szereplő értékek törléséhez állítsd vissza a típust a feltöltésre a Tartalomjegyzég fülön! <br />
-                                                                                                                    <br /><br />
-    </div>
+    <br /><br />
+</div>
 
 @using (Html.BeginForm("Tenyadatok", "Tao", FormMethod.Post))
 {
-    <div class="container pull-left" style="width: 100%">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="width: 3%"></th>
-                    <th class="col-md-5">Megnevezés</th>
-                    <th class="col-md-1 text-right">eFt</th>
-                    <th class="col-md-6">Megjegyzés</th>
-                </tr>
-            </thead>
-            <tbody>
-                    @for (int i = 0; i < Model.PageDescriptors.Count; i++)
+    <div>
+        <div class="InnerLeft">
+            <table class="TaoDataTable table" style="margin-bottom:0px;">
+                <thead>
+                    <tr>
+                        <th width="5%" style="text-align:center">#</th>
+                        <th class="col-md-4">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-3">Megjegyzés</th>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                    if (Model.Fields[i].SectionGroup != 1)
                     {
-
-                        var field = Model.PageDescriptors[i];
-                        var fieldDescriptor = Model.Fields.FirstOrDefault(f => f.Id == field.FieldId);
-                        if (fieldDescriptor.IsSpecial.HasValue && fieldDescriptor.IsSpecial.Value)
-                        {
-                            continue;
-                        }
-                        var color = fieldDescriptor.IsEditable ? "yellow" : "white";
-
-                     <tr>
-                        <td>@fieldDescriptor.OrderCharacter</td>
-                        <td>@fieldDescriptor.Title</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(fieldDescriptor.TypeOptions))
-                            {
-
-                                var comboItems = new List<SelectListItem>();
-                                foreach (var item in fieldDescriptor.TypeOptions.Split(';'))
-                                {
-                                    comboItems.Add(new SelectListItem { Value = item, Text = item });
-                                }
-
-                                @Html.DropDownListFor(m => fieldDescriptor, new SelectList(comboItems, "Value", "Text", fieldDescriptor.StringValue), new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, style = $"width:100%; background-color:{@color};" })
-                            }
-                            else
-                            {
-                                var index = Model.Fields.IndexOf(fieldDescriptor);
-                                if (fieldDescriptor.TypeName == "numeric")
-                                {
-                                    var specifier = "#;(#)";
-
-                                    @Html.TextBox(Model.Fields[i].Id.ToString(), Model.Fields[i].DecimalValue != null ? Model.Fields[i].DecimalValue.Value.ToString(specifier) : "", new { @id = Model.Fields[i].Id, @Name = Model.Fields[i].Id, @class = "text-right form-control", @style = $"width:100%; background-color:{@color};" })
-                                    @Html.ValidationMessage(Model.Fields[i].Id.ToString(), "", new { @Name = Model.Fields[i].Id })
-                                }
-                                else
-                                {
-                                    @Html.TextBoxFor(m => fieldDescriptor.StringValue, new { @id = fieldDescriptor.Id, @Name = fieldDescriptor.Id, @style = $"width:100%; background-color:{@color};" })
-                                }
-                            }
-                        </td>
-                        <td> @field.Description</td>
-                     </tr>
+                        continue;
                     }
-            </tbody>
-        </table>
 
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
+                    <tr>
+                        <td>
+                            @Model.Fields[i].OrderCharacter
+                        </td>
+                        <td>
+                            @Model.Fields[i].Title
+                        </td>
+                        <td>
+                            @CreateField(Model, i)
+                        </td>
+                        <td>
+                            @Model.Fields[i].Description
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
 
-        <input type="submit" value="Save 2" class="btn btn-default" />
+        <div class="InnerRight">
+            Innovációs járulék kötelezettség
+            <table class="TaoDataTable table">
+                <thead>
+                    <tr>
+                        <th width="5%" style="text-align:center">#</th>
+                        <th class="col-md-4">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-3">Megjegyzés</th>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                    if (Model.Fields[i].SectionGroup != 2)
+                    {
+                        continue;
+                    }
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
+                    <tr>
+                        <td>
+                            @Model.Fields[i].OrderCharacter
+                        </td>
+                        <td>
+                            @Model.Fields[i].Title
+                        </td>
+                        <td>
+                            @CreateField(Model, i)
+                        </td>
+
+                        <td>
+                            @Model.Fields[i].Description
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+        <div class="InnerRight">
+            Energiaellátók jövedelemadója
+            <table class="TaoDataTable table">
+                <thead>
+                    <tr>
+                        <th width="5%" style="text-align:center">#</th>
+                        <th class="col-md-4">Leírás</th>
+                        <th class="col-md-2">Érték</th>
+                        <th class="col-md-3">Megjegyzés</th>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                    if (Model.Fields[i].SectionGroup != 3)
+                    {
+                        continue;
+                    }
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
+                    <tr>
+                        <td>
+                            @Model.Fields[i].OrderCharacter
+                        </td>
+                        <td>
+                            @Model.Fields[i].Title
+                        </td>
+                        <td>
+                            @CreateField(Model, i)
+                        </td>
+
+                        <td>
+                            @Model.Fields[i].Description
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
     </div>
+    <footer class="pull-left">
+        <div class="InnerLeft">
+            <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+            <button type="submit" value="Save" name="buttonAction" class="btn btn-default">Mentés</button>
+            <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+        </div>
+    </footer>
+}
+
+@functions {
+
+    public HtmlString CreateField(IFieldList model, int i)
+    {
+        var color = model.Fields[i].IsEditable ? "yellow" : "#e6f2ff";
+
+        if (!model.Fields[i].IsEditable || model.Fields[i].IsCaculated)
+        {
+            switch (model.Fields[i].TypeName)
+            {
+                case "bool":
+                    return @Html.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+
+                case "numeric":
+                    return @Html.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue?.ToString() : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;" });
+                case "date":
+                    if (model.Fields[i].DateValue == null)
+                    {
+                        return @Html.Label("", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    }
+                    return @Html.Label(model.Fields[i].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                default:
+                    return @Html.Label(model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+            }
+        }
+
+        else if (!string.IsNullOrEmpty(model.Fields[i].TypeOptions))
+        {
+            var comboItems = new List<SelectListItem>();
+            foreach (var item in model.Fields[i].TypeOptions.Split(';'))
+            {
+                comboItems.Add(new SelectListItem { Value = item, Text = item });
+            }
+
+            return @Html.DropDownListFor(m => model.Fields[i].StringValue, new SelectList(comboItems, "Value", "Text", model.Fields[i].StringValue), new { @class = "TaoControl", style = $"width:100%; background-color:{@color};" });
+        }
+        else if (model.Fields[i].TypeName == "bool")
+        {
+            return @Html.CheckBoxFor(m => model.Fields[i].BoolFieldValue, new { @class = "TaoControl", @style = "width:25px; height:25px;" });
+        }
+        else if (model.Fields[i].TypeName == "date")
+        {
+            if (model.Fields[i].DateValue == null)
+            {
+                return @Html.TextBoxFor(m => model.Fields[i].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+            }
+            else
+            {
+                return @Html.TextBoxFor(m => model.Fields[i].DateValue, model.Fields[i].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+            }
+        }
+        else if (model.Fields[i].TypeName == "numeric")
+        {
+            return @Html.TextBoxFor(m => model.Fields[i].DecimalValue, "{0:G29}", new { @type = "number", @step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
+        }
+        else
+        {
+            return @Html.TextBoxFor(m => model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+        }
+    }
 }
