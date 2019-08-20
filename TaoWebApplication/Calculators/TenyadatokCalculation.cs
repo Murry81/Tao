@@ -21,17 +21,17 @@ namespace TaoWebApplication.Calculators
                 {
                     case 62: // Korrigált anyagköltség 
                         {
-                            field.DecimalValue = Calculate62(field, fields);
+                            field.DecimalValue = Calculate62(fields);
                             break;
                         }
                     case 63: // KKV státusz
                         {
-                            field.BoolFieldValue = Calculate63(field, fields, service, sessionId);
+                            field.BoolFieldValue = Calculate63(fields, service, sessionId);
                             break;
                         }
                     case 64: // A cég innovációs járulékra kötelezett
                         {
-                            field.BoolFieldValue = Calculate64(field, fields);
+                            field.BoolFieldValue = Calculate64(fields);
                             break;
                         }
                    
@@ -39,7 +39,7 @@ namespace TaoWebApplication.Calculators
             }
         }
 
-        private static bool Calculate64(FieldDescriptorDto field, List<FieldDescriptorDto> fields)
+        private static bool Calculate64(List<FieldDescriptorDto> fields)
         {
             if (fields.FirstOrDefault(f => f.Id == 63).BoolFieldValue)
                 return true;
@@ -56,7 +56,7 @@ namespace TaoWebApplication.Calculators
             return false;
         }
 
-        private static bool Calculate63(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        private static bool Calculate63(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             if (fields.FirstOrDefault(f => f.Id == 56).DecimalValue < 50)
                 return true;
@@ -75,7 +75,7 @@ namespace TaoWebApplication.Calculators
             return false;
         }
 
-        private static decimal? Calculate62(FieldDescriptorDto field, List<FieldDescriptorDto> fields)
+        private static decimal? Calculate62(List<FieldDescriptorDto> fields)
         {
             var anyagkoltseg = fields.FirstOrDefault(f => f.Id == 26).DecimalValue;
             var notAnyagkoltseg = fields.FirstOrDefault(f => f.Id == 10).DecimalValue;

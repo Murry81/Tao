@@ -33,7 +33,14 @@
                             @Model.Fields[i].OrderCharacter
                         </td>
                         <td>
-                            <b>  @Model.Fields[i].Title</b>
+                            @if (Model.Fields[i].IsCaculated)
+                            {
+                                <b> @Model.Fields[i].Title</b>
+                            }
+                            else
+                            {
+                                @Model.Fields[i].Title
+                            }
                         </td>
                         <td>
                             @CreateField(Model, i)                         
@@ -69,7 +76,14 @@
                             @Model.Fields[i].OrderCharacter
                         </td>
                         <td>
-                            @Model.Fields[i].Title
+                            @if (Model.Fields[i].IsCaculated)
+                            {
+                                <b> @Model.Fields[i].Title</b>
+                            }
+                            else
+                            {
+                                @Model.Fields[i].Title
+                            }
                         </td>
                         <td>
                             @CreateField(Model, i)
