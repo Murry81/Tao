@@ -141,10 +141,11 @@
     <Compile Include="Controllers\DataConverter.cs" />
     <Compile Include="Controllers\SelectorController.cs" />
     <Compile Include="Controllers\TaoController.cs" />
+    <Compile Include="Extensions\TaoHelpers.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DecimalModelBinder.cs" />
+    <Compile Include="Extensions\DecimalModelBinder.cs" />
     <Compile Include="Models\IFieldList.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\SelectorModel.cs" />

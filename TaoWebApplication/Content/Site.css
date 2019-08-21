@@ -1,10 +1,12 @@
-﻿body {
+﻿body 
+{
     padding-top: 10px;
     padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
-.body-content {
+.body-content 
+{
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -12,42 +14,38 @@
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
-.dl-horizontal dt {
+.dl-horizontal dt
+{
     white-space: normal;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
-textarea {
+textarea 
+{
     max-width: 280px;
 }
 
 .quantity::-webkit-inner-spin-button,
-.quantity::-webkit-outer-spin-button {
+.quantity::-webkit-outer-spin-button 
+{
     -webkit-appearance: none;
     margin: 0;
 }
 
-div.InnerLeft {
-    width: 48%;
-    position: relative;
+.DivStyle 
+{
     background: #e6f2ff;
-    float: left;
     border: outset;
-    padding-bottom:0px;
 }
 
-div.InnerRight {
-    width: 48%;
-    position: relative;
-    background: #e6f2ff;
-    float: left;
-    border: outset;
-    margin-left: 40px;
-    padding-bottom: 0px;
-}
-
-.TaoControl {
+.TaoControl 
+{
     height: 25px;
+}
+
+.TextIndent
+{
+    text-indent: 40px;
 }
