@@ -49,3 +49,11 @@ textarea
 {
     text-indent: 40px;
 }
+
+.TaoDataTable tbody tr td {
+    padding: 4px;
+}
+
+.TaoDataTable thead tr {
+    border-bottom:solid;
+}

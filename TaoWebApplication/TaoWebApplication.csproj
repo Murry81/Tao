@@ -134,6 +134,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Calculators\IpaNemKapcsoltCalculation.cs" />
     <Compile Include="Calculators\TartalomCalculation.cs" />
     <Compile Include="Calculators\TenyadatKorreckcioCalculation.cs" />
     <Compile Include="Calculators\TenyadatokCalculation.cs" />
@@ -147,6 +148,7 @@
     </Compile>
     <Compile Include="Extensions\DecimalModelBinder.cs" />
     <Compile Include="Models\IFieldList.cs" />
+    <Compile Include="Models\IpaNemKapcsoltModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\SelectorModel.cs" />
     <Compile Include="Models\TartalomjegyzekModel.cs" />

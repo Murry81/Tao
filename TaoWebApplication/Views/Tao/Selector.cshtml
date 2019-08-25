@@ -27,125 +27,127 @@
     <br />  Kérem ellenőrizze, hogy az alábbi cégadatok helyesek-e.<br /><br />
 </div>
 
-<div>
-    <div class="InnerLeft">
-        <table class="CustomerDataTable table" style="margin-bottom:0px"">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 DivStyle">
+            <table class="TaoDataTable table" style="margin-bottom:0px" ">
 
-            <tr>
-                <td>Cég név</td>
-                <td>@Model.SelectedCustomer.Nev</td>
-            </tr>
-            <tr>
-                <td>Adószám</td>
-                <td>@Model.SelectedCustomer.Adoszam</td>
-            </tr>
+                <tr>
+                    <td>Cég név</td>
+                    <td>@Model.SelectedCustomer.Nev</td>
+                </tr>
+                <tr>
+                    <td>Adószám</td>
+                    <td>@Model.SelectedCustomer.Adoszam</td>
+                </tr>
 
-            <tr>
-                <td>Címek</td>
-                <td>
-                    @foreach (var address in Model.SelectedCustomer.Address)
-                    {
-                        @address.PostCode @:&nbsp; @address.City,  <br />
-                        @address.Line1 @:&nbsp; @address.Country <br /><br />
-                    }
+                <tr>
+                    <td>Címek</td>
+                    <td>
+                        @foreach (var address in Model.SelectedCustomer.Address)
+                        {
+                            @address.PostCode @:&nbsp; @address.City,  <br />
+                            @address.Line1 @:&nbsp; @address.Country <br /><br />
+                        }
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
 
-            <tr>
-                <td>KSH szám</td>
-                <td>@Model.SelectedCustomer.KSHSzam</td>
-            </tr>
-            <tr>
-                <td>WL szám</td>
-                <td>@Model.SelectedCustomer.WLSzam</td>
-            </tr>
-            <tr>
-                <td>Cégjegyzékszám</td>
-                <td>@Model.SelectedCustomer.Cegjegyzekszam</td>
-            </tr>
-            <tr>
-                <td>Telefon</td>
-                <td>
-                    @Model.SelectedCustomer.Phone <br />
-                    @Model.SelectedCustomer.Phone2
-                </td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>
-                    @Model.SelectedCustomer.Email<br />
-                    @Model.SelectedCustomer.Email2
-                </td>
-            </tr>
-            <tr>
-                <td>Könyvelés pénzneme</td>
-                <td>
-                    @Model.SelectedCustomer.KonyvelesPenzneme.Megnevezes (@Model.SelectedCustomer.KonyvelesPenzneme.Egyseg @Model.SelectedCustomer.KonyvelesPenzneme.ISO)
-                </td>
-            </tr>
-            <tr>
-                <td>Bbeszámoló pénzneme</td>
-                <td>
-                    @Model.SelectedCustomer.BeszamoloPenzneme.Megnevezes (@Model.SelectedCustomer.BeszamoloPenzneme.Egyseg @Model.SelectedCustomer.BeszamoloPenzneme.ISO)
-                </td>
-            </tr>
-        </table>
-    </div>
+                <tr>
+                    <td>KSH szám</td>
+                    <td>@Model.SelectedCustomer.KSHSzam</td>
+                </tr>
+                <tr>
+                    <td>WL szám</td>
+                    <td>@Model.SelectedCustomer.WLSzam</td>
+                </tr>
+                <tr>
+                    <td>Cégjegyzékszám</td>
+                    <td>@Model.SelectedCustomer.Cegjegyzekszam</td>
+                </tr>
+                <tr>
+                    <td>Telefon</td>
+                    <td>
+                        @Model.SelectedCustomer.Phone <br />
+                        @Model.SelectedCustomer.Phone2
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>
+                        @Model.SelectedCustomer.Email<br />
+                        @Model.SelectedCustomer.Email2
+                    </td>
+                </tr>
+                <tr>
+                    <td>Könyvelés pénzneme</td>
+                    <td>
+                        @Model.SelectedCustomer.KonyvelesPenzneme.Megnevezes (@Model.SelectedCustomer.KonyvelesPenzneme.Egyseg @Model.SelectedCustomer.KonyvelesPenzneme.ISO)
+                    </td>
+                </tr>
+                <tr>
+                    <td>Bbeszámoló pénzneme</td>
+                    <td>
+                        @Model.SelectedCustomer.BeszamoloPenzneme.Megnevezes (@Model.SelectedCustomer.BeszamoloPenzneme.Egyseg @Model.SelectedCustomer.BeszamoloPenzneme.ISO)
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-    @using (Html.BeginForm("TartalomjegyzekStart", "Tao", FormMethod.Post))
-    {
-        @Html.HiddenFor(m => Model.SelectedCustomer.Id);
+        @using (Html.BeginForm("TartalomjegyzekStart", "Tao", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => Model.SelectedCustomer.Id);
 
-        <div class="InnerRight">
-            <table class="StateTable table" style="margin-bottom:0px">
-                <tbody>
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table" style="margin-bottom:0px">
+                    <tbody>
+                        <tr>
+                            <td>
+                                Új dokumentum kezdés:
+                                @Html.DropDownListFor(m => m.SelectedDocumentType, new SelectList(Model.DocumentTypes, "Id", "DocumentName"), new { style = $"width:100%; background-color:yellow;" })
+                                <input type="submit" value="Új kezdése" name="StartNew" class="btn btn-default" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+        <div class="col-md-6 DivStyle">
+            <table class="TaoDataTable table" style="margin-bottom:0px">
+                <thead>
                     <tr>
-                        <td>
-                            Új dokumentum kezdés:
-                            @Html.DropDownListFor(m => m.SelectedDocumentType, new SelectList(Model.DocumentTypes, "Id", "DocumentName"), new { style = $"width:100%; background-color:yellow;" })
-                            <input type="submit" value="Új kezdése" name="StartNew" class="btn btn-default" />
-                        </td>
+                        <th class="col-md-3">Dokumentum típusa</th>
+                        <th class="col-md-3">Státusz</th>
+                        <th class="col-md-2">Kezdés</th>
+                        <th class="col-md-2">Utolsó módosítás</th>
+                        <th class="col-md-2"></th>
                     </tr>
+                </thead>
+                <tbody>
+                    @if (Model.CustomerSessions != null)
+                    {
+                        foreach (var session in Model.CustomerSessions)
+                        {
+                            <tr>
+                                <td>@session.DocumentType.DocumentName</td>
+                                <td>@session.DocumentState</td>
+                                <td>@session.StartDateTime.ToString("yyyy-MM-dd")</td>
+                                <td>@session.LastModifyDate.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @if (session.DocumentState != "Closed" || session.DocumentState != "Sent")
+                                    {
+                                        using (Html.BeginForm("TartalomjegyzekStart", "Tao", FormMethod.Post))
+                                        {
+                                            @Html.HiddenFor(m => m.SelectedCustomer.Id);
+                                            <button type="submit" value=@session.Id name="Continue" class="btn btn-default">Folytat</button>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
                 </tbody>
             </table>
         </div>
-    }
-    <div class="InnerRight">
-        <table class="StateTable table" style="margin-bottom:0px">
-            <thead>
-                <tr>
-                    <th class="col-md-3">Dokumentum típusa</th>
-                    <th class="col-md-3">Státusz</th>
-                    <th class="col-md-2">Kezdés</th>
-                    <th class="col-md-2">Utolsó módosítás</th>
-                    <th class="col-md-2"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.CustomerSessions != null)
-                {
-                    foreach (var session in Model.CustomerSessions)
-                    {
-                        <tr>
-                            <td>@session.DocumentType.DocumentName</td>
-                            <td>@session.DocumentState</td>
-                            <td>@session.StartDateTime.ToString("yyyy-MM-dd")</td>
-                            <td>@session.LastModifyDate.ToString("yyyy-MM-dd")</td>
-                            <td>
-                                @if (session.DocumentState != "Closed" || session.DocumentState != "Sent")
-                                {
-                                    using (Html.BeginForm("TartalomjegyzekStart", "Tao", FormMethod.Post))
-                                    {
-                                        @Html.HiddenFor(m => m.SelectedCustomer.Id);
-                                        <button type="submit" value=@session.Id name="Continue" class="btn btn-default">Folytat</button>
-                                    }
-                                }                              
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
     </div>
 </div>

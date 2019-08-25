@@ -13,8 +13,9 @@
 
 @using (Html.BeginForm("Tenyadatok", "Tao", FormMethod.Post))
 {
-    <div>
-        <div class="InnerLeft">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 DivStyle">
             <table class="TaoDataTable table" style="margin-bottom:0px;">
                 <thead>
                     <tr>
@@ -51,7 +52,7 @@
             </table>
         </div>
 
-        <div class="InnerRight">
+        <div class="col-md-6 DivStyle">
             Innovációs járulék kötelezettség
             <table class="TaoDataTable table">
                 <thead>
@@ -89,7 +90,7 @@
             </table>
         </div>
 
-        <div class="InnerRight">
+        <div class="col-md-6 DivStyle">
             Energiaellátók jövedelemadója
             <table class="TaoDataTable table">
                 <thead>
@@ -126,12 +127,14 @@
                 }
             </table>
         </div>
+    </div>
 
-    </div> 
-
-    <div class="InnerLeft ">
-        <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
-        <button type="submit" value="Save" name="buttonAction" class="btn btn-default">Mentés</button>
-        <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+    <div class="row">
+        <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+            <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+            <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+            <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+        </div>
+    </div>
     </div>
 }

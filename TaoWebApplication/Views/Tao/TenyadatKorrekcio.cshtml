@@ -8,99 +8,103 @@
 
 @using (Html.BeginForm("TenyadatKorrekcio", "Tao", FormMethod.Post))
 {
-    <div>
-        <div class="InnerLeft">
-            <table class="TaoDataTable table" style="margin-bottom:0px;">
-                <thead>
-                    <tr>
-                        <th width="5%" style="text-align:center">#</th>
-                        <th class="col-md-5">Leírás</th>
-                        <th class="col-md-2">Érték</th>
-                        <th class="col-md-2">Megjegyzés</th>
-                    </tr>
-                </thead>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table" style="margin-bottom:0px;">
+                    <thead>
+                        <tr>
+                            <th width="5%" style="text-align:center">#</th>
+                            <th class="col-md-5">Leírás</th>
+                            <th class="col-md-2">Érték</th>
+                            <th class="col-md-2">Megjegyzés</th>
+                        </tr>
+                    </thead>
 
-                @for (int i = 0; i < Model.Fields.Count; i++)
-                {
-                    if (Model.Fields[i].SectionGroup != 1)
+                    @for (int i = 0; i < Model.Fields.Count; i++)
                     {
-                        continue;
-                    }
+                        if (Model.Fields[i].SectionGroup != 1)
+                        {
+                            continue;
+                        }
 
-                    @Html.HiddenFor(m => Model.Fields[i].Id);
-                    <tr>
-                        <td>
-                            @Model.Fields[i].OrderCharacter
-                        </td>
-                        <td  class="TextIndent">
-                            @if (Model.Fields[i].IsCaculated)
-                            {
-                                <b> @Model.Fields[i].Title</b>
-                            }
-                            else
-                            {
-                                @Model.Fields[i].Title
-                            }
-                        </td>
-                        <td>
-                            @Html.CreateActualControl((IFieldList)Model, i)
-                        </td>
-                        <td>
-                            @Model.Fields[i].Description
-                        </td>
-                    </tr>
-                }
-            </table>
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td>
+                                @Model.Fields[i].OrderCharacter
+                            </td>
+                            <td class="TextIndent">
+                                @if (Model.Fields[i].IsCaculated)
+                                {
+                                    <b> @Model.Fields[i].Title</b>
+                                }
+                                else
+                                {
+                                    @Model.Fields[i].Title
+                                }
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                            <td>
+                                @Model.Fields[i].Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th width="5%" style="text-align:center">#</th>
+                            <th class="col-md-5">Leírás</th>
+                            <th class="col-md-2">Érték</th>
+                            <th class="col-md-2">Megjegyzés</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 2)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td>
+                                @Model.Fields[i].OrderCharacter
+                            </td>
+                            <td>
+                                @if (Model.Fields[i].IsCaculated)
+                                {
+                                    <b> @Model.Fields[i].Title</b>
+                                }
+                                else
+                                {
+                                    @Model.Fields[i].Title
+                                }
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+
+                            <td>
+                                @Model.Fields[i].Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </div>
 
-        <div class="InnerRight">
-            <table class="TaoDataTable table">
-                <thead>
-                    <tr>
-                        <th width="5%" style="text-align:center">#</th>
-                        <th class="col-md-5">Leírás</th>
-                        <th class="col-md-2">Érték</th>
-                        <th class="col-md-2">Megjegyzés</th>
-                    </tr>
-                </thead>
-
-                @for (int i = 0; i < Model.Fields.Count; i++)
-                {
-                    if (Model.Fields[i].SectionGroup != 2)
-                    {
-                        continue;
-                    }
-                    @Html.HiddenFor(m => Model.Fields[i].Id);
-                    <tr>
-                        <td>
-                            @Model.Fields[i].OrderCharacter
-                        </td>
-                        <td>
-                            @if (Model.Fields[i].IsCaculated)
-                            {
-                                <b> @Model.Fields[i].Title</b>
-                            }
-                            else
-                            {
-                                @Model.Fields[i].Title
-                            }
-                        </td>
-                        <td>
-                            @Html.CreateActualControl((IFieldList)Model, i)
-                        </td>
-
-                        <td>
-                            @Model.Fields[i].Description
-                        </td>
-                    </tr>
-                }
-            </table>
+        <div class="row">
+            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            </div>
         </div>
-
-    </div>
-    <div class="InnerLeft">
-        <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
-        <button type="submit" value="Save" name="buttonAction" class="btn btn-default">Mentés</button>
-        <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
-    </div>
+ </div>
 }

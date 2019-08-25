@@ -20,18 +20,18 @@ namespace TaoWebApplication.Extensions
                 switch (model.Fields[i].TypeName)
                 {
                     case "bool":
-                        return helper.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                        return helper.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
 
                     case "numeric":
-                        return helper.Label(model.Fields[i].DecimalValue?.ToString(), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;" });
+                        return helper.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue.ToString() : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
                     case "date":
                         if (model.Fields[i].DateValue == null)
                         {
-                            return helper.Label("", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                            return helper.Label("", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
                         }
-                        return helper.Label(model.Fields[i].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                        return helper.Label(model.Fields[i].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
                     default:
-                        return helper.Label(model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                        return helper.Label(model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
                 }
             }
 
@@ -63,7 +63,7 @@ namespace TaoWebApplication.Extensions
             else if (model.Fields[i].TypeName == "numeric")
             {
 
-                return helper.TextBoxFor(m => model.Fields[i].DecimalValue, model.Fields[i].DecimalValue?.ToString("G29", CultureInfo.InvariantCulture), new { @type = "number", step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px" });
+                return helper.TextBoxFor(m => model.Fields[i].DecimalValue, model.Fields[i].DecimalValue?.ToString("G29", CultureInfo.InvariantCulture), new { @type = "number", step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px;" });
             }
             else
             {
