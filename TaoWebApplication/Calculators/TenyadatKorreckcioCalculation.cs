@@ -26,32 +26,32 @@ namespace TaoWebApplication.Calculators
                         }
                     case 380: // Bevételt módosító tényezők
                         {
-                            field.DecimalValue = SumList(fields, new List<int> { 301, 302, 307 });
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 301, 302, 307 });
                             break;
                         }
                     case 302: // Egyéb bevételek
                         {
-                            field.DecimalValue = SumList(fields, new List<int> { 303, 304, 305, 306 });
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 303, 304, 305, 306 });
                             break;
                         }
                     case 307: // Pénzügyi műveletek bevétele
                         {
-                            field.DecimalValue = SumList(fields, new List<int> { 308, 309, 310, 311 });
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 308, 309, 310, 311 });
                             break;
                         }
                     case 381: // Költséget, ráfordítást, módosító tényezők
                         {
-                            field.DecimalValue = SumList(fields, new List<int> { 312, 321, 325, 326, 327, 328, 329, 332, 333, 334, 335 });
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 312, 321, 325, 326, 327, 328, 329, 332, 333, 334, 335 });
                             break;
                         }
                     case 312: // Egyéb ráfordítás
                         {
-                            field.DecimalValue = SumList(fields, new List<int> { 313, 314, 315, 316, 317, 318, 319, 320 });
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 313, 314, 315, 316, 317, 318, 319, 320 });
                             break;
                         }
                     case 321: // Pénzügyi műveletek ráfordítása
                         {
-                            field.DecimalValue = SumList(fields, new List<int> { 322, 323, 324 });
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 322, 323, 324 });
                             break;
                         }
                     case 329: // Egyéb bevételek
@@ -77,18 +77,6 @@ namespace TaoWebApplication.Calculators
                 return anyagkoltseg.DecimalValue;
             }
             return null;
-        }
-
-        private static decimal? SumList(List<FieldDescriptorDto> fields, List<int> fieldIds)
-        {
-            decimal result = 0;
-            foreach(var fieldId in fieldIds)
-            {
-                var field = fields.FirstOrDefault(f => f.Id == fieldId);
-                if (field != null && field.DecimalValue.HasValue)
-                    result += field.DecimalValue.Value;
-            }
-            return result;
         }
 
         private static decimal? Calculate390(List<FieldDescriptorDto> fields)
