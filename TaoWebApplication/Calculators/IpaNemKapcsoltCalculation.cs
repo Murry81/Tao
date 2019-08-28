@@ -16,6 +16,30 @@ namespace TaoWebApplication.Calculators
                 if (!field.IsCaculated)
                     continue;
 
+
+
+
+
+
+
+
+                /*
+                 * 
+                 * 
+                 * 
+                 *  AZ 1.1 és 1.2 lapokról jövő adatokat még szorozni kell a valutával!!!!! 
+                 * 
+                 * 
+                 * 
+                */ 
+
+
+
+
+
+
+
+
                 switch (field.Id)
                 {
                     case 413: // Értékesítés nettó árbevétele
