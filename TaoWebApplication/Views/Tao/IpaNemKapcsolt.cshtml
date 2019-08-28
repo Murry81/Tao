@@ -11,12 +11,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 DivStyle">
-                <table class="TaoDataTable table" style="margin-bottom:0px; padding:4px;">
+                <table class="TaoDataTable table">
                     <thead>
                         <tr>
-                            <th width="3%" style="text-align:center">#</th>
-                            <th class="col-md-8">Megnevezés</th>
-                            <th class="col-md-2">Adatok forintban</th>
+                            <th width="5%" style="text-align:center">#</th>
+                            <th class="col-md-9">Leírás</th>
+                            <th class="col-md-2" style="text-align:center">Érték</th>
+                            
                         </tr>
                     </thead>
 
@@ -40,24 +41,6 @@
                             </td>
                         </tr>
                     }
-                    @GenerateSection("1. Nettó árbevétel besorolása az egyes nettó árbevétel sávokba", 2)
-                    @GenerateSection("2. Adott bevételi sávba jutó ELÁBE és közvetített szolgáltatás meghatározása\n(össze ELÁBE és közvetített szolgáltatás * adott sávba jutó nettó árbevétel/összes nettó árbevétel)", 3)
-                    @GenerateSection("3. Adott bevételi sávba (korlátosan) levonható ELÁBE és közvetített szolgáltatás meghatározása", 4)
-                    @GenerateSection("4. Figyelembe vehető ELÁBÉ és közvetített szolgáltatás értékének meghatározása \n(2. és 3. számolt értékek közül a kisebb)", 5)
-
-                </table>
-            </div>
-
-            <div class="col-md-6 DivStyle">
-                <table class="TaoDataTable table">
-                    <thead>
-                        <tr>
-                            <th width="5%" style="text-align:center">#</th>
-                            <th class="col-md-5">Leírás</th>
-                            <th class="col-md-2" style="text-align:center">Érték</th>
-                            <th class="col-md-2">Megjegyzés</th>
-                        </tr>
-                    </thead>
 
                     @for (int i = 0; i < Model.Fields.Count; i++)
                     {
@@ -71,7 +54,7 @@
                                 @Model.Fields[i].OrderCharacter
                             </td>
                             <td>
-                                @Model.Fields[i].Title                        
+                                @Model.Fields[i].Title
                             </td>
                             <td>
                                 @Html.CreateActualControl((IFieldList)Model, i)
@@ -84,6 +67,27 @@
                     }
                 </table>
             </div>
+
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table" style="margin-bottom:0px; padding:4px;">
+                    <thead>
+                        <tr>
+                            <th width="3%" style="text-align:center">#</th>
+                            <th class="col-md-8">Megnevezés</th>
+                            <th class="col-md-2">Adatok forintban</th>
+                        </tr>
+                    </thead>
+
+
+                    @GenerateSection("1. Nettó árbevétel besorolása az egyes nettó árbevétel sávokba", 2)
+                    @GenerateSection("2. Adott bevételi sávba jutó ELÁBE és közvetített szolgáltatás meghatározása\n(össze ELÁBE és közvetített szolgáltatás * adott sávba jutó nettó árbevétel/összes nettó árbevétel)", 3)
+                    @GenerateSection("3. Adott bevételi sávba (korlátosan) levonható ELÁBE és közvetített szolgáltatás meghatározása", 4)
+                    @GenerateSection("4. Figyelembe vehető ELÁBÉ és közvetített szolgáltatás értékének meghatározása \n(2. és 3. számolt értékek közül a kisebb)", 5)
+
+                </table>
+            </div>
+
+
         </div>
 
         <div class="row">

@@ -93,117 +93,127 @@ namespace TaoWebApplication.Calculators
                             field.DecimalValue = Calculate426(fields, service, sessionId);
                             break;
                         }
-                    case 448:
+                    case 448: // Beviteli sávra jutó szumma
                         {
                             field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 423, 424, 425, 426 });
                             break;
                         }
+                    case 427: // Korlátos ELÁBÉ: árbevétel 500 millióig
+                        {
+                            field.DecimalValue = Calculate427(fields, service, sessionId);
+                            break;
+                        }
+                    case 428: // Korlátos ELÁBÉ: árbevétel 500 millió és 20 milliárd között  
+                        {
+                            field.DecimalValue = Calculate428(fields, service, sessionId);
+                            break;
+                        }
+                    case 429: // Korlátos ELÁBÉ: árbevétel 20 és 80 milliárd között 
+                        {
+                            field.DecimalValue = Calculate429(fields, service, sessionId);
+                            break;
+                        }
+                    case 430: // Korlátos ELÁBÉ: árbevétel 80 milliárd felett 
+                        {
+                            field.DecimalValue = Calculate430(fields, service, sessionId);
+                            break;
+                        }
+                    case 449: //  Korlátos ELÁBÉ  szumma
+                        {
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 427, 428, 429, 430 });
+                            break;
+                        }
+                    case 431: // Figyelembe vehető ELÁBÉ: árbevétel 500 millióig  
+                        {
+                            field.DecimalValue = Calculate431(fields, service, sessionId);
+                            break;
+                        }
+                    case 432: // Figyelembe vehető ELÁBÉ: árbevétel 500 millió és 20 milliárd között 
+                        {
+                            field.DecimalValue = Calculate432(fields, service, sessionId);
+                            break;
+                        }
+                    case 433: // Figyelembe vehető ELÁBÉ: árbevétel 20 és 80 milliárd között 
+                        {
+                            field.DecimalValue = Calculate433(fields, service, sessionId);
+                            break;
+                        }
+                    case 434: // Figyelembe vehető ELÁBÉ: árbevétel 80 milliárd felett  
+                        {
+                            field.DecimalValue = Calculate434(fields, service, sessionId);
+                            break;
+                        }
+                    case 435: // Összes figyelembe vehető ELÁBÉ
+                        {
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 431, 432, 433, 434 });
+                            break;
+                        }
+                 }
+            }
 
+            foreach (var field in fields.OrderBy(s => s.Id))
+            {
+                if (!field.IsCaculated)
+                    continue;
 
+                switch (field.Id)
+                {
 
-
-
-                    case 427: // A cég innovációs járulékra kötelezett
+                    case 436: // Iparűzési adó alapja
+                        {
+                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            break;
+                        }
+                    case 437: // Iparűzési adó mértéke !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 428: // Korrigált anyagköltség 
+                    case 438: // Iparűzési adó összege   !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 429: // KKV státusz
+                    case 439: // Megfizetett útdíj 7,5%-a
+                        {
+                            field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 409, 410, 411 });
+                            break;
+                        }
+                    case 440: // Iparűzési adó csökkentett összege  !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 430: // A cég innovációs járulékra kötelezett
+                    case 441: // Összes be nem fizetett, korábban előírt előleg !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 431: // Korrigált anyagköltség 
+                    case 442: // Összes befizetett előleg !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 432: // KKV státusz
+                    case 443: // Összes folyószámlán fennálló túlfizetés !!!! NOT READY page 2.4
+                        { 
+                            field.DecimalValue = Calculate413(fields, service, sessionId);
+                            break;
+                        }
+                    case 444: // Összes feltöltési kötelezettség/Adókülönbözet !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 433: // A cég innovációs járulékra kötelezett
+                    case 445: // Összes pénzügyileg rendezendő !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 434: // Korrigált anyagköltség 
+                    case 446: // Alapkutatás, alkalmazott kutatás, kísérleti fejlesztés 10%-ából az adóalapcsökkentőként figyelembe vett összeg !!!! NOT READY page 2.4
                         {
                             field.DecimalValue = Calculate413(fields, service, sessionId);
                             break;
                         }
-                    case 435: // KKV státusz
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 436: // A cég innovációs járulékra kötelezett
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 437: // Korrigált anyagköltség 
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 438: // KKV státusz
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 439: // A cég innovációs járulékra kötelezett
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 440: // Korrigált anyagköltség 
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 441: // KKV státusz
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 442: // A cég innovációs járulékra kötelezett
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 443: // Korrigált anyagköltség 
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 444: // KKV státusz
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 445: // A cég innovációs járulékra kötelezett
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-                    case 446: // A cég innovációs járulékra kötelezett
-                        {
-                            field.DecimalValue = Calculate413(fields, service, sessionId);
-                            break;
-                        }
-
                 }
             }
         }
@@ -223,32 +233,16 @@ namespace TaoWebApplication.Calculators
             return null;
         }
 
-        private static Dictionary<int, decimal?> GetBaseValues(List<int> fields, IDataService service, Guid sessionId)
-        {
-            var result = new Dictionary<int, decimal?>();
-            var requiredFields = service.GetFieldsByFieldIdList(fields, sessionId);
-
-            foreach(var field in requiredFields)
-            {
-                if (!field.DecimalValue.HasValue)
-                    return null;
-
-                 result.Add(field.Id, field.DecimalValue);
-            }
-
-            return result;
-        }
+       
 
         private static decimal? Calculate413(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             //  (1.Értékesítés nettó árbevétele - 1.Jogdíjból származó árbevétel - 1.Árbevételként elszámolt jövedéki, energia- és regisztrációs adó)
-            //  / 0.Figyelembe vett hónapok száma * 12 + 1.1.Értékesítés nettó árbevétele)
+            //  / 0.Figyelembe vett hónapok száma * 12 + 1.1.Értékesítés nettó árbevétele
             // (f13 - f54 - f55) / f5 * 12 + f13
             var f5 = GetFigyelembeVettHonapk(service, sessionId);
 
-            var values = GetBaseValues(new List<int> { 13, 54, 55 }, service, sessionId);
-            if (values == null)
-                return null;
+            var values = GenericCalculations.GetValuesById(new List<int> { 13, 54, 55 }, service, sessionId);
 
             return (values[13] - values[54] - values[55]) / f5 * 12 + values[13];
         }
@@ -259,11 +253,7 @@ namespace TaoWebApplication.Calculators
             // f9 / f5 * 12 + f325
 
             var f5 = GetFigyelembeVettHonapk(service, sessionId);
-
-            var values = GetBaseValues(new List<int> { 9, 325 }, service, sessionId);
-            if (values == null)
-                return null;
-
+            var values = GenericCalculations.GetValuesById(new List<int> { 9, 325 }, service, sessionId);
             return values[9] / f5 * 12 + values[325];
         }
 
@@ -273,11 +263,7 @@ namespace TaoWebApplication.Calculators
             // f24 / f5 *12 + f326
 
             var f5 = GetFigyelembeVettHonapk(service, sessionId);
-
-            var values = GetBaseValues(new List<int> { 24, 326 }, service, sessionId);
-            if (values == null)
-                return null;
-
+            var values = GenericCalculations.GetValuesById(new List<int> { 24, 326 }, service, sessionId);
             return values[24] / f5 * 12 + values[326];
         }
 
@@ -286,10 +272,10 @@ namespace TaoWebApplication.Calculators
             // ELÁBÉ + Közvetített szolgáltatások
             // f414 + f415
 
-            var f414 = fields.First(f => f.Id == 414).DecimalValue;
-            var f415 = fields.First(f => f.Id == 415).DecimalValue;
+            var f414 = GenericCalculations.GetValue(fields.First(f => f.Id == 414).DecimalValue);
+            var f415 = GenericCalculations.GetValue(fields.First(f => f.Id == 415).DecimalValue);
 
-            if (!f414.HasValue || !f415.HasValue)
+            if (f414 == 0 && f415 == 0)
             {
                 return null;
             }
@@ -303,11 +289,7 @@ namespace TaoWebApplication.Calculators
             // f62 / f5 * 12 + f329
 
             var f5 = GetFigyelembeVettHonapk(service, sessionId);
-
-            var values = GetBaseValues(new List<int> { 62, 329 }, service, sessionId);
-            if (values == null)
-                return null;
-
+            var values = GenericCalculations.GetValuesById(new List<int> { 62, 329 }, service, sessionId);
             return values[62] / f5 * 12 + values[329];
         }
 
@@ -317,11 +299,7 @@ namespace TaoWebApplication.Calculators
             // f25 / f5 * 12 + f327
 
             var f5 = GetFigyelembeVettHonapk(service, sessionId);
-
-            var values = GetBaseValues(new List<int> { 25, 327 }, service, sessionId);
-            if (values == null)
-                return null;
-
+            var values = GenericCalculations.GetValuesById(new List<int> { 25, 327 }, service, sessionId);
             return values[25] / f5 * 12 + values[327];
         }
 
@@ -354,7 +332,7 @@ namespace TaoWebApplication.Calculators
             }
 
             if (500000000 > f413)
-                return 0;
+                return null;
 
             if (f413 >= 20000000000)
                 return 19500000000;
@@ -375,7 +353,7 @@ namespace TaoWebApplication.Calculators
             }
 
             if (20000000000 > f413)
-                return 0;
+                return null;
 
             if (f413 >= 80000000000)
                 return 60000000000;
@@ -397,7 +375,7 @@ namespace TaoWebApplication.Calculators
             if (f413 >= 80000000000)
                 return f413 - 80000000000;
 
-            return 0;
+            return null;
         }
 
         private static decimal? Calculate423(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
@@ -406,18 +384,18 @@ namespace TaoWebApplication.Calculators
             // (Nettó árbevétel csökkentő összeg - Export árbevételhez kapcsolódó ELÁBÉ és közvetített szolgáltatás) * Árbevétel 500 millióig / Értékesítés nettó árbevétele
             // (f416 - f401) * f419 / f413
 
-            var f416 = fields.First(f => f.Id == 416).DecimalValue;
-            var f401 = fields.First(f => f.Id == 401).DecimalValue;
-            var f419 = fields.First(f => f.Id == 419).DecimalValue;
-            var f413 = fields.First(f => f.Id == 413).DecimalValue;
+            var f416 = GenericCalculations.GetValue(fields.First(f => f.Id == 416).DecimalValue);
+            var f401 = GenericCalculations.GetValue(fields.First(f => f.Id == 401).DecimalValue);
+            var f419 = GenericCalculations.GetValue(fields.First(f => f.Id == 419).DecimalValue);
+            var f413 = GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue);
 
-            if (!f401.HasValue || !f416.HasValue || !f419.HasValue || !f413.HasValue)
+            if (f413 == 0 || (f401 == 0 && f416 == 0 && f419 == 0 ))
             {
                 return null;
             }
 
             if (f419 <= 0)
-                return 0;
+                return null;
 
             return (f416 - f401) * f419 / f413;
         }
@@ -427,18 +405,18 @@ namespace TaoWebApplication.Calculators
             // Ha Árbevétel 500 millió és 20 milliárd között <= 0, akkor 0, egyébként 
             // (Nettó árbevétel csökkentő összeg - Export árbevételhez kapcsolódó ELÁBÉ és közvetített szolgáltatás) * Árbevétel 500 millió és 20 milliárd között / Értékesítés nettó árbevétele
             // (f416 - f401) * f420 / f413
-            var f416 = fields.First(f => f.Id == 416).DecimalValue;
-            var f401 = fields.First(f => f.Id == 401).DecimalValue;
-            var f420 = fields.First(f => f.Id == 420).DecimalValue;
-            var f413 = fields.First(f => f.Id == 413).DecimalValue;
+            var f416 = GenericCalculations.GetValue(fields.First(f => f.Id == 416).DecimalValue);
+            var f401 = GenericCalculations.GetValue(fields.First(f => f.Id == 401).DecimalValue);
+            var f420 = GenericCalculations.GetValue(fields.First(f => f.Id == 420).DecimalValue);
+            var f413 = GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue);
 
-            if (!f401.HasValue || !f416.HasValue || !f420.HasValue || !f413.HasValue)
+            if (f413 == 0 || (f401 == 0 && f416 == 0 && f420 == 0))
             {
                 return null;
             }
 
             if (f420 <= 0)
-                return 0;
+                return null;
 
             return (f416 - f401) * f420 / f413;
         }
@@ -448,18 +426,18 @@ namespace TaoWebApplication.Calculators
             // Ha Árbevétel 20 és 80 milliárd között <= 0, akkor 0, egyébként 
             // (Nettó árbevétel csökkentő összeg - Export árbevételhez kapcsolódó ELÁBÉ és közvetített szolgáltatás) * Árbevétel 20 és 80 milliárd között / Értékesítés nettó árbevétele
             // (f416 - f401) * f421 / f413
-            var f416 = fields.First(f => f.Id == 416).DecimalValue;
-            var f401 = fields.First(f => f.Id == 401).DecimalValue;
-            var f421 = fields.First(f => f.Id == 421).DecimalValue;
-            var f413 = fields.First(f => f.Id == 413).DecimalValue;
+            var f416 = GenericCalculations.GetValue(fields.First(f => f.Id == 416).DecimalValue);
+            var f401 = GenericCalculations.GetValue(fields.First(f => f.Id == 401).DecimalValue);
+            var f421 = GenericCalculations.GetValue(fields.First(f => f.Id == 421).DecimalValue);
+            var f413 = GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue);
 
-            if (!f401.HasValue || !f416.HasValue || !f421.HasValue || !f413.HasValue)
+            if (f413 == 0 || (f401 == 0 && f416 == 0 && f421 == 0))
             {
                 return null;
             }
 
             if (f421 <= 0)
-                return 0;
+                return null;
 
             return (f416 - f401) * f421 / f413;
         }
@@ -469,20 +447,125 @@ namespace TaoWebApplication.Calculators
             // Ha Árbevétel 80 milliárd felett <= 0, akkor 0, egyébként 
             // (Nettó árbevétel csökkentő összeg - Export árbevételhez kapcsolódó ELÁBÉ és közvetített szolgáltatás) * Árbevétel 80 milliárd felett / Értékesítés nettó árbevétele
             // (f416 - f401) * f422 / f413
-            var f416 = fields.First(f => f.Id == 416).DecimalValue;
-            var f401 = fields.First(f => f.Id == 401).DecimalValue;
-            var f422 = fields.First(f => f.Id == 422).DecimalValue;
-            var f413 = fields.First(f => f.Id == 413).DecimalValue;
+            var f416 = GenericCalculations.GetValue(fields.First(f => f.Id == 416).DecimalValue);
+            var f401 = GenericCalculations.GetValue(fields.First(f => f.Id == 401).DecimalValue);
+            var f422 = GenericCalculations.GetValue(fields.First(f => f.Id == 422).DecimalValue);
+            var f413 = GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue);
 
-            if (!f401.HasValue || !f416.HasValue || !f422.HasValue || !f413.HasValue)
+            if (f413 == 0 || (f401 == 0 && f416 == 0 && f422 == 0))
             {
                 return null;
             }
 
             if (f422 <= 0)
-                return 0;
+                return null;
 
             return (f416 - f401) * f422 / f413;
+        }
+
+        private static decimal? Calculate427(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Bevételi sávra jutó ELÁBÉ: árbevétel 500 millióig
+            // (f419)
+
+            return fields.First(f => f.Id == 419).DecimalValue;
+        }
+
+        private static decimal? Calculate428(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Árbevétel 500 millió és 20 milliárd között * 0,85
+            // (f420) * 0.85
+
+            return fields.First(f => f.Id == 420).DecimalValue.HasValue ? fields.First(f => f.Id == 420).DecimalValue.Value * (decimal)0.85 : (decimal?)null;
+        }
+
+        private static decimal? Calculate429(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Árbevétel 20 és 80 milliárd között * 0,75
+            // (f421) * 0.75
+
+            return fields.First(f => f.Id == 421).DecimalValue.HasValue ? fields.First(f => f.Id == 421).DecimalValue.Value * (decimal)0.85 : (decimal?)null;
+        }
+
+        private static decimal? Calculate430(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Árbevétel 20 és 80 milliárd között * 0,75
+            // (f422) * 0.7
+
+            return fields.First(f => f.Id == 422).DecimalValue.HasValue ? fields.First(f => f.Id == 422).DecimalValue.Value * (decimal)0.7 : (decimal?)null;
+        }
+
+
+        private static decimal? Calculate431(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Min(Bevételi sávra jutó ELÁBÉ: árbevétel 500 millióig, Korlátos ELÁBÉ: árbevétel 500 millióig)
+            // Min(f423, f427)
+
+            var firstValue = fields.First(f => f.Id == 423).DecimalValue;
+            var secondValue = fields.First(f => f.Id == 427).DecimalValue;
+
+            if (!firstValue.HasValue || !secondValue.HasValue)
+                return null;
+
+            return Math.Min(GenericCalculations.GetValue(firstValue), GenericCalculations.GetValue(secondValue));
+        }
+
+        private static decimal? Calculate432(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Min(Bevételi sávra jutó ELÁBÉ: árbevétel 500 millió és 20 milliárd között, Korlátos ELÁBÉ: árbevétel 500 millió és 20 milliárd között)
+            // Min(f424, f428)
+
+            var firstValue = fields.First(f => f.Id == 424).DecimalValue;
+            var secondValue = fields.First(f => f.Id == 428).DecimalValue;
+
+            if (!firstValue.HasValue || !secondValue.HasValue)
+                return null;
+
+            return Math.Min(GenericCalculations.GetValue(firstValue), GenericCalculations.GetValue(secondValue));
+        }
+
+        private static decimal? Calculate433(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Min(Bevételi sávra jutó ELÁBÉ: árbevétel 20 és 80 milliárd között, Korlátos ELÁBÉ: árbevétel 20 és 80 milliárd között)
+            // Min(f425, f429)
+
+            var firstValue = fields.First(f => f.Id == 425).DecimalValue;
+            var secondValue = fields.First(f => f.Id == 429).DecimalValue;
+
+            if (!firstValue.HasValue || !secondValue.HasValue)
+                return null;
+
+            return Math.Min(GenericCalculations.GetValue(firstValue), GenericCalculations.GetValue(secondValue));
+        }
+
+        private static decimal? Calculate434(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Min(Bevételi sávra jutó ELÁBÉ: árbevétel 80 milliárd felett, Korlátos ELÁBÉ: árbevétel 80 milliárd felett)
+            // Min(f426, f430)
+
+            var firstValue = fields.First(f => f.Id == 426).DecimalValue;
+            var secondValue = fields.First(f => f.Id == 430).DecimalValue;
+
+            if (!firstValue.HasValue || !secondValue.HasValue)
+                return null;
+
+            return Math.Min(GenericCalculations.GetValue(firstValue), GenericCalculations.GetValue(secondValue));
+        }
+
+
+        private static decimal? Calculate436(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Értékesítés nettó árbevétele + Transzferár korrekció + IFRS korrekció - Összes figyelembe vehető ELÁBÉ - Korrigált anyagköltség - Alvállalkozói teljesítések értéke, 
+            // ha ez negatív, akkor 0
+            // Max(0, f413 + f400 + f405 - f435 - f417 - f418 )
+
+            return Math.Max(0,
+                GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue) +
+                GenericCalculations.GetValue(fields.First(f => f.Id == 400).DecimalValue) +
+                GenericCalculations.GetValue(fields.First(f => f.Id == 405).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 435).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 417).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 418).DecimalValue));
         }
     }
 }

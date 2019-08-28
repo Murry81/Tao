@@ -5,8 +5,9 @@ namespace TaoWebApplication.Models
 {
     public class ModelBase : IFieldList
     {
-        public int SessionId { get; set; }
+        public int? SessionId { get; set; }
         public string CustomerId { get; set; }
+        public CustomerDto Customer { get; set; }
         public List<PageDto> Pages { get; set; }
         public PageDto CurrentPage { get; set; }
         public List<PageDescriptorDto> PageDescriptors { get; set; }

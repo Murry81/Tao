@@ -42,10 +42,11 @@ namespace TaoWebApplication.Controllers
                 sessionId = Guid.Parse(Request.Form["Continue"]);
             }
 
-            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId) as TartalomjegyzekModel;
+            var customerId = int.Parse(Request.Form["SelectedCustomer.Id"]);
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TartalomjegyzekModel;
             
             Session["SessionId"] = sessionId.ToString();
-            Session["CustomerId"] = Request.Form["SelectedCustomer.Id"];
+            Session["CustomerId"] = customerId.ToString();
 
             return View("~/Views/Tao/Tartalomjegyzek.cshtml", model);
         }
@@ -54,7 +55,8 @@ namespace TaoWebApplication.Controllers
         {
             var model = new Models.TartalomjegyzekModel();
             var currentpage = _service.GetPage("Tartalomjegyzek");
-            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as TartalomjegyzekModel;
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TartalomjegyzekModel;
 
             return View(model);
         }
@@ -73,11 +75,12 @@ namespace TaoWebApplication.Controllers
             {
                 var model = new Models.TartalomjegyzekModel();
                 var currentpage = _service.GetPage("Tartalomjegyzek");
-                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as TartalomjegyzekModel;
+                var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TartalomjegyzekModel;
 
                 return View(model);
             }
-
+            
             return RedirectToAction("Tenyadatok", "Tao");
         }
 
@@ -85,7 +88,8 @@ namespace TaoWebApplication.Controllers
         {
             var model = new Models.TenyadatokModel();
             var currentpage = _service.GetPage("Tenyadatok");
-            ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()));
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId);
             return View(model);
         }
 
@@ -102,7 +106,8 @@ namespace TaoWebApplication.Controllers
             {
                 var model = new Models.TenyadatokModel();
                 var currentpage = _service.GetPage("Tenyadatok");
-                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as TenyadatokModel;
+                var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TenyadatokModel;
                 return View(model);
             }
             return RedirectToAction("TenyadatKorrekcio", "Tao");
@@ -112,7 +117,8 @@ namespace TaoWebApplication.Controllers
         {
             var model = new Models.TenyadatKorrekcioModel();
             var currentpage = _service.GetPage("TenyadatKorrekcio");
-            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as TenyadatKorrekcioModel;
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TenyadatKorrekcioModel;
             return View(model);
         }
 
@@ -129,7 +135,8 @@ namespace TaoWebApplication.Controllers
             {
                 var model = new Models.TenyadatKorrekcioModel();
                 var currentpage = _service.GetPage("TenyadatKorrekcio");
-                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as TenyadatKorrekcioModel;
+                var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TenyadatKorrekcioModel;
                 return View(model);
             }
             return RedirectToAction("IpaNemKapcsolt", "Tao");
@@ -139,7 +146,8 @@ namespace TaoWebApplication.Controllers
         {
             var model = new IpaNemKapcsoltModel();
             var currentpage = _service.GetPage("IpaNemKapcsolt");
-            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString())) as IpaNemKapcsoltModel;
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as IpaNemKapcsoltModel;
             return View(model);
         }
 

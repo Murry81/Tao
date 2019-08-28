@@ -40,9 +40,10 @@ textarea
     border: outset;
 }
 
-.TaoControl 
-{
+.TaoControl {
     height: 25px;
+    padding: 0px;
+    margin: 0px;
 }
 
 .TextIndent
@@ -52,6 +53,8 @@ textarea
 
 .TaoDataTable tbody tr td {
     padding: 4px;
+    margin: 0px;
+    align-content:center;
 }
 
 .TaoDataTable thead tr {

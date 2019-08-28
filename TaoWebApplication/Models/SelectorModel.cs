@@ -3,10 +3,8 @@ using TaoContracts.Contracts;
 
 namespace TaoWebApplication.Models
 {
-    public class SelectorModel
+    public class SelectorModel : ModelBase
     {
-        public int? SessionId { get; set; }
-
         public string SelectedCustomerId { get; set; }
 
         public CustomerDto SelectedCustomer { get; set; }
