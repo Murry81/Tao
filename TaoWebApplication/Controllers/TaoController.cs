@@ -7,6 +7,7 @@ using TaoContracts.Contracts;
 using TaoDatabaseService.Interfaces;
 using TaoWebApplication.Calculators;
 using TaoWebApplication.Models;
+using TaoWebApplication.Validators;
 
 namespace TaoWebApplication.Controllers
 {
@@ -65,6 +66,34 @@ namespace TaoWebApplication.Controllers
         [HttpPost]
         public ActionResult Tartalomjegyzek(string buttonAction, TartalomjegyzekModel fc)
         {
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+
+            var validationResult = TartalomValidator.Validate(fc.Fields);
+            if(validationResult.Keys.Count > 0)
+            {
+                foreach (var error in validationResult.Keys)
+                {
+                    ModelState.AddModelError(error.ToString(), validationResult[error]);
+                }
+
+                var model = new TartalomjegyzekModel();
+                var currentpage = _service.GetPage("Tartalomjegyzek");
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TartalomjegyzekModel;
+                foreach (var field in model.Fields)
+                {
+                    var newValueField = fc.Fields.FirstOrDefault(f => f.Id == field.Id);
+                    if (newValueField != null)
+                    {
+                        field.BoolFieldValue = newValueField.BoolFieldValue;
+                        field.DateValue = newValueField.DateValue;
+                        field.DecimalValue = newValueField.DecimalValue;
+                        field.StringValue = newValueField.StringValue;
+                    }
+                }
+                return View(model);
+            }
+            
             SaveValues(fc.Fields, TartalomCalculation.CalculateValues, 1);
        
             if(buttonAction == "Previous")
@@ -73,10 +102,9 @@ namespace TaoWebApplication.Controllers
             }
             if (buttonAction == "Save")
             {
-                var model = new Models.TartalomjegyzekModel();
-                var currentpage = _service.GetPage("Tartalomjegyzek");
-                var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
-                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TartalomjegyzekModel;
+                var model = new TartalomjegyzekModel();
+                var currentpage = _service.GetPage("Tartalomjegyzek");            
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TartalomjegyzekModel;
 
                 return View(model);
             }
@@ -118,7 +146,8 @@ namespace TaoWebApplication.Controllers
             var model = new Models.TenyadatKorrekcioModel();
             var currentpage = _service.GetPage("TenyadatKorrekcio");
             var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
-            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TenyadatKorrekcioModel;
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TenyadatKorrekcioModel;
             return View(model);
         }
 
@@ -126,6 +155,7 @@ namespace TaoWebApplication.Controllers
         public ActionResult TenyadatKorrekcio(string buttonAction, TenyadatokModel fc)
         {
             SaveValues(fc.Fields, TenyadatKorreckcioCalculation.CalculateValues, 3);
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
 
             if (buttonAction == "Previous")
             {
@@ -135,11 +165,21 @@ namespace TaoWebApplication.Controllers
             {
                 var model = new Models.TenyadatKorrekcioModel();
                 var currentpage = _service.GetPage("TenyadatKorrekcio");
-                var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
-                model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TenyadatKorrekcioModel;
+                var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());     
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TenyadatKorrekcioModel;
+                
                 return View(model);
             }
-            return RedirectToAction("IpaNemKapcsolt", "Tao");
+
+            var isKapcsolt =_service.GetFieldsByFieldIdList(new List<int> { 40 }, sessionId).FirstOrDefault()?.BoolFieldValue;
+            if (isKapcsolt == null || !isKapcsolt.Value)
+            {
+                return RedirectToAction("IpaNemKapcsolt", "Tao");
+            }
+            else
+            {
+                return RedirectToAction("IpaKapcsolt", "Tao");
+            }
         }
 
         public ActionResult IpaNemKapcsolt()
@@ -165,6 +205,31 @@ namespace TaoWebApplication.Controllers
                 return RedirectToAction("IpaNemKapcsolt", "Tao");
             }
             return RedirectToAction("IpaNemKapcsolt", "Tao");
+        }
+
+        public ActionResult IpaKapcsolt()
+        {
+            var model = new IpaKapcsoltModel();
+            var currentpage = _service.GetPage("IpaKapcsolt");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as IpaKapcsoltModel;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult IpaKapcsolt(string buttonAction, IpaKapcsoltModel fc)
+        {
+            SaveValues(fc.Fields, IpaKapcsoltCalculation.CalculateValues, pageId: 5);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("TenyadatKorrekcio", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("IpaKapcsolt", "Tao");
+            }
+            return RedirectToAction("IpaKapcsolt", "Tao");
         }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)

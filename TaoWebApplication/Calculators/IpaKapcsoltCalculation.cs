@@ -7,7 +7,7 @@ using TaoDatabaseService.Interfaces;
 
 namespace TaoWebApplication.Calculators
 {
-    public class IpaNemKapcsoltCalculation
+    public class IpaKapcsoltCalculation
     {
         public static void CalculateValues(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
@@ -151,7 +151,7 @@ namespace TaoWebApplication.Calculators
                             field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 431, 432, 433, 434 });
                             break;
                         }
-                 }
+                }
             }
 
             foreach (var field in fields.OrderBy(s => s.Id))
@@ -163,6 +163,16 @@ namespace TaoWebApplication.Calculators
                 {
 
                     case 436: // Iparűzési adó alapja
+                        {
+                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            break;
+                        }
+                    case 450: // Adóalanyra jutó adóalap
+                        {
+                            field.DecimalValue = Calculate450(fields, service, sessionId, arfolyam);
+                            break;
+                        }
+                    case 451: //Kapcsolt vállalkozásokra jutó adóalap !!!! NOT READY page 2.1
                         {
                             field.DecimalValue = Calculate436(fields, service, sessionId);
                             break;
@@ -198,7 +208,7 @@ namespace TaoWebApplication.Calculators
                             break;
                         }
                     case 443: // Összes folyószámlán fennálló túlfizetés !!!! NOT READY page 2.4
-                        { 
+                        {
                             field.DecimalValue = Calculate436(fields, service, sessionId);
                             break;
                         }
@@ -225,7 +235,7 @@ namespace TaoWebApplication.Calculators
         {
             if (customer.KonyvelesPenzneme.ISO != "HUF")
             {
-                var field = service.GetFieldsByFieldIdList(new List<int>{ 34 }, sessionId).First();
+                var field = service.GetFieldsByFieldIdList(new List<int> { 34 }, sessionId).First();
                 if (field.DecimalValue.HasValue)
                     return field.DecimalValue.Value;
 
@@ -238,18 +248,18 @@ namespace TaoWebApplication.Calculators
         {
             var requiredFields = service.GetFieldsByFieldIdList(new List<int> { 5 }, sessionId);
             var f5 = requiredFields.FirstOrDefault(f => f.Id == 5)?.StringValue;
-            if(string.IsNullOrEmpty(f5))
+            if (string.IsNullOrEmpty(f5))
             {
                 return null;
             }
-            if(int.TryParse(f5, out var result))
+            if (int.TryParse(f5, out var result))
             {
                 return (decimal)result;
             }
             return null;
         }
 
-       
+
 
         private static decimal? Calculate413(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal arfolyam)
         {
@@ -316,7 +326,7 @@ namespace TaoWebApplication.Calculators
 
             var f5 = GetFigyelembeVettHonapk(service, sessionId);
             var values = GenericCalculations.GetValuesById(new List<int> { 25, 327 }, service, sessionId);
-            return values[25] * arfolyam  / f5 * 12 + values[327] * arfolyam;
+            return values[25] * arfolyam / f5 * 12 + values[327] * arfolyam;
         }
 
         private static decimal? Calculate419(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
@@ -405,7 +415,7 @@ namespace TaoWebApplication.Calculators
             var f419 = GenericCalculations.GetValue(fields.First(f => f.Id == 419).DecimalValue);
             var f413 = GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue);
 
-            if (f413 == 0 || (f401 == 0 && f416 == 0 && f419 == 0 ))
+            if (f413 == 0 || (f401 == 0 && f416 == 0 && f419 == 0))
             {
                 return null;
             }
@@ -582,6 +592,24 @@ namespace TaoWebApplication.Calculators
                 GenericCalculations.GetValue(fields.First(f => f.Id == 435).DecimalValue) -
                 GenericCalculations.GetValue(fields.First(f => f.Id == 417).DecimalValue) -
                 GenericCalculations.GetValue(fields.First(f => f.Id == 418).DecimalValue));
+        }
+
+
+        private static decimal? Calculate450(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal arfolyam)
+        {
+            // (1.Értékesítés nettó árbevétele - 1.Jogdíjból származó árbevétel - 1.Árbevételként elszámolt jövedéki, energia- és regisztrációs adó) *arfolyam / 
+            // 0.Figyelembe vett hónapok száma * 12 + 1.1.Értékesítés nettó árbevétele * arfolyam / Értékesítés nettó árbevétele * Iparűzési adó együttes alapja
+            // (f13 - f54 - f55) *arfolyam / f5 * 12 + f13 *arfolyam / f413 * f436
+                        
+            var f413 = GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue);
+            if (f413 == 0)
+                return null;
+
+            var f436 = GenericCalculations.GetValue(fields.First(f => f.Id == 436).DecimalValue);
+            var f5 = GetFigyelembeVettHonapk(service, sessionId);
+            var values = GenericCalculations.GetValuesById(new List<int> { 13, 54, 55 }, service, sessionId);
+
+            return (values[13] - values[54] - values[55]) * arfolyam / f5 * 12 + values[13] * arfolyam / f413 * f436;
         }
     }
 }

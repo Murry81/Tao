@@ -135,6 +135,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Calculators\GenericCalculations.cs" />
+    <Compile Include="Calculators\IpaKapcsoltCalculation.cs" />
     <Compile Include="Calculators\IpaNemKapcsoltCalculation.cs" />
     <Compile Include="Calculators\TartalomCalculation.cs" />
     <Compile Include="Calculators\TenyadatKorreckcioCalculation.cs" />
@@ -149,6 +150,7 @@
     </Compile>
     <Compile Include="Extensions\DecimalModelBinder.cs" />
     <Compile Include="Models\IFieldList.cs" />
+    <Compile Include="Models\IpaKapcsoltModel.cs" />
     <Compile Include="Models\IpaNemKapcsoltModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\SelectorModel.cs" />
@@ -156,6 +158,8 @@
     <Compile Include="Models\TenyadatKorrekcioModel.cs" />
     <Compile Include="Models\TenyadatokModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\IValidator.cs" />
+    <Compile Include="Validators\TartalomValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -197,6 +201,7 @@
     <Content Include="Views\Tao\TenyadatKorrekcio.cshtml" />
     <Content Include="Views\Tao\IpaNemKapcsolt.cshtml" />
     <Content Include="Views\Tao\Selector.cshtml" />
+    <Content Include="Views\Tao\IpaKapcsolt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

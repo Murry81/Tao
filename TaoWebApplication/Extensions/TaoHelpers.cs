@@ -11,7 +11,7 @@ namespace TaoWebApplication.Extensions
 {
     public static class TaoHelpers
     {
-        public static MvcHtmlString CreateActualControl<TModel>(this HtmlHelper<TModel> helper, IFieldList model, int i)
+        public static MvcHtmlString CreateActualControl<TModel>(this HtmlHelper<TModel> helper, IFieldList model, int i, ModelStateDictionary modelState = null)
         {
             var color = model.Fields[i].IsEditable ? "yellow" : "#e6f2ff";
 
@@ -57,7 +57,12 @@ namespace TaoWebApplication.Extensions
                 }
                 else
                 {
-                    return helper.TextBoxFor(m => model.Fields[i].DateValue, model.Fields[i].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    var str = helper.TextBoxFor(m => model.Fields[i].DateValue, model.Fields[i].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    if (modelState != null &&!modelState.IsValid && modelState.ContainsKey(model.Fields[i].Id.ToString()))
+                    {
+                       return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[model.Fields[i].Id.ToString()].Errors[0].ErrorMessage}</span>");
+                     }
+                    return str;
                 }
             }
             else if (model.Fields[i].TypeName == "numeric")

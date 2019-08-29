@@ -1,6 +1,6 @@
 ﻿namespace TaoWebApplication.Models
 {
-    public class IpaNemKapcsoltModel : ModelBase
+    public class IpaKapcsoltModel : ModelBase
     {
     }
 }

@@ -42,7 +42,7 @@
                             @Model.Fields[i].Title
                         </td>
                         <td>
-                            @Html.CreateActualControl((IFieldList)Model, i)
+                            @Html.CreateActualControl((IFieldList)Model, i, ViewData.ModelState)
                         </td>
                         <td>
                             @Model.Fields[i].Description

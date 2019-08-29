@@ -20,8 +20,8 @@ namespace TaoWebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
-           ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
-    
+            ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
+
             var builder = new ContainerBuilder();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
