@@ -107,9 +107,9 @@ namespace TaoDatabaseService.Services
                 {
                     FieldDescriptorId = field.Id,
                     Id = field.FieldValueId.HasValue ? field.FieldValueId.Value : Guid.NewGuid(),
-                SessionId = sessionId
+                    SessionId = sessionId,
+                    RowIndex = field.RowIndex
                 };
-
 
                 switch(field.TypeName)
                 {
@@ -131,7 +131,7 @@ namespace TaoDatabaseService.Services
                 {
                     if (field.FieldValueId.HasValue)
                     {
-                        var result = entities.FieldValue.FirstOrDefault(f => f.Id == field.FieldValueId.Value);
+                        var result = entities.FieldValue.FirstOrDefault(f => f.Id == field.FieldValueId.Value && f.RowIndex == field.RowIndex);
                         if(result != null)
                         {
                             entities.FieldValue.Remove(result);
