@@ -19,6 +19,7 @@ namespace TaoDatabaseService
         {
             this.FieldValue = new HashSet<FieldValue>();
             this.PageDescriptor = new HashSet<PageDescriptor>();
+            this.TableDescriptor = new HashSet<TableDescriptor>();
         }
     
         public int Id { get; set; }
@@ -36,5 +37,7 @@ namespace TaoDatabaseService
         public virtual ICollection<FieldValue> FieldValue { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PageDescriptor> PageDescriptor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TableDescriptor> TableDescriptor { get; set; }
     }
 }

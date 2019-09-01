@@ -12,18 +12,12 @@ namespace TaoDatabaseService
     using System;
     using System.Collections.Generic;
     
-    public partial class FieldValue
+    public partial class TableDescriptor
     {
-        public System.Guid Id { get; set; }
+        public int TableId { get; set; }
         public int FieldDescriptorId { get; set; }
-        public Nullable<decimal> DecimalValue { get; set; }
-        public string StringValue { get; set; }
-        public Nullable<System.DateTimeOffset> DateValue { get; set; }
-        public Nullable<bool> BoolValue { get; set; }
-        public System.Guid SessionId { get; set; }
-        public Nullable<int> RowIndex { get; set; }
+        public string Caption { get; set; }
     
         public virtual FieldDescriptor FieldDescriptor { get; set; }
-        public virtual Session Session { get; set; }
     }
 }

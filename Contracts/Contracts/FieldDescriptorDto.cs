@@ -22,5 +22,6 @@ namespace TaoContracts.Contracts
         public bool? IsSpecial { get; set; }
         public int? Order { get; set; }
         public int? SectionGroup { get; set; }
+        public int? RowIndex { get; set; }
     }
 }

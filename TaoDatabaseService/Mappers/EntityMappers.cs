@@ -74,6 +74,7 @@ namespace TaoDatabaseService.Mappers
                         result.StringValue = currentValue.StringValue;
                         break;
                 }
+                result.RowIndex = currentValue.RowIndex;
             }
             else
             {

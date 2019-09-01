@@ -91,6 +91,9 @@
     <Compile Include="Session.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="TableDescriptor.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="TaoModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
