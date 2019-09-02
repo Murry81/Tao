@@ -136,6 +136,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Calculators\GenericCalculations.cs" />
     <Compile Include="Calculators\IpaKapcsoltCalculation.cs" />
+    <Compile Include="Calculators\IpaKapcsoltStatusCalculation.cs" />
     <Compile Include="Calculators\IpaNemKapcsoltCalculation.cs" />
     <Compile Include="Calculators\TartalomCalculation.cs" />
     <Compile Include="Calculators\TenyadatKorreckcioCalculation.cs" />
@@ -151,7 +152,9 @@
     <Compile Include="Extensions\DecimalModelBinder.cs" />
     <Compile Include="Models\IFieldList.cs" />
     <Compile Include="Models\IpaKapcsoltModel.cs" />
+    <Compile Include="Models\IpaKapcsoltStatusModel.cs" />
     <Compile Include="Models\IpaNemKapcsoltModel.cs" />
+    <Compile Include="Models\ITableDescriptor.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\SelectorModel.cs" />
     <Compile Include="Models\TartalomjegyzekModel.cs" />
@@ -202,6 +205,7 @@
     <Content Include="Views\Tao\IpaNemKapcsolt.cshtml" />
     <Content Include="Views\Tao\Selector.cshtml" />
     <Content Include="Views\Tao\IpaKapcsolt.cshtml" />
+    <Content Include="Views\Tao\IpaKapcsoltStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

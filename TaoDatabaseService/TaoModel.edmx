@@ -131,13 +131,17 @@
           <Property Name="DocumentTypeId" Type="int" Nullable="false" />
           <Property Name="DocumentStateId" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TableDescriptor">
           <Key>
             <PropertyRef Name="TableId" />
+            <PropertyRef Name="FieldDescriptorId" />
           </Key>
           <Property Name="TableId" Type="int" Nullable="false" />
           <Property Name="FieldDescriptorId" Type="int" Nullable="false" />
           <Property Name="Caption" Type="nvarchar" MaxLength="250" />
+          <Property Name="ColumnOrder" Type="int" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
@@ -307,7 +311,14 @@
           <EntitySet Name="Page" EntityType="Self.Page" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PageDescriptor" EntityType="Self.PageDescriptor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Session" EntityType="Self.Session" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TableDescriptor" EntityType="Self.TableDescriptor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TableDescriptor" EntityType="Self.TableDescriptor" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TableDescriptor].[TableId] AS [TableId], 
+    [TableDescriptor].[FieldDescriptorId] AS [FieldDescriptorId], 
+    [TableDescriptor].[Caption] AS [Caption], 
+    [TableDescriptor].[ColumnOrder] AS [ColumnOrder]
+    FROM [dbo].[TableDescriptor] AS [TableDescriptor]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Address_Customer" Association="Self.FK_Address_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Address" EntitySet="Address" />
@@ -377,7 +388,6 @@
           <EntitySet Name="Page" EntityType="CustomerNameTaoModel.Page" />
           <EntitySet Name="PageDescriptor" EntityType="CustomerNameTaoModel.PageDescriptor" />
           <EntitySet Name="Session" EntityType="CustomerNameTaoModel.Session" />
-          <EntitySet Name="TableDescriptor" EntityType="CustomerNameTaoModel.TableDescriptor" />
           <AssociationSet Name="FK_Address_Customer" Association="CustomerNameTaoModel.FK_Address_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Address" EntitySet="Address" />
@@ -418,10 +428,6 @@
             <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
           </AssociationSet>
-          <AssociationSet Name="FK_TableDescriptor_FieldDescriptor" Association="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor">
-            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
-            <End Role="TableDescriptor" EntitySet="TableDescriptor" />
-          </AssociationSet>
           <AssociationSet Name="FK_FieldValue_Session" Association="CustomerNameTaoModel.FK_FieldValue_Session">
             <End Role="Session" EntitySet="Session" />
             <End Role="FieldValue" EntitySet="FieldValue" />
@@ -429,6 +435,11 @@
           <AssociationSet Name="FK_PageDescriptor_Pages" Association="CustomerNameTaoModel.FK_PageDescriptor_Pages">
             <End Role="Page" EntitySet="Page" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
+          </AssociationSet>
+          <EntitySet Name="TableDescriptor" EntityType="CustomerNameTaoModel.TableDescriptor" />
+          <AssociationSet Name="FK_TableDescriptor_FieldDescriptor" Association="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="TableDescriptor" EntitySet="TableDescriptor" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Address">
@@ -582,15 +593,6 @@
           <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="Session" ToRole="DocumentType" />
           <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="Session" ToRole="FieldValue" />
         </EntityType>
-        <EntityType Name="TableDescriptor">
-          <Key>
-            <PropertyRef Name="TableId" />
-          </Key>
-          <Property Name="TableId" Type="Int32" Nullable="false" />
-          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
-          <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="TableDescriptor" ToRole="FieldDescriptor" />
-        </EntityType>
         <Association Name="FK_Address_Customer">
           <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="1" />
           <End Type="CustomerNameTaoModel.Address" Role="Address" Multiplicity="*" />
@@ -711,18 +713,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TableDescriptor_FieldDescriptor">
-          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
-          <End Type="CustomerNameTaoModel.TableDescriptor" Role="TableDescriptor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FieldDescriptor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TableDescriptor">
-              <PropertyRef Name="FieldDescriptorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_FieldValue_Session">
           <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="1" />
           <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
@@ -744,6 +734,29 @@
             </Principal>
             <Dependent Role="PageDescriptor">
               <PropertyRef Name="PageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TableDescriptor">
+          <Key>
+            <PropertyRef Name="TableId" />
+            <PropertyRef Name="FieldDescriptorId" />
+          </Key>
+          <Property Name="TableId" Type="Int32" Nullable="false" />
+          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
+          <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ColumnOrder" Type="Int32" />
+          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="TableDescriptor" ToRole="FieldDescriptor" />
+        </EntityType>
+        <Association Name="FK_TableDescriptor_FieldDescriptor">
+          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.TableDescriptor" Role="TableDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TableDescriptor">
+              <PropertyRef Name="FieldDescriptorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -893,6 +906,7 @@
           <EntitySetMapping Name="TableDescriptor">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.TableDescriptor">
               <MappingFragment StoreEntitySet="TableDescriptor">
+                <ScalarProperty Name="ColumnOrder" ColumnName="ColumnOrder" />
                 <ScalarProperty Name="Caption" ColumnName="Caption" />
                 <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />
                 <ScalarProperty Name="TableId" ColumnName="TableId" />

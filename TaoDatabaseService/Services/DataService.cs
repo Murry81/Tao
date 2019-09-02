@@ -167,5 +167,58 @@ namespace TaoDatabaseService.Services
 
             return sessionCreated.ToSession();
         }
+
+        public TableDescriptorDto GetTableDate(int tableId, Guid session)
+        {
+            var result = new TableDescriptorDto
+            {
+                TableId = tableId
+            };
+
+            var table = entities.TableDescriptor.Where(t => t.TableId == tableId);
+            if (table == null || table.Count() == 0)
+            { 
+                return null;
+            }
+
+            // Set up ids
+            var fieldDescriptors = table.OrderBy(t => t.ColumnOrder).Select(t => t.FieldDescriptor);
+            result.FieldDescriptorIds = fieldDescriptors.Select(t => t.Id).ToList();
+
+            // Set up captions
+            result.Captions = new Dictionary<int, string>();
+            foreach (var t in table.OrderBy(t => t.ColumnOrder))
+            {
+                result.Captions.Add(t.FieldDescriptorId, t.Caption);
+            }
+
+            // Set up saved values
+            result.FieldValues = new List<List<FieldDescriptorDto>>();
+            var savedFields = entities.FieldValue.Where(f => f.SessionId == session && result.FieldDescriptorIds.Contains(f.FieldDescriptorId)).OrderBy(t=> t.RowIndex).ThenBy(t => t.FieldDescriptorId);
+
+            int rowIndex = 0;
+            List<FieldDescriptorDto> currentList = null;
+            foreach(var savedField in savedFields)
+            {
+                if(savedField.RowIndex != rowIndex)
+                {
+                    currentList = new List<FieldDescriptorDto>();
+                    result.FieldValues.Add(currentList);
+                    rowIndex = savedField.RowIndex.Value;
+                }
+                currentList.Add(savedField.FieldDescriptor.ToFieldDescriptorDto(new List<FieldValue> { savedField }, null));
+            }
+
+            // Add an empty row
+            currentList = new List<FieldDescriptorDto>();
+            rowIndex++;
+            foreach (var field in fieldDescriptors)
+            {
+                currentList.Add(field.ToFieldDescriptorDto(new List<FieldValue> { new FieldValue { RowIndex = rowIndex }}, null));
+            }
+
+            result.FieldValues.Add(currentList);
+            return result;
+        }
     }
 }

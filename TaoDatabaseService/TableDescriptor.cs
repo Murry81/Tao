@@ -17,6 +17,7 @@ namespace TaoDatabaseService
         public int TableId { get; set; }
         public int FieldDescriptorId { get; set; }
         public string Caption { get; set; }
+        public Nullable<int> ColumnOrder { get; set; }
     
         public virtual FieldDescriptor FieldDescriptor { get; set; }
     }

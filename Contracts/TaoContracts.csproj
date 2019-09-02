@@ -49,6 +49,7 @@
     <Compile Include="Contracts\PageDescriptorDto.cs" />
     <Compile Include="Contracts\PageDto.cs" />
     <Compile Include="Contracts\SessionDto.cs" />
+    <Compile Include="Contracts\TableDescriptorDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

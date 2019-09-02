@@ -229,7 +229,35 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("IpaKapcsolt", "Tao");
             }
-            return RedirectToAction("IpaKapcsolt", "Tao");
+            return RedirectToAction("IpaKapcsoltStatus", "Tao");
+        }
+
+
+        public ActionResult IpaKapcsoltStatus()
+        {
+            var model = new IpaKapcsoltStatusModel();
+            var currentpage = _service.GetPage("IpaKapcsoltStatusz");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as IpaKapcsoltStatusModel;
+            model.TableDescriptor = _service.GetTableDate(1, sessionId);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult IpaKapcsoltStatus(string buttonAction, IpaKapcsoltStatusModel fc)
+        {
+            SaveValues(fc.Fields, IpaKapcsoltStatusCalculation.CalculateValues, pageId: 6);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("IpaKapcsolt", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("IpaKapcsoltStatus", "Tao");
+            }
+            return RedirectToAction("IpaKapcsoltStatus", "Tao");
         }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)

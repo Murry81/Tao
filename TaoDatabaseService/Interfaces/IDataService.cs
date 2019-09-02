@@ -27,5 +27,7 @@ namespace TaoDatabaseService.Interfaces
         List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId);
 
         List<SessionDto> GetCustomerSessions(int customerId);
+
+        TableDescriptorDto GetTableDate(int tableId, Guid session);
     }
 }
