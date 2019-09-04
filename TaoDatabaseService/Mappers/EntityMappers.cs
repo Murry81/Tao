@@ -83,6 +83,67 @@ namespace TaoDatabaseService.Mappers
             return result;
         }
 
+        public static FieldDescriptorDto ToBaseFieldDescriptorDto(this FieldDescriptor fieldDescriptor)
+        {
+            var result = new FieldDescriptorDto
+            {
+                Caption = fieldDescriptor.Caption,
+                Id = fieldDescriptor.Id,
+                IsCaculated = fieldDescriptor.IsCalculated,
+                IsEditable = fieldDescriptor.IsEditable,
+                IsMandatory = fieldDescriptor.IsMandatory,
+                Title = fieldDescriptor.Title,
+                TypeName = fieldDescriptor.TypeName,
+                TypeOptions = fieldDescriptor.TypeOptions,
+                IsSpecial = fieldDescriptor.IsSpecial
+            };
+
+            return result;
+        }
+
+        public static FieldDescriptorDto ToFieldDescriptorDto(this FieldDescriptor fieldDescriptor, FieldValue value, int rowIndex)
+        {
+            var result = new FieldDescriptorDto
+            {
+                Caption = fieldDescriptor.Caption,
+                Id = fieldDescriptor.Id,
+                IsCaculated = fieldDescriptor.IsCalculated,
+                IsEditable = fieldDescriptor.IsEditable,
+                IsMandatory = fieldDescriptor.IsMandatory,
+                Title = fieldDescriptor.Title,
+                TypeName = fieldDescriptor.TypeName,
+                TypeOptions = fieldDescriptor.TypeOptions,
+                IsSpecial = fieldDescriptor.IsSpecial
+            };
+
+            if (value != null)
+            {
+                result.FieldValueId = value.Id;
+                switch (fieldDescriptor.TypeName)
+                {
+                    case "numeric":
+                        result.DecimalValue = value.DecimalValue;
+                        break;
+                    case "bool":
+                        result.BoolFieldValue = value.BoolValue.HasValue ? value.BoolValue.Value : false;
+                        break;
+                    case "date":
+                        result.DateValue = value.DateValue;
+                        break;
+                    default:
+                        result.StringValue = value.StringValue;
+                        break;
+                }
+            }
+            else
+            {
+                result.FieldValueId = null;
+            }
+
+            result.RowIndex = rowIndex;
+            return result;
+        }
+
         public static CurrencyDto ToCurrency(this Currency currency)
         {
             return new CurrencyDto

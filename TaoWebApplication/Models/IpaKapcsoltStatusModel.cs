@@ -1,9 +1,10 @@
-﻿using TaoContracts.Contracts;
+﻿using System.Collections.Generic;
+using TaoContracts.Contracts;
 
 namespace TaoWebApplication.Models
 {
     public class IpaKapcsoltStatusModel : ModelBase, ITableDescriptor
     {
-        public TableDescriptorDto TableDescriptor { get; set; } 
+        public List<TableDescriptorDto> TableDescriptors { get; set; } 
     }
 }

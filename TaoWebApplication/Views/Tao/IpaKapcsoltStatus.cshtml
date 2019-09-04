@@ -15,22 +15,23 @@
                 <table class="TaoDataTable table">
                     <thead>
                         <tr>
-                            @foreach (var v in Model.TableDescriptor.FieldDescriptorIds)
+                            @foreach (var v in Model.TableDescriptors[0].FieldDescriptorIds)
                             {
-                             <th style="width:7%; border:double;">@Model.TableDescriptor.Captions[v]</th>
+                             <th style="width:7%; border:double;">@Model.TableDescriptors[0].Captions[v]</th>
                             }
                         </tr>
                     </thead>
 
-                    @for (int i = 0; i < Model.TableDescriptor.FieldValues.Count; i++)
+                    @for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
                     {
                 <tr>
-                    @for (int j = 0; j < Model.TableDescriptor.FieldValues[i].Count; j++)
+                    @for (int j = 0; j < Model.TableDescriptors[0].FieldValues[i].Count; j++)
                     {
-                        @Html.HiddenFor(m => Model.TableDescriptor.FieldValues[i][j].Id);
-                        @Html.HiddenFor(m => Model.TableDescriptor.FieldValues[i][j].RowIndex, new { Value = i} );
+                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId);
+                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id);
+                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i });
                         <td style="width:7%; border:double; ">
-                            @Html.CreateActualControlForTable(Model, i, j)
+                            @Html.CreateActualControlForTable(Model, i, j, 0)
                         </td>
                     }
                 </tr>

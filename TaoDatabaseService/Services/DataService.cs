@@ -69,6 +69,19 @@ namespace TaoDatabaseService.Services
             return result;
         }
 
+
+        public List<BaseFieldDescriptorDto> GetTableFields(int tableId)
+        {
+            var fieldDescriptor = entities.TableDescriptor.Where(t => t.TableId == tableId).Select(t => t.FieldDescriptor);
+
+            var result = new List<BaseFieldDescriptorDto>();
+            foreach (var field in fieldDescriptor)
+            {
+                result.Add(field.ToBaseFieldDescriptorDto());
+            }
+            return result;
+        }
+
         public List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId)
         {
             var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldIds.Contains(f.Id));
@@ -168,56 +181,68 @@ namespace TaoDatabaseService.Services
             return sessionCreated.ToSession();
         }
 
-        public TableDescriptorDto GetTableDate(int tableId, Guid session)
+        public List<TableDescriptorDto> GetTableData(int pageId, Guid session)
         {
-            var result = new TableDescriptorDto
+            var tableIds = entities.TableDescriptor.Where(t => t.PageId == pageId).Select(t=> t.TableId);
+
+            var result = new List<TableDescriptorDto>();
+            foreach (var tableId in tableIds)
             {
-                TableId = tableId
-            };
+                var tableElement = new TableDescriptorDto
+                {
+                    TableId = tableId
+                };
 
-            var table = entities.TableDescriptor.Where(t => t.TableId == tableId);
-            if (table == null || table.Count() == 0)
-            { 
-                return null;
-            }
+                var table = entities.TableDescriptor.Where(t => t.TableId == tableId);
+                if (table == null || table.Count() == 0)
+                {
+                    return null;
+                }
 
-            // Set up ids
-            var fieldDescriptors = table.OrderBy(t => t.ColumnOrder).Select(t => t.FieldDescriptor);
-            result.FieldDescriptorIds = fieldDescriptors.Select(t => t.Id).ToList();
+                // Set up ids
+                var fieldDescriptors = table.OrderBy(t => t.ColumnOrder).Select(t => t.FieldDescriptor);
+                tableElement.FieldDescriptorIds = fieldDescriptors.Select(t => t.Id).ToList();
 
-            // Set up captions
-            result.Captions = new Dictionary<int, string>();
-            foreach (var t in table.OrderBy(t => t.ColumnOrder))
-            {
-                result.Captions.Add(t.FieldDescriptorId, t.Caption);
-            }
+                // Set up captions
+                tableElement.Captions = new Dictionary<int, string>();
+                foreach (var t in table.OrderBy(t => t.ColumnOrder))
+                {
+                    tableElement.Captions.Add(t.FieldDescriptorId, t.Caption);
+                }
 
-            // Set up saved values
-            result.FieldValues = new List<List<FieldDescriptorDto>>();
-            var savedFields = entities.FieldValue.Where(f => f.SessionId == session && result.FieldDescriptorIds.Contains(f.FieldDescriptorId)).OrderBy(t=> t.RowIndex).ThenBy(t => t.FieldDescriptorId);
+                // Set up saved values
+                tableElement.FieldValues = new List<List<FieldDescriptorDto>>();
+                var savedFields = entities.FieldValue.Where(f => f.SessionId == session && tableElement.FieldDescriptorIds.Contains(f.FieldDescriptorId));
 
-            int rowIndex = 0;
-            List<FieldDescriptorDto> currentList = null;
-            foreach(var savedField in savedFields)
-            {
-                if(savedField.RowIndex != rowIndex)
+                int rowIndex = 0;
+                List<FieldDescriptorDto> currentList = null;
+
+                var rowNumbers = savedFields.Select(t => t.RowIndex).Distinct().OrderBy(t=> t.Value).ToList();
+
+
+                foreach(int row in rowNumbers)
                 {
                     currentList = new List<FieldDescriptorDto>();
-                    result.FieldValues.Add(currentList);
-                    rowIndex = savedField.RowIndex.Value;
+                    tableElement.FieldValues.Add(currentList);
+                    foreach (var field in fieldDescriptors)
+                    {
+                        var savedField = savedFields.FirstOrDefault(t => t.RowIndex == row && t.FieldDescriptorId == field.Id);
+                        currentList.Add(field.ToFieldDescriptorDto(savedField, row));
+                    }
+                    rowIndex++;
                 }
-                currentList.Add(savedField.FieldDescriptor.ToFieldDescriptorDto(new List<FieldValue> { savedField }, null));
-            }
 
-            // Add an empty row
-            currentList = new List<FieldDescriptorDto>();
-            rowIndex++;
-            foreach (var field in fieldDescriptors)
-            {
-                currentList.Add(field.ToFieldDescriptorDto(new List<FieldValue> { new FieldValue { RowIndex = rowIndex }}, null));
-            }
+                // Add an empty row
+                currentList = new List<FieldDescriptorDto>();
+                rowIndex++;
+                foreach (var field in fieldDescriptors)
+                {
+                    currentList.Add(field.ToFieldDescriptorDto(null, rowIndex));
+                }
 
-            result.FieldValues.Add(currentList);
+                tableElement.FieldValues.Add(currentList);
+                result.Add(tableElement);
+            }
             return result;
         }
     }

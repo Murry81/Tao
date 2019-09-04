@@ -1,9 +1,10 @@
-﻿using TaoContracts.Contracts;
+﻿using System.Collections.Generic;
+using TaoContracts.Contracts;
 
 namespace TaoWebApplication.Models
 {
     public interface ITableDescriptor
     {
-        TableDescriptorDto TableDescriptor { get; set; }
+        List<TableDescriptorDto> TableDescriptors { get; set; }
     }
 }

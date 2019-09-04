@@ -240,14 +240,21 @@ namespace TaoWebApplication.Controllers
             var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
             var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
             model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as IpaKapcsoltStatusModel;
-            model.TableDescriptor = _service.GetTableDate(1, sessionId);
+            model.TableDescriptors = _service.GetTableData(6, sessionId);
             return View(model);
         }
 
         [HttpPost]
         public ActionResult IpaKapcsoltStatus(string buttonAction, IpaKapcsoltStatusModel fc)
         {
-            SaveValues(fc.Fields, IpaKapcsoltStatusCalculation.CalculateValues, pageId: 6);
+            var field = new List<FieldDescriptorDto>();
+            foreach(var list in fc.TableDescriptors[0].FieldValues)
+            {
+                field.AddRange(list);
+            }
+
+            field = FillFieldValuesForTable(field, 1);
+            SaveValues(field, IpaKapcsoltStatusCalculation.CalculateValues);
 
             if (buttonAction == "Previous")
             {
@@ -274,13 +281,36 @@ namespace TaoWebApplication.Controllers
                     }
                 }
 
-                if (calulator != null)
-                {
-                    calulator(fields, _service, sessionId);
-                }
-
+                calulator?.Invoke(fields, _service, sessionId);
                 _service.UpdateFieldValues(fields, sessionId);
             }
+        }
+
+        private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator)
+        {
+            if (Guid.TryParse(System.Web.HttpContext.Current.Session["SessionId"]?.ToString(), out var sessionId))
+            {
+                calulator?.Invoke(fieldValues, _service, sessionId);
+                _service.UpdateFieldValues(fieldValues, sessionId);
+            }
+        }
+
+        private List<FieldDescriptorDto> FillFieldValuesForTable(List<FieldDescriptorDto> fieldValues, int tableId)
+        {
+            var tableFields = _service.GetTableFields(tableId).ToList();
+
+            foreach(var field in fieldValues)
+            {
+                var baseData = tableFields.FirstOrDefault(t => t.Id == field.Id);
+                if(baseData != null)
+                {
+                    field.IsCaculated = baseData.IsCaculated;
+                    field.IsEditable = baseData.IsEditable;
+                    field.IsMandatory = baseData.IsMandatory;
+                    field.TypeName = baseData.TypeName;
+                }
+            }
+            return fieldValues;
         }
     }
 }

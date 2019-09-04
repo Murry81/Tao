@@ -22,12 +22,14 @@ namespace TaoDatabaseService.Interfaces
 
         List<FieldDescriptorDto> GetPageFields(int pageId, Guid sessionId);
 
+        List<BaseFieldDescriptorDto> GetTableFields(int tableId);
+
         void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, Guid sessionId);
 
         List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId);
 
         List<SessionDto> GetCustomerSessions(int customerId);
 
-        TableDescriptorDto GetTableDate(int tableId, Guid session);
+        List<TableDescriptorDto> GetTableData(int pageId, Guid session);
     }
 }

@@ -137,11 +137,13 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <Key>
             <PropertyRef Name="TableId" />
             <PropertyRef Name="FieldDescriptorId" />
+            <PropertyRef Name="PageId" />
           </Key>
           <Property Name="TableId" Type="int" Nullable="false" />
           <Property Name="FieldDescriptorId" Type="int" Nullable="false" />
           <Property Name="Caption" Type="nvarchar" MaxLength="250" />
           <Property Name="ColumnOrder" Type="int" />
+          <Property Name="PageId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
@@ -299,6 +301,18 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TableDescriptor_Page">
+          <End Role="Page" Type="Self.Page" Multiplicity="1" />
+          <End Role="TableDescriptor" Type="Self.TableDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Page">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TableDescriptor">
+              <PropertyRef Name="PageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CustomerNameTaoModelStoreContainer">
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContactDetail" EntityType="Self.ContactDetail" Schema="dbo" store:Type="Tables" />
@@ -316,7 +330,8 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
     [TableDescriptor].[TableId] AS [TableId], 
     [TableDescriptor].[FieldDescriptorId] AS [FieldDescriptorId], 
     [TableDescriptor].[Caption] AS [Caption], 
-    [TableDescriptor].[ColumnOrder] AS [ColumnOrder]
+    [TableDescriptor].[ColumnOrder] AS [ColumnOrder], 
+    [TableDescriptor].[PageId] AS [PageId]
     FROM [dbo].[TableDescriptor] AS [TableDescriptor]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Address_Customer" Association="Self.FK_Address_Customer">
@@ -371,6 +386,10 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
             <End Role="TableDescriptor" EntitySet="TableDescriptor" />
           </AssociationSet>
+          <AssociationSet Name="FK_TableDescriptor_Page" Association="Self.FK_TableDescriptor_Page">
+            <End Role="Page" EntitySet="Page" />
+            <End Role="TableDescriptor" EntitySet="TableDescriptor" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -388,6 +407,7 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <EntitySet Name="Page" EntityType="CustomerNameTaoModel.Page" />
           <EntitySet Name="PageDescriptor" EntityType="CustomerNameTaoModel.PageDescriptor" />
           <EntitySet Name="Session" EntityType="CustomerNameTaoModel.Session" />
+          <EntitySet Name="TableDescriptor" EntityType="CustomerNameTaoModel.TableDescriptor" />
           <AssociationSet Name="FK_Address_Customer" Association="CustomerNameTaoModel.FK_Address_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Address" EntitySet="Address" />
@@ -428,6 +448,10 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
           </AssociationSet>
+          <AssociationSet Name="FK_TableDescriptor_FieldDescriptor" Association="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="TableDescriptor" EntitySet="TableDescriptor" />
+          </AssociationSet>
           <AssociationSet Name="FK_FieldValue_Session" Association="CustomerNameTaoModel.FK_FieldValue_Session">
             <End Role="Session" EntitySet="Session" />
             <End Role="FieldValue" EntitySet="FieldValue" />
@@ -436,9 +460,8 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             <End Role="Page" EntitySet="Page" />
             <End Role="PageDescriptor" EntitySet="PageDescriptor" />
           </AssociationSet>
-          <EntitySet Name="TableDescriptor" EntityType="CustomerNameTaoModel.TableDescriptor" />
-          <AssociationSet Name="FK_TableDescriptor_FieldDescriptor" Association="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor">
-            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+          <AssociationSet Name="FK_TableDescriptor_Page" Association="CustomerNameTaoModel.FK_TableDescriptor_Page">
+            <End Role="Page" EntitySet="Page" />
             <End Role="TableDescriptor" EntitySet="TableDescriptor" />
           </AssociationSet>
         </EntityContainer>
@@ -560,6 +583,7 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <Property Name="DocumentTypeId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_Page_DocumentType" FromRole="Page" ToRole="DocumentType" />
           <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_Pages" FromRole="Page" ToRole="PageDescriptor" />
+          <NavigationProperty Name="TableDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_Page" FromRole="Page" ToRole="TableDescriptor" />
         </EntityType>
         <EntityType Name="PageDescriptor">
           <Key>
@@ -592,6 +616,20 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <NavigationProperty Name="DocumentState" Relationship="CustomerNameTaoModel.FK_Session_DocumentState" FromRole="Session" ToRole="DocumentState" />
           <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="Session" ToRole="DocumentType" />
           <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="Session" ToRole="FieldValue" />
+        </EntityType>
+        <EntityType Name="TableDescriptor">
+          <Key>
+            <PropertyRef Name="TableId" />
+            <PropertyRef Name="FieldDescriptorId" />
+            <PropertyRef Name="PageId" />
+          </Key>
+          <Property Name="TableId" Type="Int32" Nullable="false" />
+          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
+          <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ColumnOrder" Type="Int32" />
+          <Property Name="PageId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="TableDescriptor" ToRole="FieldDescriptor" />
+          <NavigationProperty Name="Page" Relationship="CustomerNameTaoModel.FK_TableDescriptor_Page" FromRole="TableDescriptor" ToRole="Page" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="1" />
@@ -713,6 +751,18 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TableDescriptor_FieldDescriptor">
+          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.TableDescriptor" Role="TableDescriptor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TableDescriptor">
+              <PropertyRef Name="FieldDescriptorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FieldValue_Session">
           <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="1" />
           <End Type="CustomerNameTaoModel.FieldValue" Role="FieldValue" Multiplicity="*" />
@@ -737,26 +787,15 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="TableDescriptor">
-          <Key>
-            <PropertyRef Name="TableId" />
-            <PropertyRef Name="FieldDescriptorId" />
-          </Key>
-          <Property Name="TableId" Type="Int32" Nullable="false" />
-          <Property Name="FieldDescriptorId" Type="Int32" Nullable="false" />
-          <Property Name="Caption" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ColumnOrder" Type="Int32" />
-          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="TableDescriptor" ToRole="FieldDescriptor" />
-        </EntityType>
-        <Association Name="FK_TableDescriptor_FieldDescriptor">
-          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
+        <Association Name="FK_TableDescriptor_Page">
+          <End Type="CustomerNameTaoModel.Page" Role="Page" Multiplicity="1" />
           <End Type="CustomerNameTaoModel.TableDescriptor" Role="TableDescriptor" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="FieldDescriptor">
+            <Principal Role="Page">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TableDescriptor">
-              <PropertyRef Name="FieldDescriptorId" />
+              <PropertyRef Name="PageId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -906,6 +945,7 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <EntitySetMapping Name="TableDescriptor">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.TableDescriptor">
               <MappingFragment StoreEntitySet="TableDescriptor">
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
                 <ScalarProperty Name="ColumnOrder" ColumnName="ColumnOrder" />
                 <ScalarProperty Name="Caption" ColumnName="Caption" />
                 <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />

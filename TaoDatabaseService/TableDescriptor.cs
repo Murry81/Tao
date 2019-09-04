@@ -18,7 +18,9 @@ namespace TaoDatabaseService
         public int FieldDescriptorId { get; set; }
         public string Caption { get; set; }
         public Nullable<int> ColumnOrder { get; set; }
+        public int PageId { get; set; }
     
         public virtual FieldDescriptor FieldDescriptor { get; set; }
+        public virtual Page Page { get; set; }
     }
 }
