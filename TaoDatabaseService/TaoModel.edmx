@@ -80,6 +80,7 @@
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="TypeOptions" Type="nvarchar" MaxLength="500" />
           <Property Name="IsSpecial" Type="bit" />
+          <Property Name="HtmlClass" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="FieldValue">
           <Key>
@@ -552,6 +553,7 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TypeOptions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsSpecial" Type="Boolean" />
+          <Property Name="HtmlClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldDescriptor" ToRole="FieldValue" />
           <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" FromRole="FieldDescriptor" ToRole="PageDescriptor" />
           <NavigationProperty Name="TableDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="FieldDescriptor" ToRole="TableDescriptor" />
@@ -875,6 +877,7 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <EntitySetMapping Name="FieldDescriptor">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.FieldDescriptor">
               <MappingFragment StoreEntitySet="FieldDescriptor">
+                <ScalarProperty Name="HtmlClass" ColumnName="HtmlClass" />
                 <ScalarProperty Name="IsSpecial" ColumnName="IsSpecial" />
                 <ScalarProperty Name="TypeOptions" ColumnName="TypeOptions" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />

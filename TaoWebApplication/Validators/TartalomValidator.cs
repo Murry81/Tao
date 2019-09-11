@@ -26,7 +26,7 @@ namespace TaoWebApplication.Validators
 
             if (f32 == null || !f32.DateValue.HasValue)
             {
-                result.Add(32, "A kezdő időpontnak léteznie kell.");
+                result.Add(32, "A befejező időpontnak léteznie kell.");
             }
 
             if (f31 != null && f31.DateValue.HasValue && f32 != null && f32.DateValue.HasValue && f32.DateValue - f31.DateValue > TimeSpan.FromDays(365))

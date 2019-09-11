@@ -52,7 +52,8 @@ namespace TaoDatabaseService.Mappers
                 OrderCharacter = pageDescriptor?.OrderCharacter,
                 IsSpecial = fieldDescriptor.IsSpecial,
                 SectionGroup = pageDescriptor?.SectionGroup,
-                Order = pageDescriptor?.Order
+                Order = pageDescriptor?.Order,
+                HtmlClass = fieldDescriptor.HtmlClass
             };
 
             var currentValue = values.FirstOrDefault(v => v.FieldDescriptorId == fieldDescriptor.Id);

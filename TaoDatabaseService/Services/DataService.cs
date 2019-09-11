@@ -64,7 +64,7 @@ namespace TaoDatabaseService.Services
 
             foreach (var field in fieldDescriptor)
             {
-                result.Add(field.ToFieldDescriptorDto(fieldValues.ToList(), pageDescriptor));
+                result.Add(field.ToFieldDescriptorDto(fieldValues, pageDescriptor));
             }
             return result;
         }
@@ -72,7 +72,7 @@ namespace TaoDatabaseService.Services
 
         public List<BaseFieldDescriptorDto> GetTableFields(int tableId)
         {
-            var fieldDescriptor = entities.TableDescriptor.Where(t => t.TableId == tableId).Select(t => t.FieldDescriptor);
+            var fieldDescriptor = entities.TableDescriptor.Where(t => t.TableId == tableId).Select(t => t.FieldDescriptor).ToList();
 
             var result = new List<BaseFieldDescriptorDto>();
             foreach (var field in fieldDescriptor)
@@ -84,7 +84,7 @@ namespace TaoDatabaseService.Services
 
         public List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId)
         {
-            var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldIds.Contains(f.Id));
+            var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldIds.Contains(f.Id)).ToList();
             var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId).ToList();
 
             var result = new List<FieldDescriptorDto>();
@@ -98,13 +98,13 @@ namespace TaoDatabaseService.Services
 
         public List<SessionDto> GetCustomerSessions(int customerId)
         {
-            var sessions = entities.Session.Where(s => s.CustomerId == customerId);
+            var sessions = entities.Session.Where(s => s.CustomerId == customerId).ToList();
             if (sessions == null || sessions.Count() == 0)
             {
                 return null;
             }
 
-            return sessions.ToList().Select(s => s.ToSession()).ToList();
+            return sessions.Select(s => s.ToSession()).ToList();
         }
 
         public List<DocumentDto> GetAllDocumentType()
@@ -140,7 +140,7 @@ namespace TaoDatabaseService.Services
                         break;
                 }
 
-                if (myEntity.StringValue == null && myEntity.DecimalValue == null && myEntity.DateValue == null && myEntity.BoolValue == null)
+                if (string.IsNullOrEmpty(myEntity.StringValue) && myEntity.DecimalValue == null && myEntity.DateValue == null && myEntity.BoolValue == null)
                 {
                     if (field.FieldValueId.HasValue)
                     {
@@ -183,7 +183,7 @@ namespace TaoDatabaseService.Services
 
         public List<TableDescriptorDto> GetTableData(int pageId, Guid session)
         {
-            var tableIds = entities.TableDescriptor.Where(t => t.PageId == pageId).Select(t=> t.TableId);
+            var tableIds = entities.TableDescriptor.Where(t => t.PageId == pageId).Select(t=> t.TableId).Distinct().ToList();
 
             var result = new List<TableDescriptorDto>();
             foreach (var tableId in tableIds)
@@ -193,26 +193,26 @@ namespace TaoDatabaseService.Services
                     TableId = tableId
                 };
 
-                var table = entities.TableDescriptor.Where(t => t.TableId == tableId);
-                if (table == null || table.Count() == 0)
+                var tableDescriptors = entities.TableDescriptor.Where(t => t.TableId == tableId).ToList();
+                if (tableDescriptors == null || tableDescriptors.Count() == 0)
                 {
                     return null;
                 }
 
                 // Set up ids
-                var fieldDescriptors = table.OrderBy(t => t.ColumnOrder).Select(t => t.FieldDescriptor);
+                var fieldDescriptors = tableDescriptors.OrderBy(t => t.ColumnOrder).Select(t => t.FieldDescriptor).ToList();
                 tableElement.FieldDescriptorIds = fieldDescriptors.Select(t => t.Id).ToList();
 
                 // Set up captions
                 tableElement.Captions = new Dictionary<int, string>();
-                foreach (var t in table.OrderBy(t => t.ColumnOrder))
+                foreach (var t in tableDescriptors.OrderBy(t => t.ColumnOrder))
                 {
                     tableElement.Captions.Add(t.FieldDescriptorId, t.Caption);
                 }
 
                 // Set up saved values
                 tableElement.FieldValues = new List<List<FieldDescriptorDto>>();
-                var savedFields = entities.FieldValue.Where(f => f.SessionId == session && tableElement.FieldDescriptorIds.Contains(f.FieldDescriptorId));
+                var savedFields = entities.FieldValue.Where(f => f.SessionId == session && tableElement.FieldDescriptorIds.Contains(f.FieldDescriptorId)).ToList();
 
                 int rowIndex = 0;
                 List<FieldDescriptorDto> currentList = null;

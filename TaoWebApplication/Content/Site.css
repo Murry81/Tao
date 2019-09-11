@@ -52,7 +52,8 @@ textarea
 }
 
 .TaoDataTable tbody tr td {
-    padding: 4px;
+    padding: 1px;
+    padding-left: 4px;
     margin: 0px;
     align-content:center;
 }

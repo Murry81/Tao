@@ -264,8 +264,74 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("IpaKapcsoltStatus", "Tao");
             }
-            return RedirectToAction("IpaKapcsoltStatus", "Tao");
+            return RedirectToAction("InnovaciosJarulek", "Tao");
         }
+
+
+        public ActionResult InnovaciosJarulek()
+        {
+            var model = new InnovaciosJarulekModel();
+            var currentpage = _service.GetPage("InnovJar");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as InnovaciosJarulekModel;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult InnovaciosJarulek(string buttonAction, IpaKapcsoltStatusModel fc)
+        {
+            SaveValues(fc.Fields, InnovaciosJarulekCalculation.CalculateValues, pageId: 7);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("IpaKapcsoltStatus", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("InnovaciosJarulek", "Tao");
+            }
+            return RedirectToAction("IpaMegosztas", "Tao");
+        }
+
+
+        public ActionResult IpaMegosztas()
+        {
+            var model = new IpaMegosztasModel();
+            var currentpage = _service.GetPage("IpaMegosztas");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as IpaMegosztasModel;
+            model.TableDescriptors = _service.GetTableData(18, sessionId);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult IpaMegosztas(string buttonAction, IpaMegosztasModel fc)
+        {
+            var field = new List<FieldDescriptorDto>();
+            foreach (var list in fc.TableDescriptors[0].FieldValues)
+            {
+                field.AddRange(list);
+            }
+
+            field = FillFieldValuesForTable(field, 2);
+            SaveValues(field, IpaMegosztasCalculation.CalculateValues);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("InnovaciosJarulek", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("IpaMegosztas", "Tao");
+            }
+            return RedirectToAction("IpaMegosztas", "Tao");
+        }
+
+
+
+
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)
         {

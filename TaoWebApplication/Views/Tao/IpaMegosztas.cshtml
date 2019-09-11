@@ -1,0 +1,87 @@
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
+@using TaoContracts.Contracts
+@model IpaMegosztasModel
+
+@{
+    ViewBag.Title = "IpaMegosztas";
+}
+
+@using (Html.BeginForm("IpaMegosztas", "Tao", FormMethod.Post))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 DivStyle">
+                <table class="TaoDataTable table" style="width:auto">
+                    <thead>
+                        <tr>
+                            @{
+                                int width = 20;
+                                var numberOfColumns = Model.TableDescriptors[0].FieldDescriptorIds.Count;
+                                <th style="width:20%"></th>
+                                for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
+                                {
+                                    width += 9;
+                                    <th style="width:9%">
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].FieldValueId)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].Id)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].RowIndex, new { Value = i })
+                                        @Html.CreateActualControlForTable(Model, i, 0, 0)
+                                    </th>
+                                }
+                                if (width < 100)
+                                {
+                                    var w = 100 - width;
+                                    <th style="width:@w" />
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    @{
+                        for (int j = 1; j < numberOfColumns; j++)
+                        {
+                            if (j == 4)
+                            {
+                                <tr></tr>
+                                <tr style="margin:30px;">
+                                    <td style="padding:12px;"><b>Tényértékek</b></td>
+                                    <td style="padding:12px;"><b>Időszak 1-12</b></td>
+                                </tr>
+                            }
+                            if (j == 9)
+                            {
+                                <tr></tr>
+                                <tr style="padding-top:30px;">
+                                    <td style="padding:12px;"><b>Arányosított értékek</b></td>
+                                </tr>
+                            }
+                            <tr>
+                                <td style="border:double;">
+                                    @Model.TableDescriptors[0].Captions[Model.TableDescriptors[0].FieldDescriptorIds[j]]
+                                </td>
+                                @for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
+                                {
+                                    <td style=" border:double; ">
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
+
+                                        @Html.CreateActualControlForTable(Model, i, j, 0)
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            </div>
+        </div>
+    </div>
+}

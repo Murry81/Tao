@@ -33,7 +33,7 @@
                             <td>
                                 @Model.Fields[i].OrderCharacter
                             </td>
-                            <td class="TextIndent">
+                            <td class="@Model.Fields[i].HtmlClass">
                                 @if (Model.Fields[i].IsCaculated)
                                 {
                                     <b> @Model.Fields[i].Title</b>
@@ -72,28 +72,28 @@
                             continue;
                         }
                         @Html.HiddenFor(m => Model.Fields[i].Id);
-                        <tr>
-                            <td>
-                                @Model.Fields[i].OrderCharacter
-                            </td>
-                            <td>
-                                @if (Model.Fields[i].IsCaculated)
-                                {
-                                    <b> @Model.Fields[i].Title</b>
-                                }
-                                else
-                                {
-                                    @Model.Fields[i].Title
-                                }
-                            </td>
-                            <td>
-                                @Html.CreateActualControl((IFieldList)Model, i)
-                            </td>
+                <tr>
+                    <td>
+                        @Model.Fields[i].OrderCharacter
+                    </td>
+                    <td class="@Model.Fields[i].HtmlClass">
+                        @if (Model.Fields[i].IsCaculated)
+                        {
+                            <b> @Model.Fields[i].Title</b>
+                        }
+                        else
+                        {
+                            @Model.Fields[i].Title
+                        }
+                    </td>
+                    <td>
+                        @Html.CreateActualControl((IFieldList)Model, i)
+                    </td>
 
-                            <td>
-                                @Model.Fields[i].Description
-                            </td>
-                        </tr>
+                    <td>
+                        @Model.Fields[i].Description
+                    </td>
+                </tr>
                     }
                 </table>
             </div>

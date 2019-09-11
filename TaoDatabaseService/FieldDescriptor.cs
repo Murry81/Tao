@@ -32,6 +32,7 @@ namespace TaoDatabaseService
         public string TypeName { get; set; }
         public string TypeOptions { get; set; }
         public Nullable<bool> IsSpecial { get; set; }
+        public string HtmlClass { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FieldValue> FieldValue { get; set; }
