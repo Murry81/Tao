@@ -302,6 +302,22 @@ namespace TaoWebApplication.Controllers
             var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
             model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as IpaMegosztasModel;
             model.TableDescriptors = _service.GetTableData(18, sessionId);
+
+            var allFields = new List<FieldDescriptorDto>();
+
+            foreach (var list in model.TableDescriptors[0].FieldValues)
+            {
+                allFields.AddRange(list);
+            }
+            var validationResult = IpaMegosztasValidator.Validate(allFields);
+            if (validationResult.Keys.Count > 0)
+            {
+                foreach (var error in validationResult.Keys)
+                {
+                    ModelState.AddModelError(error.ToString(), validationResult[error]);
+                }
+            }
+            
             return View(model);
         }
 

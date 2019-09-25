@@ -18,6 +18,11 @@ namespace TaoWebApplication.Calculators
 
                 switch (field.Id)
                 {
+                    case 1802: // Adó mértéke (%, két tizedes)
+                        {
+                            field.DecimalValue = Calculate1802(field, fields, service); //use 408
+                            break;
+                        }
                     case 1803: // Megosztás módja
                         {
                             field.StringValue = Calculate1803(field, fields, service, sessionId); //use 408
@@ -87,6 +92,8 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        
+
         private static decimal? Calculate1827(FieldDescriptorDto field, List<FieldDescriptorDto> fields)
         {
             // Felöltési kötelezettség/Adókülönbözet + Be nem fizetett, korábban előírt előleg - Folyószámlán fennálló túlfizetés
@@ -126,7 +133,7 @@ namespace TaoWebApplication.Calculators
             //    - Kutatási kedvezmény, ha negatív, akkor 0
             // ( f1811 * f1802) - f1813 - f1814 - f1815 - f1816 - f1817 - f1818 - f1821
             var f1811 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1811).DecimalValue);
-            var f1802 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1802).DecimalValue);
+            var f1802 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1802).DecimalValue) / 100;
             var f1813 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1813).DecimalValue);
             var f1814 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1814).DecimalValue);
             var f1815 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1815).DecimalValue);
@@ -144,7 +151,7 @@ namespace TaoWebApplication.Calculators
             // Ha Kutatási kedvezmény alkalmazható = igaz, Alapkutatás, alkalmazott kutatás, K+F önköltségének településre jutó összege, egyébként 0
             //if !f1820 then 0
             //else f1819
-            if (fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1820).BoolFieldValue)
+            if (fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1820).StringValue == "igen")
             {
                 return GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1819).DecimalValue);
             }
@@ -203,7 +210,7 @@ namespace TaoWebApplication.Calculators
         {
             // Adóköteles adóalap *Adó mértéke
             // f1811 * f1802
-            var f1802 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1802).DecimalValue);
+            var f1802 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1802).DecimalValue) / 100;
             var f1811 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1811).DecimalValue);
 
             return f1811 * f1802;
@@ -304,6 +311,17 @@ namespace TaoWebApplication.Calculators
 
 
             return field.StringValue;
+        }
+
+        private static decimal Calculate1802(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service)
+        {
+            // f1800 település
+            var f1800 = fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1800).StringValue;
+            var tax = service.GetCityTaxes().FirstOrDefault(c => c.City.ToLower() == f1800.ToLower());
+            if (tax == null)
+                return (decimal)2;
+
+            return tax.IparuzesiAdo;
         }
     }
 }

@@ -15,7 +15,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color:#e6f2ff;">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -52,9 +52,20 @@
                     </div>
                 </div>
             </div>
-                   
-            @RenderBody()
-     </div>
+            <div class="col-md-12" style="text-align:center; color:darkslategrey;">
+
+                @if (Model.CurrentPage != null)
+                {
+                     <h2>
+                        @Model.CurrentPage.CaptionText
+                         <br/>
+                    </h2>
+                }
+</div>
+             </div>
+            <div>
+                @RenderBody()
+            </div>
         
                 @Scripts.Render("~/bundles/jquery")
                 @Scripts.Render("~/bundles/bootstrap")

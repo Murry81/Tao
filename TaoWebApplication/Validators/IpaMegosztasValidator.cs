@@ -7,9 +7,9 @@ namespace TaoWebApplication.Validators
 {
     public class IpaMegosztasValidator : IValidator
     {
-        public static Dictionary<ValidatorElement, string> Validate(List<FieldDescriptorDto> fields)
+        public static Dictionary<string, string> Validate(List<FieldDescriptorDto> fields)
         {
-            var result = new Dictionary<ValidatorElement, string>();
+            var result = new Dictionary<string, string>();
 
             var rows = fields.Select(f => f.RowIndex).Distinct();
 
@@ -20,7 +20,7 @@ namespace TaoWebApplication.Validators
             return result;
         }
 
-        private static void CheckF1830(Dictionary<ValidatorElement, string> result, List<FieldDescriptorDto> fields)
+        private static void CheckF1830(Dictionary<string, string> result, List<FieldDescriptorDto> fields)
         {
             //	Ha Ideiglenes iparűzési adóátalány levonható része > 0, akkor kötelező és Ideiglenes iparűzési adóátalány teljes összeg >= Ideiglenes iparűzési adóátalány levonható része
             //if 1830 > 0
@@ -37,24 +37,24 @@ namespace TaoWebApplication.Validators
                 {
                     var f1815 = GenericCalculations.GetValue(fields.FirstOrDefault(field => field.Id == 1815 && f.RowIndex == field.RowIndex).DecimalValue);
                     if (f1830 < f1815)
-                        result.Add(new ValidatorElement { ColumnId = 31, RowIndex = rowindexes.IndexOf(f.RowIndex) }, "Ideiglenes iparűzési adóátalány teljes összeg nem lehet kisebb mint az Ideiglenes iparűzési adóátalány levonható része.");
+                        result.Add($"0;{rowindexes.IndexOf(f.RowIndex)};15", "Ideiglenes iparűzési adóátalány teljes összeg nem lehet kisebb mint az Ideiglenes iparűzési adóátalány levonható része.");
                 }
             }
 
         }
 
 
-        private static void CheckSzekhelys(List<FieldDescriptorDto> fields, Dictionary<ValidatorElement, string> result, List<FieldDescriptorDto> kulfolds)
+        private static void CheckSzekhelys(List<FieldDescriptorDto> fields, Dictionary<string, string> result, List<FieldDescriptorDto> kulfolds)
         {
             var rowindexes = fields.Select(f => f.RowIndex).Distinct().ToList();
             rowindexes.Sort();
-            var szekhelys = fields.Where(f => f.Id == 1801 && f.StringValue == "Igen").ToList();
+            var szekhelys = fields.Where(f => f.Id == 1801 && f.StringValue == "igen").ToList();
 
             if (szekhelys.Count() > 1)
             {
                 for (int i = 1; i < szekhelys.Count(); i++)
                 {
-                    result.Add(new ValidatorElement { RowIndex = rowindexes.IndexOf(szekhelys[i].RowIndex.Value), ColumnId = 2 }, "Csak egy város lehet székhely.");
+                    result.Add($"0;{rowindexes.IndexOf(szekhelys[i].RowIndex.Value)};1", "Csak egy város lehet székhely.");
                 }
             }
 
@@ -63,12 +63,12 @@ namespace TaoWebApplication.Validators
             {
                 if (kulfolds.FirstOrDefault(k => k.RowIndex.Value == szekhely.RowIndex.Value) != null)
                 {
-                    result.Add(new ValidatorElement { RowIndex = rowindexes.IndexOf(szekhely.RowIndex.Value), ColumnId = 2 }, "Külföld nem lehet székhely.");
+                    result.Add($"0;{rowindexes.IndexOf(szekhely.RowIndex.Value)};1", "Külföld nem lehet székhely.");
                 }
             }
         }
 
-        private static List<FieldDescriptorDto> CheckOnlyOneKulfold(List<FieldDescriptorDto> fields, Dictionary<ValidatorElement, string> result)
+        private static List<FieldDescriptorDto> CheckOnlyOneKulfold(List<FieldDescriptorDto> fields, Dictionary<string, string> result)
         {
             var rowindexes = fields.Select(f => f.RowIndex).Distinct().ToList();
             rowindexes.Sort();
@@ -77,17 +77,11 @@ namespace TaoWebApplication.Validators
             {
                 for (int i = 1; i < kulfolds.Count(); i++)
                 {
-                    result.Add(new ValidatorElement { RowIndex = rowindexes.IndexOf(kulfolds[i].RowIndex.Value), ColumnId = 1 }, "Csak egy külföld vehető fel.");
+                    result.Add($"0;{rowindexes.IndexOf(kulfolds[i].RowIndex.Value)};0", "Csak egy külföld vehető fel.");
                 }
             }
 
             return kulfolds;
         }
-    }
-
-    public class ValidatorElement
-    {
-        public int RowIndex { get; set; }
-        public int ColumnId { get; set; }
     }
 }

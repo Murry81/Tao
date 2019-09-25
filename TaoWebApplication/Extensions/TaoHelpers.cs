@@ -155,9 +155,9 @@ namespace TaoWebApplication.Extensions
 
         private static MvcHtmlString AddValidationHandling(ITableDescriptor model, int i, int j, int tableIndex, ModelStateDictionary modelState, MvcHtmlString str)
         {
-            if (modelState != null && !modelState.IsValid && modelState.ContainsKey(model.TableDescriptors[tableIndex].FieldValues[i][j].Id.ToString()))
+            if (modelState != null && !modelState.IsValid && modelState.ContainsKey($"{tableIndex};{i};{j}"))
             {
-                return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[model.TableDescriptors[tableIndex].FieldValues[i][j].Id.ToString()].Errors[0].ErrorMessage}</span>");
+                return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[$"{tableIndex};{i};{j}"].Errors[0].ErrorMessage}</span>");
             }
             return str;
         }

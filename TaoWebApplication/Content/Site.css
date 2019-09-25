@@ -34,10 +34,11 @@ textarea
     margin: 0;
 }
 
-.DivStyle 
-{
+.DivStyle {
     background: #e6f2ff;
     border: outset;
+    bottom : 0px;
+    margin-bottom: 4px;
 }
 
 .TaoControl {
@@ -56,8 +57,24 @@ textarea
     padding-left: 4px;
     margin: 0px;
     align-content:center;
+    padding-bottom: 1px;
 }
 
 .TaoDataTable thead tr {
-    border-bottom:solid;
+   
+}
+
+.TaoDataTable{
+    margin-bottom : 1px;
+}
+
+.btn {
+    background-color: #e6f2ff;
+    border-style:outset;
+    border-radius: 20px 10px;
+}
+
+.field-validation-error
+{
+    color: red;
 }

@@ -26,7 +26,7 @@
                                         @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].FieldValueId)
                                         @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].Id)
                                         @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].RowIndex, new { Value = i })
-                                        @Html.CreateActualControlForTable(Model, i, 0, 0)
+                                        @Html.CreateActualControlForTable(Model, i, 0, 0, ViewData.ModelState)
                                     </th>
                                 }
                                 if (width < 100)
@@ -40,33 +40,18 @@
                     @{
                         for (int j = 1; j < numberOfColumns; j++)
                         {
-                            if (j == 4)
-                            {
-                                <tr></tr>
-                                <tr style="margin:30px;">
-                                    <td style="padding:12px;"><b>Tényértékek</b></td>
-                                    <td style="padding:12px;"><b>Időszak 1-12</b></td>
-                                </tr>
-                            }
-                            if (j == 9)
-                            {
-                                <tr></tr>
-                                <tr style="padding-top:30px;">
-                                    <td style="padding:12px;"><b>Arányosított értékek</b></td>
-                                </tr>
-                            }
                             <tr>
-                                <td style="border:double;">
+                                <td style="border-right:outset;">
                                     @Model.TableDescriptors[0].Captions[Model.TableDescriptors[0].FieldDescriptorIds[j]]
                                 </td>
                                 @for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
                                 {
-                                    <td style=" border:double; ">
+                                    <td style="border-right:outset;">
                                         @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
                                         @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
                                         @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
 
-                                        @Html.CreateActualControlForTable(Model, i, j, 0)
+                                        @Html.CreateActualControlForTable(Model, i, j, 0, ViewData.ModelState)
                                     </td>
                                 }
                             </tr>
