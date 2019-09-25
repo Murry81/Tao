@@ -133,7 +133,7 @@
           <Property Name="DocumentStateId" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Tao.dbo.TableDescriptor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TableDescriptor">
           <Key>
             <PropertyRef Name="TableId" />
@@ -145,6 +145,20 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
           <Property Name="Caption" Type="nvarchar" MaxLength="250" />
           <Property Name="ColumnOrder" Type="int" />
           <Property Name="PageId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TaxesByCities">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Megye" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="HelyiIparuzesiAdo" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Megye" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="HelyiIparuzesiAdo" Type="decimal" Precision="16" Scale="10" Nullable="false" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
@@ -335,6 +349,14 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
     [TableDescriptor].[PageId] AS [PageId]
     FROM [dbo].[TableDescriptor] AS [TableDescriptor]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="TaxesByCities" EntityType="Self.TaxesByCities" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TaxesByCities].[Id] AS [Id], 
+    [TaxesByCities].[Megye] AS [Megye], 
+    [TaxesByCities].[City] AS [City], 
+    [TaxesByCities].[HelyiIparuzesiAdo] AS [HelyiIparuzesiAdo]
+    FROM [dbo].[TaxesByCities] AS [TaxesByCities]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Address_Customer" Association="Self.FK_Address_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Address" EntitySet="Address" />
@@ -465,6 +487,7 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             <End Role="Page" EntitySet="Page" />
             <End Role="TableDescriptor" EntitySet="TableDescriptor" />
           </AssociationSet>
+          <EntitySet Name="TaxesByCities" EntityType="CustomerNameTaoModel.TaxesByCities" />
         </EntityContainer>
         <EntityType Name="Address">
           <Key>
@@ -801,6 +824,18 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TaxesByCities">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Megye" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="HelyiIparuzesiAdo" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Megye" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="HelyiIparuzesiAdo" Type="Decimal" Nullable="false" Precision="16" Scale="10" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -953,6 +988,16 @@ warning 6002: The table/view 'CustomerNameTao.dbo.TableDescriptor' does not have
                 <ScalarProperty Name="Caption" ColumnName="Caption" />
                 <ScalarProperty Name="FieldDescriptorId" ColumnName="FieldDescriptorId" />
                 <ScalarProperty Name="TableId" ColumnName="TableId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxesByCities">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.TaxesByCities">
+              <MappingFragment StoreEntitySet="TaxesByCities">
+                <ScalarProperty Name="HelyiIparuzesiAdo" ColumnName="HelyiIparuzesiAdo" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Megye" ColumnName="Megye" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

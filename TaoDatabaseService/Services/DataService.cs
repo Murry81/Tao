@@ -216,9 +216,7 @@ namespace TaoDatabaseService.Services
 
                 int rowIndex = 0;
                 List<FieldDescriptorDto> currentList = null;
-
                 var rowNumbers = savedFields.Select(t => t.RowIndex).Distinct().OrderBy(t=> t.Value).ToList();
-
 
                 foreach(int row in rowNumbers)
                 {
@@ -244,6 +242,18 @@ namespace TaoDatabaseService.Services
                 result.Add(tableElement);
             }
             return result;
+        }
+
+        public List<TaxesByCitiesDto> GetCityTaxes()
+        {
+            var cities = entities.TaxesByCities.ToList();
+            return cities.Select(c => new TaxesByCitiesDto
+            {
+                Id = c.Id,
+                County = c.Megye,
+                City = c.City,
+                IparuzesiAdo = c.HelyiIparuzesiAdo
+            }).ToList();
         }
     }
 }

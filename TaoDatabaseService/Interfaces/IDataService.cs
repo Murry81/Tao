@@ -31,5 +31,7 @@ namespace TaoDatabaseService.Interfaces
         List<SessionDto> GetCustomerSessions(int customerId);
 
         List<TableDescriptorDto> GetTableData(int pageId, Guid session);
+
+        List<TaxesByCitiesDto> GetCityTaxes();
     }
 }

@@ -24,7 +24,7 @@ namespace TaoWebApplication.Extensions
                         return helper.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
 
                     case "numeric":
-                        return helper.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue.Value.ToString("#,#.00#;(#,#.00#)") : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
+                        return helper.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue.Value.ToString("#,#.00#;") : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
                     case "date":
                         if (model.Fields[i].DateValue == null)
                         {
@@ -44,39 +44,48 @@ namespace TaoWebApplication.Extensions
                     comboItems.Add(new SelectListItem { Value = item, Text = item });
                 }
 
-                return helper.DropDownListFor(m => model.Fields[i].StringValue, new SelectList(comboItems, "Value", "Text", model.Fields[i].StringValue), new { @class = "TaoControl", style = $"width:100%; background-color:{@color};" });
+                var str = helper.DropDownListFor(m => model.Fields[i].StringValue, new SelectList(comboItems, "Value", "Text", model.Fields[i].StringValue), new { @class = "TaoControl", style = $"width:100%; background-color:{@color};" });
+                return AddValidationHandling(model, i, modelState, str);
             }
             else if (model.Fields[i].TypeName == "bool")
             {
-                return helper.CheckBoxFor(m => model.Fields[i].BoolFieldValue, new { @class = "TaoControl", @style = "width:16px; height:16px;" });
+                var str = helper.CheckBoxFor(m => model.Fields[i].BoolFieldValue, new { @class = "TaoControl", @style = "width:16px; height:16px;" });
+                return AddValidationHandling(model, i, modelState, str);
             }
             else if (model.Fields[i].TypeName == "date")
             {
                 if (model.Fields[i].DateValue == null)
                 {
-                    return helper.TextBoxFor(m => model.Fields[i].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    var str = helper.TextBoxFor(m => model.Fields[i].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    return AddValidationHandling(model, i, modelState, str);
                 }
                 else
                 {
                     var str = helper.TextBoxFor(m => model.Fields[i].DateValue, model.Fields[i].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
-                    if (modelState != null &&!modelState.IsValid && modelState.ContainsKey(model.Fields[i].Id.ToString()))
-                    {
-                       return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[model.Fields[i].Id.ToString()].Errors[0].ErrorMessage}</span>");
-                     }
-                    return str;
+                    return AddValidationHandling(model, i, modelState, str);
                 }
             }
             else if (model.Fields[i].TypeName == "numeric")
             {
 
-                return helper.TextBoxFor(m => model.Fields[i].DecimalValue, model.Fields[i].DecimalValue?.ToString("G29", CultureInfo.InvariantCulture), new { @type = "number", step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px;" });
+                var str = helper.TextBoxFor(m => model.Fields[i].DecimalValue, model.Fields[i].DecimalValue?.ToString("G29", CultureInfo.InvariantCulture), new { @type = "number", step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px;" });
+                return AddValidationHandling(model, i, modelState, str);
             }
             else
             {
-                return helper.TextBoxFor(m => model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                var str = helper.TextBoxFor(m => model.Fields[i].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                return AddValidationHandling(model, i, modelState, str);
             }
         }
 
+        private static MvcHtmlString AddValidationHandling(IFieldList model, int i, ModelStateDictionary modelState, MvcHtmlString str)
+        {
+            if (modelState != null && !modelState.IsValid && modelState.ContainsKey(model.Fields[i].Id.ToString()))
+            {
+                return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[model.Fields[i].Id.ToString()].Errors[0].ErrorMessage}</span>");
+            }
+            return str;
+        }
 
         public static MvcHtmlString CreateActualControlForTable<TModel>(this HtmlHelper<TModel> helper, ITableDescriptor model, int i, int j, int tableIndex, ModelStateDictionary modelState = null)
         {
@@ -90,7 +99,7 @@ namespace TaoWebApplication.Extensions
                         return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
 
                     case "numeric":
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.HasValue ? model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.Value.ToString("#,#.00#;(#,#.00#)") : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.HasValue ? model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.Value.ToString("#,#.00#;") : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
                     case "date":
                         if (model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue == null)
                         {
@@ -110,37 +119,47 @@ namespace TaoWebApplication.Extensions
                     comboItems.Add(new SelectListItem { Value = item, Text = item });
                 }
 
-                return helper.DropDownListFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue, new SelectList(comboItems, "Value", "Text", model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue), new { @class = "TaoControl", style = $"width:100%; background-color:{@color};" });
+                var str = helper.DropDownListFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue, new SelectList(comboItems, "Value", "Text", model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue), new { @class = "TaoControl", style = $"width:100%; background-color:{@color};" });
+                return AddValidationHandling(model, i, j, tableIndex, modelState, str);
             }
             else if (model.TableDescriptors[tableIndex].FieldValues[i][j].TypeName == "bool")
             {
-                return helper.CheckBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].BoolFieldValue, new { @class = "TaoControl", @style = "width:16px; height:16px;" });
+                var str = helper.CheckBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].BoolFieldValue, new { @class = "TaoControl", @style = "width:16px; height:16px;" });
+                return AddValidationHandling(model, i, j, tableIndex, modelState, str);
             }
             else if (model.TableDescriptors[tableIndex].FieldValues[i][j].TypeName == "date")
             {
                 if (model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue == null)
                 {
-                    return helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    var str = helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue, new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
+                    return AddValidationHandling(model, i, j, tableIndex, modelState, str);
                 }
                 else
                 {
                     var str = helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue, model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue.Value.ToString("yyyy-MM-dd"), new { @type = "date", @class = "datepicker TaoControl", @style = $"width:100%; background-color:{@color};" });
-                    if (modelState != null && !modelState.IsValid && modelState.ContainsKey(model.TableDescriptors[tableIndex].FieldValues[i][j].Id.ToString()))
-                    {
-                        return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[model.TableDescriptors[tableIndex].FieldValues[i][j].Id.ToString()].Errors[0].ErrorMessage}</span>");
-                    }
-                    return str;
+                    return AddValidationHandling(model, i, j, tableIndex, modelState, str);
                 }
             }
             else if (model.TableDescriptors[tableIndex].FieldValues[i][j].TypeName == "numeric")
             {
 
-                return helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue, model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue?.ToString("G29", CultureInfo.InvariantCulture), new { @type = "number", step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px;" });
+                var str = helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue, model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue?.ToString("G29", CultureInfo.InvariantCulture), new { @type = "number", step = "any", @class = "text-right form-control TaoControl", @style = $"width:100%; background-color:{@color}; height:25px;" });
+                return AddValidationHandling(model, i, j, tableIndex, modelState, str);
             }
             else
             {
-                return helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                var str = helper.TextBoxFor(m => model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};" });
+                return AddValidationHandling(model, i, j, tableIndex, modelState, str);
             }
+        }
+
+        private static MvcHtmlString AddValidationHandling(ITableDescriptor model, int i, int j, int tableIndex, ModelStateDictionary modelState, MvcHtmlString str)
+        {
+            if (modelState != null && !modelState.IsValid && modelState.ContainsKey(model.TableDescriptors[tableIndex].FieldValues[i][j].Id.ToString()))
+            {
+                return MvcHtmlString.Create(str.ToString() + $"<span class=\"field-validation-error\">{modelState[model.TableDescriptors[tableIndex].FieldValues[i][j].Id.ToString()].Errors[0].ErrorMessage}</span>");
+            }
+            return str;
         }
     }
 }

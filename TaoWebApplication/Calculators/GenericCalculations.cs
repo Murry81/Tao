@@ -25,6 +25,17 @@ namespace TaoWebApplication.Calculators
             return result;
         }
 
+        internal static decimal? SumList(List<FieldDescriptorDto> fields)
+        {
+            decimal result = 0;
+            foreach (var field in fields)
+            {
+                if (field != null && field.DecimalValue.HasValue)
+                    result += field.DecimalValue.Value;
+            }
+            return result;
+        }
+
         internal static Dictionary<int, decimal?> GetValuesById(List<int> fields, IDataService service, Guid sessionId)
         {
             var result = new Dictionary<int, decimal?>();

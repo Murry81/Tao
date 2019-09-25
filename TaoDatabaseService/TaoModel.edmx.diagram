@@ -11,7 +11,7 @@
         <EntityTypeShape EntityType="CustomerNameTaoModel.Customer" Width="1.5" PointX="3" PointY="4.5" />
         <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentState" Width="1.5" PointX="3" PointY="9.875" />
         <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentType" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="CustomerNameTaoModel.FieldDescriptor" Width="1.5" PointX="5.25" PointY="13.625" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.FieldDescriptor" Width="1.5" PointX="5.25" PointY="12.875" />
         <EntityTypeShape EntityType="CustomerNameTaoModel.FieldValue" Width="1.5" PointX="7.5" PointY="5" />
         <EntityTypeShape EntityType="CustomerNameTaoModel.Page" Width="1.5" PointX="5.25" PointY="0.75" />
         <EntityTypeShape EntityType="CustomerNameTaoModel.PageDescriptor" Width="1.5" PointX="7.5" PointY="9.5" />
@@ -31,6 +31,7 @@
         <AssociationConnector Association="CustomerNameTaoModel.FK_FieldValue_Session" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_PageDescriptor_Pages" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_TableDescriptor_Page" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.TaxesByCities" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

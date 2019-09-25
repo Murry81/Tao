@@ -109,6 +109,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TaoModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="TaxesByCities.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="TaoModel.edmx">

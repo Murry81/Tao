@@ -37,5 +37,6 @@ namespace TaoDatabaseService
         public virtual DbSet<PageDescriptor> PageDescriptor { get; set; }
         public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<TableDescriptor> TableDescriptor { get; set; }
+        public virtual DbSet<TaxesByCities> TaxesByCities { get; set; }
     }
 }
