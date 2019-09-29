@@ -7,6 +7,7 @@
     ViewBag.Title = "IpaMegosztas";
 }
 
+
 @using (Html.BeginForm("IpaMegosztas", "Tao", FormMethod.Post))
 {
     <div class="container-fluid">
@@ -67,6 +68,14 @@
                 <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
                 <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
             </div>
+        </div>
+    </div>
+}
+@using (Html.BeginForm("GenerateIpaMegosztasExcel", "Tao", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+            <button type="submit" value="ExcelExport" name="ExcelExport" class="btn btn-default">Exportálás excel fileba</button>
         </div>
     </div>
 }

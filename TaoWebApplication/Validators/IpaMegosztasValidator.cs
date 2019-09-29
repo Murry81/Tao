@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaoContracts.Contracts;
 using TaoWebApplication.Calculators;
@@ -17,7 +18,36 @@ namespace TaoWebApplication.Validators
             var kulfolds = CheckOnlyOneKulfold(fields, result);
             CheckSzekhelys(fields, result, kulfolds);
             CheckF1830(result, fields);
+            CheckMegosztasModja(result, fields);
             return result;
+        }
+
+        private static void CheckMegosztasModja(Dictionary<string, string> result, List<FieldDescriptorDto> fields)
+        {
+            //Az eszközérték nem választható ki, ha székhelynek jelölt település rekordjában Eszközérték = 0.
+            // szekhyely => f1801, eszkozérték => f1807
+
+            var szekhely = fields.Where(f => f.Id == 1801 && f.StringValue == "igen").FirstOrDefault();
+            if (szekhely == null)
+                return;
+
+            var eszkozertekSzekhely = fields.Where(f => f.Id == 1807 && f.RowIndex == szekhely.RowIndex).FirstOrDefault().DecimalValue;
+            if (eszkozertekSzekhely > 0)
+                return;
+
+            var rowindexes = fields.Select(f => f.RowIndex).Distinct().ToList();
+            rowindexes.Sort();
+
+            foreach (var megosztas in fields.Where(f => f.Id == 1803))
+            {
+                if(megosztas.StringValue == "eszközérték")
+                {
+                    if (result.ContainsKey($"0;{rowindexes.IndexOf(megosztas.RowIndex.Value)};3"))
+                        result[$"0;{rowindexes.IndexOf(megosztas.RowIndex.Value)};3"] += "Az eszközérték nem választható ki, ha székhelynek jelölt település rekordjában Eszközérték = 0."; 
+                    else
+                       result.Add($"0;{rowindexes.IndexOf(megosztas.RowIndex.Value)};3", "Az eszközérték nem választható ki, ha székhelynek jelölt település rekordjában Eszközérték = 0.");
+                }
+            }
         }
 
         private static void CheckF1830(Dictionary<string, string> result, List<FieldDescriptorDto> fields)
@@ -54,7 +84,10 @@ namespace TaoWebApplication.Validators
             {
                 for (int i = 1; i < szekhelys.Count(); i++)
                 {
-                    result.Add($"0;{rowindexes.IndexOf(szekhelys[i].RowIndex.Value)};1", "Csak egy város lehet székhely.");
+                    if (result.ContainsKey($"0;{rowindexes.IndexOf(szekhelys[i].RowIndex.Value)};1"))
+                        result[$"0;{rowindexes.IndexOf(szekhelys[i].RowIndex.Value)};1"] += "; Csak egy város lehet székhely.";
+                    else
+                        result.Add($"0;{rowindexes.IndexOf(szekhelys[i].RowIndex.Value)};1", "Csak egy város lehet székhely.");
                 }
             }
 
@@ -63,7 +96,10 @@ namespace TaoWebApplication.Validators
             {
                 if (kulfolds.FirstOrDefault(k => k.RowIndex.Value == szekhely.RowIndex.Value) != null)
                 {
-                    result.Add($"0;{rowindexes.IndexOf(szekhely.RowIndex.Value)};1", "Külföld nem lehet székhely.");
+                    if (result.ContainsKey($"0;{rowindexes.IndexOf(szekhely.RowIndex.Value)};1"))
+                        result[$"0;{rowindexes.IndexOf(szekhely.RowIndex.Value)};1"] += "; Külföld nem lehet székhely.";
+                    else
+                        result.Add($"0;{rowindexes.IndexOf(szekhely.RowIndex.Value)};1", "Külföld nem lehet székhely.");
                 }
             }
         }
@@ -77,7 +113,10 @@ namespace TaoWebApplication.Validators
             {
                 for (int i = 1; i < kulfolds.Count(); i++)
                 {
-                    result.Add($"0;{rowindexes.IndexOf(kulfolds[i].RowIndex.Value)};0", "Csak egy külföld vehető fel.");
+                    if (result.ContainsKey($"0;{rowindexes.IndexOf(kulfolds[i].RowIndex.Value)};0"))
+                        result[$"0;{rowindexes.IndexOf(kulfolds[i].RowIndex.Value)};0"] += "; Csak egy külföld vehető fel.";
+                    else
+                        result.Add($"0;{rowindexes.IndexOf(kulfolds[i].RowIndex.Value)};0", "Csak egy külföld vehető fel.");
                 }
             }
 

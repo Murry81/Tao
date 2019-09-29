@@ -1,0 +1,56 @@
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
+@model AEEVarhatoAdatokModel
+
+@{
+    ViewBag.Title = "AEE Varhato Adatok";
+}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 DivStyle">
+                <h4 style="color:red"> Ipa és Innov könyvelése utáni AEE, valamint a tényadatok számolt várható éves adatok </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1"></th>
+                            <th class="col-md-7">Megnevezés</th>
+                            <th class="col-md-2" style="text-align:right">eFt</th>
+                            <th class="col-md-2" style="text-align:center">Megjegyzés</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td>
+                                @Model.Fields[i].OrderCharacter
+                            </td>
+                            <td>
+                                @Model.Fields[i].Title
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                            <td>
+                                @Model.Fields[i].Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        @using (Html.BeginForm("AEEVarhatoAdatok", "Tao", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                    <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Előző </button>
+                    <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Következő</button>
+                </div>
+            </div>
+        }
+    </div>

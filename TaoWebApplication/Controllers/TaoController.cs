@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -341,11 +342,110 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("IpaMegosztas", "Tao");
             }
-            return RedirectToAction("IpaMegosztas", "Tao");
+            return RedirectToAction("AEEVarhatoAdatok", "Tao");
         }
 
+        [HttpPost]
+        public ActionResult GenerateIpaMegosztasExcel()
+        {
+            var model = new IpaMegosztasModel();
+            var currentpage = _service.GetPage("IpaMegosztas");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as IpaMegosztasModel;
+            model.TableDescriptors = _service.GetTableData(18, sessionId);
+            var dataSet = new DataSet();
+            dataSet.Tables.Add("IpaMegosztas");
+            foreach (var r in model.TableDescriptors[0].FieldValues[0])
+            {
+                dataSet.Tables[0].Columns.Add(r.Title, r.TypeName == "numeric" ? typeof(decimal) : r.TypeName == "bool" ? typeof(bool) : r.TypeName == "date" ? typeof(DateTime) : typeof(string));
+            }
 
+            for(int row = 0; row < model.TableDescriptors[0].FieldValues.Count; row++)
+            {
+                var rowValues = new List<object>();
+                for(int column = 0; column < model.TableDescriptors[0].FieldValues[row].Count; column++)
+                {
+                    switch (model.TableDescriptors[0].FieldValues[row][column].TypeName)
+                    {
+                        case "numeric":
+                            rowValues.Add(model.TableDescriptors[0].FieldValues[row][column].DecimalValue);
+                            break;
+                        case "bool":
+                            rowValues.Add(model.TableDescriptors[0].FieldValues[row][column].BoolFieldValue);
+                            break;
+                        case "date":
+                            rowValues.Add(model.TableDescriptors[0].FieldValues[row][column].DateValue);
+                            break;
+                        default:
+                            rowValues.Add(model.TableDescriptors[0].FieldValues[row][column].StringValue);
+                            break;
+                    }
+                   
+                }
+                dataSet.Tables[0].Rows.Add(rowValues.ToArray());
+            }                
 
+            var file = ExcelExport.ExcelExport.GenerateExcelFile(dataSet, "IpaMegosztas");
+            return File(file, "application/vnd.ms-excel", "IpamMegosztas.xlsx");
+        }
+
+        public ActionResult AEEVarhatoAdatok()
+        {
+            var model = new AEEVarhatoAdatokModel();
+           
+            var currentpage = _service.GetPage("AeeVarhatoAdatok");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as AEEVarhatoAdatokModel;
+            SaveValues(model.Fields, AEEVarhatoAdatokCalculation.CalculateValues);
+
+            foreach (var field in model.Fields)
+            {
+                field.IsEditable = false;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AeeVarhatoAdatok(string buttonAction, IpaKapcsoltModel fc)
+        {
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("IpaMegosztas", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("AEEVarhatoAdatok", "Tao");
+            }
+            return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
+        }
+
+        public ActionResult TaoAdoalapKorrekcio()
+        {
+            var model = new TaoAdoalapKorrekcioModel();
+            var currentpage = _service.GetPage("TaoAdoalapKorr");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TaoAdoalapKorrekcioModel;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult TaoAdoalapKorrekcio(string buttonAction, TaoAdoalapKorrekcioModel fc)
+        {
+            SaveValues(fc.Fields, TaoAdoalapKorrekcioCalculation.CalculateValues, pageId: 11);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("AEEVarhatoAdatok", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
+            }
+            return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
+        }
 
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)

@@ -91,9 +91,17 @@ namespace TaoDatabaseService.Services
 
             foreach (var field in fieldDescriptor)
             {
-                result.Add(field.ToFieldDescriptorDto(fieldValues.ToList(), null));
+                result.Add(field.ToFieldDescriptorDto(fieldValues, null));
             }
             return result;
+        }
+
+        public FieldDescriptorDto GetFieldById(int fieldId, Guid sessionId)
+        {
+            var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldId == f.Id).FirstOrDefault();
+            var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId && fv.FieldDescriptorId == fieldId).ToList();
+
+            return fieldDescriptor.ToFieldDescriptorDto(fieldValues, null);
         }
 
         public List<SessionDto> GetCustomerSessions(int customerId)

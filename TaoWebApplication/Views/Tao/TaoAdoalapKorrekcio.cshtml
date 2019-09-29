@@ -1,0 +1,139 @@
+﻿@using TaoWebApplication.Models
+@using TaoWebApplication.Extensions
+@model TaoAdoalapKorrekcioModel
+
+@{
+    ViewBag.Title = "Tao Adoalap Korrekcio";
+}
+
+@using (Html.BeginForm("TaoAdoalapKorrekcio", "Tao", FormMethod.Post))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 DivStyle">
+                <h4>Adóalap csökkentő korrekciók</h4>
+                <table class="TaoDataTable table" style="margin-bottom:0px;">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5" style="text-align:center">Jogcím</th>
+                            <th class="col-md-2" style="text-align:right">Összeg eFt</th>
+                            <th class="col-md-2" style="text-align:center">Megjegyzés</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 1)
+                        {
+                            continue;
+                        }
+
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td class="@Model.Fields[i].HtmlClass">
+                                @if (Model.Fields[i].IsCaculated)
+                                {
+                                    <h5> <b>@Model.Fields[i].Title</b> </h5>
+                                }
+                                else
+                                {
+                                    @Model.Fields[i].Title
+                                }
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                            <td>
+                                @Model.Fields[i].Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="col-md-6 DivStyle">
+                <h4>Adóalap növelő korrekciók</h4>
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5" style="text-align:center">Jogcím</th>
+                            <th class="col-md-2" style="text-align:right">Összeg eFt</th>
+                            <th class="col-md-2" style="text-align:center">Megjegyzés</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 2)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td class="@Model.Fields[i].HtmlClass">
+                                @if (Model.Fields[i].IsCaculated)
+                                {
+                                <h5> <b>@Model.Fields[i].Title</b> </h5>
+                                }
+                                else
+                                {
+                                    @Model.Fields[i].Title
+                                }
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+
+                            <td>
+                                @Model.Fields[i].Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table" style="margin-bottom:0px;">
+                    <thead>
+                        <tr>
+                            <th class="col-md-5" style="text-align:center">Jogcím</th>
+                            <th class="col-md-2" style="text-align:right">Összeg eFt</th>
+                            <th class="col-md-2" style="text-align:center">Megjegyzés</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 3)
+                        {
+                            continue;
+                        }
+
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td class="@Model.Fields[i].HtmlClass">
+                                   @Model.Fields[i].Title
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                            <td>
+                                @Model.Fields[i].Description
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            </div>
+        </div>
+    </div>
+        }
