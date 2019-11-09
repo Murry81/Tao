@@ -418,6 +418,53 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("AEEVarhatoAdatok", "Tao");
             }
+            return RedirectToAction("Alultokesites", "Tao");
+        }
+
+        public ActionResult Alultokesites()
+        {
+            var model = new AlultokesitesModel();
+
+            var currentpage = _service.GetPage("TaoAlultokesites");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId , customerId) as AlultokesitesModel;
+            model.TableDescriptors = _service.GetTableData(9, sessionId);
+
+            var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value);
+            if(values.Count > 0)
+            {
+                SaveValues(values, null);
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AlultokesitesModel;
+                model.TableDescriptors = _service.GetTableData(9, sessionId);
+            }
+
+            model.MakeDefaultRowsReadonly();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Alultokesites(string buttonAction, AlultokesitesModel fc)
+        {
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            var fields = new List<FieldDescriptorDto>();
+            fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
+            fields = FillFieldValuesForTable(fields, 3, 4);
+
+            AlultokesitesCalculation.CalculateValues(fields, _service, sessionId, fc.Fields);
+            //Save table fields
+            SaveValues(fields, null);
+            // Save other fields
+            SaveValues(fc.Fields, null, 9);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("AEEVarhatoAdatok", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("Alultokesites", "Tao");
+            }
             return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
         }
 
@@ -438,7 +485,7 @@ namespace TaoWebApplication.Controllers
 
             if (buttonAction == "Previous")
             {
-                return RedirectToAction("AEEVarhatoAdatok", "Tao");
+                return RedirectToAction("Alultokesites", "Tao");
             }
             if (buttonAction == "Save")
             {
@@ -456,7 +503,7 @@ namespace TaoWebApplication.Controllers
 
                 foreach (var field in fields)
                 {
-                    if (!field.IsCaculated && field.IsEditable)
+                    if ((!field.IsCaculated && field.IsEditable) || calulator == null)
                     {
                         DataConverter.GetTypedValue(field, fieldValues);
                     }
@@ -476,19 +523,24 @@ namespace TaoWebApplication.Controllers
             }
         }
 
-        private List<FieldDescriptorDto> FillFieldValuesForTable(List<FieldDescriptorDto> fieldValues, int tableId)
+        private List<FieldDescriptorDto> FillFieldValuesForTable(List<FieldDescriptorDto> fieldValues, params int[] tableId)
         {
-            var tableFields = _service.GetTableFields(tableId).ToList();
-
-            foreach(var field in fieldValues)
+            foreach (var id in tableId)
             {
-                var baseData = tableFields.FirstOrDefault(t => t.Id == field.Id);
-                if(baseData != null)
+                var tableFields = _service.GetTableFields(id).ToList();
+
+                foreach (var field in fieldValues)
                 {
-                    field.IsCaculated = baseData.IsCaculated;
-                    field.IsEditable = baseData.IsEditable;
-                    field.IsMandatory = baseData.IsMandatory;
-                    field.TypeName = baseData.TypeName;
+                    var baseData = tableFields.FirstOrDefault(t => t.Id == field.Id);
+                    if (baseData != null)
+                    {
+                        field.IsCaculated = baseData.IsCaculated;
+                        field.IsEditable = baseData.IsEditable;
+                        field.IsMandatory = baseData.IsMandatory;
+                        field.TypeName = baseData.TypeName;
+                        field.IsSpecial = baseData.IsSpecial;
+                        field.TypeOptions = baseData.TypeOptions;
+                    }
                 }
             }
             return fieldValues;

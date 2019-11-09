@@ -147,6 +147,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Calculators\AEEVarhatoAdatokCalculation.cs" />
+    <Compile Include="Calculators\AlultokesitesCalculation.cs" />
     <Compile Include="Calculators\GenericCalculations.cs" />
     <Compile Include="Calculators\InnovaciosJarulekCalculation.cs" />
     <Compile Include="Calculators\IpaKapcsoltCalculation.cs" />
@@ -168,6 +169,7 @@
     </Compile>
     <Compile Include="Extensions\DecimalModelBinder.cs" />
     <Compile Include="Models\AEEVarhatoAdatokModel.cs" />
+    <Compile Include="Models\AlultokesitesModel.cs" />
     <Compile Include="Models\IFieldList.cs" />
     <Compile Include="Models\InnovaciosJarulekModel.cs" />
     <Compile Include="Models\IpaKapcsoltModel.cs" />
@@ -234,6 +236,7 @@
     <Content Include="Views\Tao\IpaMegosztas.cshtml" />
     <Content Include="Views\Tao\AEEVarhatoAdatok.cshtml" />
     <Content Include="Views\Tao\TaoAdoalapKorrekcio.cshtml" />
+    <Content Include="Views\Tao\Alultokesites.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

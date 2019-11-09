@@ -107,7 +107,8 @@ namespace TaoWebApplication.Extensions
                         }
                         return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
                     default:
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue, new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue ?? "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
+
                 }
             }
 
