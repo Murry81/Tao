@@ -107,14 +107,14 @@ namespace TaoWebApplication.Calculators
             }
 
             tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
-
+            previousItem.DayCount = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
 
             currentValue = previousYearValueTableTwo;
             previousItem = null;
             // Do calculatations
             foreach (var item in tableTwoItems.Keys.OrderBy(s => s.Date))
             {
-                currentValue += item.Value;
+                currentValue += GenericCalculations.GetValue(item.Value);
                 tableTwoItems[item].FirstOrDefault(f => f.Id == 911).DecimalValue = currentValue;
                 item.CumulatedValue = currentValue.Value;
                 if (previousItem != null)
@@ -126,9 +126,9 @@ namespace TaoWebApplication.Calculators
             }
 
             tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
+            previousItem.DayCount = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
 
-
-            foreach(var field in otherFields)
+            foreach (var field in otherFields)
             {
                 switch(field.Id)
                 {

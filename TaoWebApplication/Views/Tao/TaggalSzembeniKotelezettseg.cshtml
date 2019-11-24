@@ -1,12 +1,12 @@
 ﻿@using TaoWebApplication.Extensions
 @using TaoWebApplication.Models
-@model AlultokesitesModel
+@model TaggalSzembeniKotelezettsegModel
 
 @{
-    ViewBag.Title = "Alultokesites";
+    ViewBag.Title = "TaggalSzembeniKotelezettseg";
 }
 
-@using (Html.BeginForm("Alultokesites", "Tao", FormMethod.Post))
+@using (Html.BeginForm("TaggalSzembeniKotelezettseg", "Tao", FormMethod.Post))
 {
     <div class="container-fluid">
 
@@ -18,33 +18,30 @@
                         @Html.HiddenFor(m => Model.Fields[i].Id)
                         <div class="col-md-5">
                             @Model.Fields[i].Title
-                         </div>
+                        </div>
                         <div class="col-md-2">
                             @Html.CreateActualControl((IFieldList)Model, i)
-                        </div>      
+                        </div>
                     </div>
                 }
-                </div>
+            </div>
         </div>
-       <br/>
+        <br />
         <div class="row">
-            @for (int table = 0; table < 2; table++)
+            <div class="col-md-6">
+                Hivatkozás: Tao tv. 6. § (9) c.)<br />
+                Magánszemély taggal szemben fennálló kötelezettség napi átlagos állományának az adóévet megelőző adóév utolsó napján a magánszemély taggal szemben fennálló kötelezettségét meghaladó összegének az 50%-a. <br />
+                Nem értjük kötelezettség alatt az áruszállításból és a szolgáltatásból származó kötelezettséget és a megállapított, de ki nem fizetett osztalékkötelezettséget.<br/>
+            </div>
+        </div>
+
+        <div class="row">
+            @for (int table = 0; table < 1; table++)
             {
                 <div class="col-md-6 DivStyle">
-                    @if (table == 0)
-                    {
-                        <div>
-                            <b>A saját tőke állományváltozásai</b><br />
-                            <span style="font-style:italic"> (a tárgyévi mérleg szerinti eredményt nem kell figyelembe venni)<br /></span>
-                        </div>
-                    }
-                    else
-                    {
-                        <div>
-                            <b>Kötelezettségek állományváltozásai</b><br />
-                                <span style="font-style:italic">(a pénzintézettől, pü-i vállalkozástól kapott összegeket nem kell feltüntetni)<br /></span>
-                        </div>
-                    }
+                    <b>
+                        Taggal szemben fennálló kötelezettségek állományváltozásai
+                    </b>
                     <table class="TaoDataTable table" style="width:auto">
                         <thead>
                             <tr>
@@ -75,7 +72,6 @@
                                 </tr>
                             }
                         }
-
                     </table>
                 </div>
             }
@@ -89,4 +85,4 @@
             </div>
         </div>
     </div>
-    }
+}

@@ -465,6 +465,53 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("Alultokesites", "Tao");
             }
+            return RedirectToAction("TaggalSzembeniKotelezettseg", "Tao");
+        }
+
+        public ActionResult TaggalSzembeniKotelezettseg()
+        {
+            var model = new TaggalSzembeniKotelezettsegModel();
+
+            var currentpage = _service.GetPage("TaggalSzembeniKot");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TaggalSzembeniKotelezettsegModel;
+            model.TableDescriptors = _service.GetTableData(10, sessionId);
+
+            var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value);
+            if (values.Count > 0)
+            {
+                SaveValues(values, null);
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as TaggalSzembeniKotelezettsegModel;
+                model.TableDescriptors = _service.GetTableData(10, sessionId);
+            }
+
+            model.MakeDefaultRowsReadonly();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult TaggalSzembeniKotelezettseg(string buttonAction, TaggalSzembeniKotelezettsegModel fc)
+        {
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            var fields = new List<FieldDescriptorDto>();
+            fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
+            fields = FillFieldValuesForTable(fields, 5);
+
+            TaggalSzembeniKotelezettsegCalculation.CalculateValues(fields, _service, sessionId, fc.Fields);
+            //Save table fields
+            SaveValues(fields, null);
+            // Save other fields
+            SaveValues(fc.Fields, null, 10);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Alultokesites", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("TaggalSzembeniKotelezettseg", "Tao");
+            }
             return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
         }
 
@@ -485,7 +532,7 @@ namespace TaoWebApplication.Controllers
 
             if (buttonAction == "Previous")
             {
-                return RedirectToAction("Alultokesites", "Tao");
+                return RedirectToAction("TaggalSzembeniKotelezettseg", "Tao");
             }
             if (buttonAction == "Save")
             {
