@@ -171,6 +171,7 @@
     <Compile Include="Extensions\DecimalModelBinder.cs" />
     <Compile Include="Models\AEEVarhatoAdatokModel.cs" />
     <Compile Include="Models\AlultokesitesModel.cs" />
+    <Compile Include="Models\AthozottVesztesegModel.cs" />
     <Compile Include="Models\IFieldList.cs" />
     <Compile Include="Models\InnovaciosJarulekModel.cs" />
     <Compile Include="Models\IpaKapcsoltModel.cs" />
@@ -299,6 +300,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

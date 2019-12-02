@@ -541,6 +541,52 @@ namespace TaoWebApplication.Controllers
             return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
         }
 
+        public ActionResult AthozottVeszteseg()
+        {
+            var model = new AthozottVesztesegModel();
+
+            var currentpage = _service.GetPage("TaggalSzembeniKot");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
+            model.TableDescriptors = _service.GetTableData(10, sessionId);
+
+            var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value);
+            if (values.Count > 0)
+            {
+                SaveValues(values, null);
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
+                model.TableDescriptors = _service.GetTableData(19, sessionId);
+            }
+
+            model.MakeDefaultRowsReadonly();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AthozottVeszteseg(string buttonAction, AthozottVesztesegModel fc)
+        {
+            var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+            var fields = new List<FieldDescriptorDto>();
+            fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
+            fields = FillFieldValuesForTable(fields, 5);
+
+            AthozottVesztesegCalculation.CalculateValues(fields, _service, sessionId, fc.Fields);
+            //Save table fields
+            SaveValues(fields, null);
+            // Save other fields
+            SaveValues(fc.Fields, null, 19);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Alultokesites", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("AthozottVeszteseg", "Tao");
+            }
+            return RedirectToAction("AthozottVeszteseg", "Tao");
+        }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)
         {

@@ -24,7 +24,7 @@ namespace TaoWebApplication.Extensions
                         return helper.Label(model.Fields[i].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
 
                     case "numeric":
-                        return helper.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue.Value.ToString("#,#.00#;") : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
+                        return helper.Label(model.Fields[i].DecimalValue.HasValue ? model.Fields[i].DecimalValue.Value.ToString("#,#.00#;", CultureInfo.GetCultureInfoByIetfLanguageTag("HU-hu")) : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
                     case "date":
                         if (model.Fields[i].DateValue == null)
                         {
@@ -99,7 +99,7 @@ namespace TaoWebApplication.Extensions
                         return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
 
                     case "numeric":
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.HasValue ? model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.Value.ToString("#,#.00#;") : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.HasValue ? model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.Value.ToString("#,#.00#;", CultureInfo.GetCultureInfoByIetfLanguageTag("HU-hu")) : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
                     case "date":
                         if (model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue == null)
                         {
