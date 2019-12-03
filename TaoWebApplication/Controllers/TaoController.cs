@@ -538,7 +538,7 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
             }
-            return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
+            return RedirectToAction("AthozottVeszteseg", "Tao");
         }
 
         public ActionResult AthozottVeszteseg()
@@ -551,15 +551,15 @@ namespace TaoWebApplication.Controllers
             model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
             model.TableDescriptors = _service.GetTableData(10, sessionId);
 
-            var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value);
-            if (values.Count > 0)
-            {
-                SaveValues(values, null);
-                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
-                model.TableDescriptors = _service.GetTableData(19, sessionId);
-            }
+            //var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value);
+            //if (values.Count > 0)
+            //{
+            //    SaveValues(values, null);
+            //    model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
+            //    model.TableDescriptors = _service.GetTableData(19, sessionId);
+            //}
 
-            model.MakeDefaultRowsReadonly();
+            //model.MakeDefaultRowsReadonly();
             return View(model);
         }
 
@@ -568,10 +568,10 @@ namespace TaoWebApplication.Controllers
         {
             var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
             var fields = new List<FieldDescriptorDto>();
-            fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
-            fields = FillFieldValuesForTable(fields, 5);
+            //fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
+            //fields = FillFieldValuesForTable(fields, 5);
 
-            AthozottVesztesegCalculation.CalculateValues(fields, _service, sessionId, fc.Fields);
+           // AthozottVesztesegCalculation.CalculateValues(fields, _service, sessionId, fc.Fields);
             //Save table fields
             SaveValues(fields, null);
             // Save other fields
@@ -579,13 +579,38 @@ namespace TaoWebApplication.Controllers
 
             if (buttonAction == "Previous")
             {
-                return RedirectToAction("Alultokesites", "Tao");
+                return RedirectToAction("TaoAdoalapKorrekcio", "Tao");
             }
             if (buttonAction == "Save")
             {
                 return RedirectToAction("AthozottVeszteseg", "Tao");
             }
-            return RedirectToAction("AthozottVeszteseg", "Tao");
+            return RedirectToAction("NyeresegminimumLevezetese", "Tao");
+        }
+
+        public ActionResult NyeresegminimumLevezetese()
+        {
+            var model = new NyeresegminimumLevezeteseModel();
+            var currentpage = _service.GetPage("TaoNyeresegminimum");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as NyeresegminimumLevezeteseModel;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult NyeresegminimumLevezetese(string buttonAction, IpaKapcsoltModel fc)
+        {
+            SaveValues(fc.Fields, NyeresegminimumLevezeteseCalculation.CalculateValues, pageId: 12);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("AthozottVeszteseg", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("NyeresegminimumLevezetese", "Tao");
+            }
+            return RedirectToAction("NyeresegminimumLevezetese", "Tao");
         }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)

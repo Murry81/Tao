@@ -1,0 +1,47 @@
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
+@model NyeresegminimumLevezeteseModel
+
+@{
+    ViewBag.Title = "A nyeresegminimum levezetese";
+}
+
+@using (Html.BeginForm("NyeresegminimumLevezetese", "Tao", FormMethod.Post))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-9">Megnevezés</th>
+                            <th class="col-md-2" style="text-align:center">Érték</th>
+
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td>
+                                @Model.Fields[i].Title
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            </div>
+        </div>
+    </div>
+}

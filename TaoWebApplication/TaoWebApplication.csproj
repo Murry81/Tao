@@ -154,6 +154,7 @@
     <Compile Include="Calculators\IpaKapcsoltStatusCalculation.cs" />
     <Compile Include="Calculators\IpaMegosztasCalculation.cs" />
     <Compile Include="Calculators\IpaNemKapcsoltCalculation.cs" />
+    <Compile Include="Calculators\NyeresegminimumLevezeteseCalculation.cs" />
     <Compile Include="Calculators\TaggalSzembeniKotelezettsegCalculation.cs" />
     <Compile Include="Calculators\TaoAdoalapKorrekcioCalculation.cs" />
     <Compile Include="Calculators\TartalomCalculation.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Models\IpaNemKapcsoltModel.cs" />
     <Compile Include="Models\ITableDescriptor.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\NyeresegminimumLevezeteseModel.cs" />
     <Compile Include="Models\SelectorModel.cs" />
     <Compile Include="Models\TaggalSzembeniKotelezettsegModel.cs" />
     <Compile Include="Models\TaoAdoalapKorrekcioModel.cs" />
@@ -241,6 +243,8 @@
     <Content Include="Views\Tao\TaoAdoalapKorrekcio.cshtml" />
     <Content Include="Views\Tao\Alultokesites.cshtml" />
     <Content Include="Views\Tao\TaggalSzembeniKotelezettseg.cshtml" />
+    <Content Include="Views\Tao\AthozottVeszteseg.cshtml" />
+    <Content Include="Views\Tao\NyeresegminimumLevezetese.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

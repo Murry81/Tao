@@ -13,6 +13,11 @@ namespace TaoWebApplication.Calculators
             return value.HasValue ? value.Value : 0;
         }
 
+        internal static bool GetValue(bool? value)
+        {
+            return value.HasValue && value.Value;
+        }
+
         internal static decimal? SumList(List<FieldDescriptorDto> fields, List<int> fieldIds)
         {
             decimal result = 0;
