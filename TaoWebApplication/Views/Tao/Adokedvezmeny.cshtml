@@ -1,0 +1,183 @@
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
+@model AdokedvezmenyModel
+
+@{
+    ViewBag.Title = "Adokedvezmeny";
+}
+
+@using (Html.BeginForm("Adokedvezmeny", "Tao", FormMethod.Post))
+{
+    <div class="container-fluid" style="-ms-transform: translateX(20%);transform: translateX(20%);">
+        <div class="row">
+            <div class="col-md-7 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-7">Megnevezés</th>
+                            <th class="col-md-2" style="text-align:center">Érték</th>
+                            <th class="col-md-2" style="text-align:center">Még felhasználható</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 1)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td>
+                                <b> @Model.Fields[i].Title </b>
+                            </td>
+                            <td>
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-7 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <b> 80%-ban igénybevehető adókedvezmények </b>
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 2)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                <tr>
+                    <td class="col-md-7">
+                        @Model.Fields[i].Title
+                    </td>
+                    <td class="col-md-2">
+                        @Html.CreateActualControl((IFieldList)Model, i)
+                    </td>
+                    <td class="col-md-2">
+                          @{int o = Model.Fields.IndexOf(Model.Fields.FirstOrDefault(f => f.Id == Model.Fields[i].Id + 20));
+                              if (o > 0)
+                              {
+                              @Html.CreateActualControl((IFieldList)Model, o)}
+                              }
+                    </td>
+                </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-7 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <th>
+                            <b>
+                                70%-ban igénybevehető adókedvezmények
+                             </b>
+                        </th>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 3)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                <tr>
+                    <td class="col-md-7">
+                        @Model.Fields[i].Title
+                    </td>
+                    <td class="col-md-2">
+                        @Html.CreateActualControl((IFieldList)Model, i)
+                    </td>
+                    <td class="col-md-2">
+                        @{int o = Model.Fields.IndexOf(Model.Fields.FirstOrDefault(f => f.Id == Model.Fields[i].Id + 20));
+                            if (o > 0)
+                            {
+                                @Html.CreateActualControl((IFieldList)Model, o)}
+                        }
+                    </td>
+                </tr>
+                    }
+                    </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 4)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr>
+                            <td class="col-md-7">
+                                 <b>  @Model.Fields[i].Title </b> 
+                            </td>
+                            <td class="col-md-2">
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-7 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < Model.Fields.Count; i++)
+                    {
+                        if (Model.Fields[i].SectionGroup != 5)
+                        {
+                            continue;
+                        }
+                        @Html.HiddenFor(m => Model.Fields[i].Id);
+                        <tr style="background-color: cyan">
+                            <td class="col-md-7" >
+                                <span style="font-size: large;">  @Model.Fields[i].Title </span>
+                            </td>
+                            <td class="col-md-2">
+                                @Html.CreateActualControl((IFieldList)Model, i)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            </div>
+        </div>
+    </div>
+}

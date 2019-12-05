@@ -47,6 +47,11 @@ namespace TaoWebApplication.Calculators
                             field.BoolFieldValue = Calculate1210(fields);
                             break;
                         }
+                    case 2105: // A magánszemély taggal szemben fennálló kötelezettség 
+                        {
+                            field.DecimalValue = Calculate2105(service, sessionId);
+                            break;
+                        }
                 }
             }
 
@@ -54,6 +59,13 @@ namespace TaoWebApplication.Calculators
             // A vállalkozás a jövedelem (nyereség) -minimumot tekinti adóalapnak
             var f1208 = fields.FirstOrDefault(f => f.Id == 1208);
             f1208.BoolFieldValue = Calculate1208(fields);
+        }
+
+        private static decimal? Calculate2105(IDataService service, Guid sessionId)
+        {
+            // 3.3 Adóalap korrekció nyereségminimum esetén
+            // f1006
+            return service.GetFieldById(1006, sessionId)?.DecimalValue;
         }
 
         private static bool Calculate1210(List<FieldDescriptorDto> fields)

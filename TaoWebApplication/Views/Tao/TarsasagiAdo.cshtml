@@ -1,22 +1,21 @@
 ﻿@using TaoWebApplication.Extensions
 @using TaoWebApplication.Models
-@model NyeresegminimumLevezeteseModel
+@model TarsasagiAdoModel
 
 @{
-    ViewBag.Title = "A nyeresegminimum levezetese";
+    ViewBag.Title = "Tarsasagi Ado";
 }
 
-@using (Html.BeginForm("NyeresegminimumLevezetese", "Tao", FormMethod.Post))
+@using (Html.BeginForm("TarsasagiAdo", "Tao", FormMethod.Post))
 {
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4 DivStyle">
+            <div class="col-md-7 DivStyle">
                 <table class="TaoDataTable table">
                     <thead>
                         <tr>
-                            <th class="col-md-9">Megnevezés</th>
+                            <th class="col-md-7">Megnevezés</th>
                             <th class="col-md-2" style="text-align:center">Érték</th>
-
                         </tr>
                     </thead>
 
@@ -27,9 +26,12 @@
                             continue;
                         }
                         @Html.HiddenFor(m => Model.Fields[i].Id);
-                        <tr>
+
+                        var color = Model.Fields[i].Id == 1415 || Model.Fields[i].Id == 1416 ?  "Cyan" : "";
+                        color = Model.Fields[i].Id == 1413 || Model.Fields[i].Id == 1414 ?  "lawngreen" : color;
+                        <tr style="background-color: @color">
                             <td>
-                                @Model.Fields[i].Title
+                                @Model.Fields[i].Title 
                             </td>
                             <td>
                                 @Html.CreateActualControl((IFieldList)Model, i)
@@ -38,16 +40,13 @@
                     }
                 </table>
             </div>
-            <div class="col-md-8 DivStyle">
+        </div>
+        <br />
+        <b>Felajánlás</b>
+        <div class="row">
+            <div class="col-md-7 DivStyle">
                 <table class="TaoDataTable table">
-                    <thead>
-                        <tr>
-                            <th class="col-md-9">Megnevezés</th>
-                            <th class="col-md-2" style="text-align:center">Érték</th>
-
-                        </tr>
-                    </thead>
-
+                    
                     @for (int i = 0; i < Model.Fields.Count; i++)
                     {
                         if (Model.Fields[i].SectionGroup != 2)
@@ -56,10 +55,10 @@
                         }
                         @Html.HiddenFor(m => Model.Fields[i].Id);
                         <tr>
-                            <td>
+                            <td class="col-md-7">
                                 @Model.Fields[i].Title
                             </td>
-                            <td>
+                            <td class="col-md-2">
                                 @Html.CreateActualControl((IFieldList)Model, i)
                             </td>
                         </tr>
@@ -69,11 +68,12 @@
         </div>
 
         <div class="row">
+            <div class="col-md-2"></div>
             <div class="col-md-4 DivStyle" style="display:flex; justify-content: center;">
                 <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
                 <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
                 <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
             </div>
         </div>
-    </div>
+        </div>
 }

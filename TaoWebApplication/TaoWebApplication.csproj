@@ -146,6 +146,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Calculators\AdokedvezmenyCalculation.cs" />
     <Compile Include="Calculators\AEEVarhatoAdatokCalculation.cs" />
     <Compile Include="Calculators\AlultokesitesCalculation.cs" />
     <Compile Include="Calculators\GenericCalculations.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Calculators\NyeresegminimumLevezeteseCalculation.cs" />
     <Compile Include="Calculators\TaggalSzembeniKotelezettsegCalculation.cs" />
     <Compile Include="Calculators\TaoAdoalapKorrekcioCalculation.cs" />
+    <Compile Include="Calculators\TarsasagiAdoCalculations.cs" />
     <Compile Include="Calculators\TartalomCalculation.cs" />
     <Compile Include="Calculators\TenyadatKorreckcioCalculation.cs" />
     <Compile Include="Calculators\TenyadatokCalculation.cs" />
@@ -170,6 +172,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Extensions\DecimalModelBinder.cs" />
+    <Compile Include="Models\AdokedvezmenyModel.cs" />
     <Compile Include="Models\AEEVarhatoAdatokModel.cs" />
     <Compile Include="Models\AlultokesitesModel.cs" />
     <Compile Include="Models\AthozottVesztesegModel.cs" />
@@ -185,6 +188,7 @@
     <Compile Include="Models\SelectorModel.cs" />
     <Compile Include="Models\TaggalSzembeniKotelezettsegModel.cs" />
     <Compile Include="Models\TaoAdoalapKorrekcioModel.cs" />
+    <Compile Include="Models\TarsasagiAdoModel.cs" />
     <Compile Include="Models\TartalomjegyzekModel.cs" />
     <Compile Include="Models\TenyadatKorrekcioModel.cs" />
     <Compile Include="Models\TenyadatokModel.cs" />
@@ -245,6 +249,8 @@
     <Content Include="Views\Tao\TaggalSzembeniKotelezettseg.cshtml" />
     <Content Include="Views\Tao\AthozottVeszteseg.cshtml" />
     <Content Include="Views\Tao\NyeresegminimumLevezetese.cshtml" />
+    <Content Include="Views\Tao\Adokedvezmeny.cshtml" />
+    <Content Include="Views\Tao\TarsasagiAdo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

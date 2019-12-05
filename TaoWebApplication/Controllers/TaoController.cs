@@ -610,7 +610,58 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("NyeresegminimumLevezetese", "Tao");
             }
-            return RedirectToAction("NyeresegminimumLevezetese", "Tao");
+            return RedirectToAction("Adokedvezmeny", "Tao");
+        }
+
+        public ActionResult Adokedvezmeny()
+        {
+            var model = new AdokedvezmenyModel();
+            var currentpage = _service.GetPage("TaoAdokedvezmeny");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as AdokedvezmenyModel;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Adokedvezmeny(string buttonAction, AdokedvezmenyModel fc)
+        {
+            SaveValues(fc.Fields, AdokedvezmenyCalculation.CalculateValues, pageId: 13);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("NyeresegminimumLevezetese", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("Adokedvezmeny", "Tao");
+            }
+            return RedirectToAction("TarsasagiAdo", "Tao");
+        }
+
+
+        public ActionResult TarsasagiAdo()
+        {
+            var model = new TarsasagiAdoModel();
+            var currentpage = _service.GetPage("Tao");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as TarsasagiAdoModel;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult TarsasagiAdo(string buttonAction, TarsasagiAdoModel fc)
+        {
+            SaveValues(fc.Fields, TarsasagiAdoCalculations.CalculateValues, pageId: 14);
+
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Adokedvezmeny", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("TarsasagiAdo", "Tao");
+            }
+            return RedirectToAction("TarsasagiAdo", "Tao");
         }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)
