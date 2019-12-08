@@ -18,59 +18,69 @@
 <body style="background-color:#e6f2ff;">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Kezdőlap", "Index", "Selector")</li>
-                    <li>@Html.ActionLink("Tartalomjegyzék", "Tartalomjegyzek", "Tao")</li>
-                    <li>@Html.ActionLink("Tenyadatok", "Tenyadatok", "Tao")</li>
-                    <li>@Html.ActionLink("Alultokesites", "Alultokesites", "Tao")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid body-content">
-            <div class="container-fluid" style="height: 110px; display:block; margin-left:auto; margin-right:auto; margin-top:30px;">
-                <div class="row">
-                    <div class="col-md-4" style="margin-top:30px; ">
-                        @if (Model.Customer != null)
-                        {
-                            <div style="border:outset;">
-                                Cégnév: @Model.Customer.Nev <br />
-                                Adószám: @Model.Customer.Adoszam
+                    @if (Model.CurrentPage != null)
+                    {
+                        <li>@Html.ActionLink("Kezdőlap", "Index", "Selector")</li>
+                        <li>@Html.ActionLink("Tartalomjegyzék", "Tartalomjegyzek", "Tao")</li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                3-as pont összefoglaló neve
+                            </a>
+                            <div class="dropdown-menu navbar-inverse">
+                                <a class="dropdown-item" href="/Tao/AEEVarhatoAdatok">AEE várható adatok</a><br />
+                                <a class="dropdown-item" href="/Tao/Alultokesites">Alultőkésítés</a><br />
+                                <a class="dropdown-item" href="/Tao/TaggalSzembeniKotelezettseg">Taggal szembeni kötelezettség</a><br />
+                                <a class="dropdown-item" href="/Tao/TaoAdoalapKorrekcio">Adóalap korrekció</a><br />
+                                <a class="dropdown-item" href="/Tao/AthozottVeszteseg">Áthozott veszteség</a><br />
+                                <a class="dropdown-item" href="/Tao/NyeresegminimumLevezetese">TAO nyereségminimum</a><br />
+                                <a class="dropdown-item" href="/Tao/Adokedvezmeny">TAO adókedvezmény</a>
                             </div>
+                            </li>
+                            <li>@Html.ActionLink("Tenyadatok", "Tenyadatok", "Tao")</li>
+                            <li>@Html.ActionLink("Alultokesites", "Alultokesites", "Tao")</li>
+                            <li>@Html.ActionLink("EnergiaEllatok", "EnergiaEllatok", "Tao")</li>
                         }
-
-                    </div>
-                    <div class="col-md-4">
-                        <img src="~/Images/logo.png" style="height: 110px; display:block; margin-left:auto; margin-right:auto;" />
-                    </div>
+                    </ul>
                 </div>
             </div>
-            <div class="col-md-12" style="text-align:center; color:darkslategrey;">
+        </div>
+        <div class="container-fluid body-content">
+                <div class="container-fluid" style="height: 110px; display:block; margin-left:auto; margin-right:auto; margin-top:30px;">
+                    <div class="row">
+                        <div class="col-md-4" style="margin-top:30px; ">
+                            @if (Model.Customer != null)
+                            {
+                                <div style="border:outset;">
+                                    Cégnév: @Model.Customer.Nev <br />
+                                    Adószám: @Model.Customer.Adoszam
+                                </div>
+                            }
 
-                @if (Model.CurrentPage != null)
-                {
-                     <h2>
-                        @Model.CurrentPage.CaptionText
-                         <br/>
-                    </h2>
-                }
-</div>
-             </div>
-            <div>
-                @RenderBody()
-            </div>
-        
-                @Scripts.Render("~/bundles/jquery")
-                @Scripts.Render("~/bundles/bootstrap")
-                @RenderSection("scripts", required: false)
-</body>
-</html>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="~/Images/logo.png" style="height: 110px; display:block; margin-left:auto; margin-right:auto;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="text-align:center; color:darkslategrey;">
+
+                    @if (Model.CurrentPage != null)
+                    {
+                         <h2>
+                            @Model.CurrentPage.CaptionText
+                             <br/>
+                        </h2>
+                    }
+    </div>
+                 </div>
+                <div>
+                    @RenderBody()
+                </div>
+
+                    @Scripts.Render("~/bundles/jquery")
+                    @Scripts.Render("~/bundles/bootstrap")
+                    @RenderSection("scripts", required: false)
+    </body>
+    </html>

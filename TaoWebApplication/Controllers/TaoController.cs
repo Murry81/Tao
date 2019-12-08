@@ -661,7 +661,57 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("TarsasagiAdo", "Tao");
             }
-            return RedirectToAction("TarsasagiAdo", "Tao");
+            return RedirectToAction("AdozottEredmeny", "Tao");
+        }
+
+        public ActionResult AdozottEredmeny()
+        {
+            var model = new AdozottEredmenyModel();
+            var currentpage = _service.GetPage("AdozottEredmeny");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as AdozottEredmenyModel;
+           
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AdozottEredmeny(string buttonAction, AdozottEredmenyModel fc)
+        {
+            SaveValues(fc.Fields, AdozottEredmenyCalculations.CalculateValues, pageId: 22);
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("TarsasagiAdo", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("AdozottEredmeny", "Tao");
+            }
+            return RedirectToAction("EnergiaEllatok", "Tao");
+        }
+
+        public ActionResult EnergiaEllatok()
+        {
+            var model = new EnergiaEllatokModel();
+            var currentpage = _service.GetPage("EnergiaEllatok");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as EnergiaEllatokModel;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EnergiaEllatok(string buttonAction, EnergiaEllatokModel fc)
+        {
+            SaveValues(fc.Fields, EnergiaEllatokCalculations.CalculateValues, pageId: 15);
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("AdozottEredmeny", "Tao");
+            }
+            if (buttonAction == "Save")
+            {
+                return RedirectToAction("EnergiaEllatok", "Tao");
+            }
+            return RedirectToAction("EnergiaEllatok", "Tao");
         }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)
