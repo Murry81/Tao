@@ -545,21 +545,22 @@ namespace TaoWebApplication.Controllers
         {
             var model = new AthozottVesztesegModel();
 
-            var currentpage = _service.GetPage("TaggalSzembeniKot");
+            var currentpage = _service.GetPage("AthozottVeszteseg");
             var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
             var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
             model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
-            model.TableDescriptors = _service.GetTableData(10, sessionId);
+            model.TableDescriptors = _service.GetTableData(19, sessionId);
 
-            //var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value);
-            //if (values.Count > 0)
-            //{
-            //    SaveValues(values, null);
-            //    model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
-            //    model.TableDescriptors = _service.GetTableData(19, sessionId);
-            //}
+            var values = model.FillDeafultRows(_service.GetFieldById(32, sessionId).DateValue.Value, sessionId, _service);
+            model.SetUpKepzesEveCombo(_service, sessionId);
+            if (values.Count > 0)
+            {
+                SaveValues(values, null);
+                model = ControllerHelper.FillModel(model, _service, currentpage, sessionId, customerId) as AthozottVesztesegModel;
+                model.TableDescriptors = _service.GetTableData(19, sessionId);
+            }
 
-            //model.MakeDefaultRowsReadonly();
+            model.MakeDefaultRowsReadonly();
             return View(model);
         }
 
@@ -568,14 +569,13 @@ namespace TaoWebApplication.Controllers
         {
             var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
             var fields = new List<FieldDescriptorDto>();
-            //fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
-            //fields = FillFieldValuesForTable(fields, 5);
-
-           // AthozottVesztesegCalculation.CalculateValues(fields, _service, sessionId, fc.Fields);
+            fields = fc.RemoveDefaultFieldsBeforeSave(fc.TableDescriptors);
+            fields = FillFieldValuesForTable(fields, 6);
+                       
             //Save table fields
             SaveValues(fields, null);
-            // Save other fields
-            SaveValues(fc.Fields, null, 19);
+
+            AthozottVesztesegCalculation.CalculateAndSaveValues(_service, sessionId);
 
             if (buttonAction == "Previous")
             {

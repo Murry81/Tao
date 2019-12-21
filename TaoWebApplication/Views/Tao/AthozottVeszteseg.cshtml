@@ -1,20 +1,123 @@
-﻿@using TaoWebApplication.Models
-@using TaoWebApplication.Extensions
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
 @model AthozottVesztesegModel
 
 @{
-    ViewBag.Title = "Athozott veszteseg";
+    ViewBag.Title = "AthozottVeszteseg";
 }
+
 @using (Html.BeginForm("AthozottVeszteseg", "Tao", FormMethod.Post))
 {
     <div class="container-fluid">
+
+
         <div class="row">
-            <div class="row">
-                <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
-                    <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
-                    <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
-                    <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            <div class="col-md-8 DivStyle">
+                <div>
+                    <b>Állományváltozási tábla</b><br />
                 </div>
+                <table class="TaoDataTable table" style="width:100%">
+                    <thead>
+                        <tr>
+                            @{
+                                foreach (var i in Model.TableDescriptors[1].FieldDescriptorIds)
+                                {
+                                    <th style="text-align:center; width:14%">
+                                        @Html.Label(Model.TableDescriptors[1].Captions[i])
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    @{
+                        for (int i = 0; i < Model.TableDescriptors[1].FieldValues.Count; i++)
+                        {
+                            <tr>
+                                @for (int j = 0; j < Model.TableDescriptors[1].Captions.Count; j++)
+                                {
+                                    <td style="text-align:center;">
+                                        @Html.HiddenFor(m => Model.TableDescriptors[1].FieldValues[i][j].FieldValueId)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[1].FieldValues[i][j].Id)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[1].FieldValues[i][j].RowIndex, new { Value = i })
+
+                                        @Html.CreateActualControlForTable(Model, i, j, 1)
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+
+                </table>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-4">
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                <b>
+                    <div class="row">
+                        @Html.HiddenFor(m => Model.Fields[i].Id)
+                        <div class="col-md-5">
+                            @Model.Fields[i].Title
+                        </div>
+                        <div class="col-md-2">
+                            @Html.CreateActualControl((IFieldList)Model, i)
+                        </div>
+                    </div>
+                </b>
+                }
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-8 DivStyle">
+                <div>
+                    <b>Mozgások</b><br />
+                </div>
+                <table class="TaoDataTable table" style="width:100%">
+                    <thead>
+                        <tr>
+                            @{
+                                foreach (var i in Model.TableDescriptors[0].FieldDescriptorIds)
+                                {
+                                    <th style="text-align:center; width:14%">
+                                        @Html.Label(Model.TableDescriptors[0].Captions[i])
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    @{
+                        for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
+                        {
+                            <tr>
+                                @for (int j = 0; j < Model.TableDescriptors[0].Captions.Count; j++)
+                                {
+                                    <td style="text-align:center;">
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].IsEditable)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
+                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
+
+                                        @Html.CreateActualControlForTable(Model, i, j, 0)
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
             </div>
         </div>
     </div>

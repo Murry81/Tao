@@ -47,6 +47,10 @@ textarea
     margin: 0px;
 }
 
+.TaoControl label {
+    font-weight: normal;
+}
+
 .TextIndent
 {
     text-indent: 40px;
@@ -64,8 +68,9 @@ textarea
    
 }
 
-.TaoDataTable{
-    margin-bottom : 1px;
+.TaoDataTable {
+    margin-bottom: 1px;
+    font-weight: normal;
 }
 
 .btn {
@@ -82,4 +87,5 @@ textarea
 .dropdown-item
 {
     color: white;
+    line-height: 30px;
 }

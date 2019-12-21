@@ -26,23 +26,56 @@
                         <li>@Html.ActionLink("Tartalomjegyzék", "Tartalomjegyzek", "Tao")</li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                1. Tényadatok
+                            </a>
+                            <div class="dropdown-menu navbar-inverse">
+                                <a class="dropdown-item" href="/Tao/Tenyadatok">1. Tényadatok</a><br />
+                                <a class="dropdown-item" href="/Tao/TenyadatKorrekcio">1.1 Tényadat korrekció</a><br />
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                2. IPA
+                            </a>
+                            <div class="dropdown-menu navbar-inverse">
+                                @if (Model.IpaKapcsolt.Value)
+                                {
+                                    <a class="dropdown-item" href="/Tao/IPAKapcsolt">2.1 IPA kapcsolt</a><br />
+                                    <a class="dropdown-item" href="/Tao/IPAKapcsoltStatus">2.1.1 IPA kapcsolt státusz</a><br />
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item" href="/Tao/IPANemKapcsolt">2.1 IPA nem kapcsolt</a><br />
+                                }
+                                <a class="dropdown-item" href="/Tao/InnovaciosJarulek">2.2  Innovácios Járulék</a><br />
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 3-as pont összefoglaló neve
                             </a>
                             <div class="dropdown-menu navbar-inverse">
-                                <a class="dropdown-item" href="/Tao/AEEVarhatoAdatok">AEE várható adatok</a><br />
-                                <a class="dropdown-item" href="/Tao/Alultokesites">Alultőkésítés</a><br />
-                                <a class="dropdown-item" href="/Tao/TaggalSzembeniKotelezettseg">Taggal szembeni kötelezettség</a><br />
-                                <a class="dropdown-item" href="/Tao/TaoAdoalapKorrekcio">Adóalap korrekció</a><br />
-                                <a class="dropdown-item" href="/Tao/AthozottVeszteseg">Áthozott veszteség</a><br />
-                                <a class="dropdown-item" href="/Tao/NyeresegminimumLevezetese">TAO nyereségminimum</a><br />
-                                <a class="dropdown-item" href="/Tao/Adokedvezmeny">TAO adókedvezmény</a>
+                                <a class="dropdown-item" href="/Tao/AEEVarhatoAdatok">3.1 AEE várható adatok</a><br />
+                                <a class="dropdown-item" href="/Tao/Alultokesites">3.2 Alultőkésítés</a><br />
+                                <a class="dropdown-item" href="/Tao/TaggalSzembeniKotelezettseg">3.3 Taggal szembeni kötelezettség</a><br />
+                                <a class="dropdown-item" href="/Tao/TaoAdoalapKorrekcio">3.4 Adóalap korrekció</a><br />
+                                <a class="dropdown-item" href="/Tao/AthozottVeszteseg">3.4.1 Áthozott veszteség</a><br />
+                                <a class="dropdown-item" href="/Tao/NyeresegminimumLevezetese">3.5 TAO nyereségminimum</a><br />
+                                <a class="dropdown-item" href="/Tao/Adokedvezmeny">3.6 TAO adókedvezmény</a>
                             </div>
-                            </li>
-                            <li>@Html.ActionLink("Tenyadatok", "Tenyadatok", "Tao")</li>
-                            <li>@Html.ActionLink("Alultokesites", "Alultokesites", "Tao")</li>
-                            <li>@Html.ActionLink("EnergiaEllatok", "EnergiaEllatok", "Tao")</li>
-                        }
-                    </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                4. TAO
+                            </a>
+                            <div class="dropdown-menu navbar-inverse">
+                                <a class="dropdown-item" href="/Tao/TarsasagiAdo">4. TAO</a><br />
+                                <a class="dropdown-item" href="/Tao/AdozottEredmeny">4.1 Adózott eredmény</a><br />
+                            </div>
+                        </li>
+                        <li>@Html.ActionLink("5. Energiaellátók", "EnergiaEllatok", "Tao")</li>
+                    }
+                </ul>
                 </div>
             </div>
         </div>

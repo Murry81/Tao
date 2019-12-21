@@ -96,18 +96,18 @@ namespace TaoWebApplication.Extensions
                 switch (model.TableDescriptors[tableIndex].FieldValues[i][j].TypeName)
                 {
                     case "bool":
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].BoolFieldValue ? "Igen" : "Nem", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick; font-weight: normal;" });
 
                     case "numeric":
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.HasValue ? model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.Value.ToString("#,#.00#;", CultureInfo.GetCultureInfoByIetfLanguageTag("HU-hu")) : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.HasValue ? model.TableDescriptors[tableIndex].FieldValues[i][j].DecimalValue.Value.ToString("#,#.00#;", CultureInfo.GetCultureInfoByIetfLanguageTag("HU-hu")) : "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color}; text-align:right;  border:thick; font-weight: normal;" });
                     case "date":
                         if (model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue == null)
                         {
                             return helper.Label("", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
                         }
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].DateValue?.ToString("yyyy-MM-dd"), new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick; font-weight: normal;" });
                     default:
-                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue ?? "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick;" });
+                        return helper.Label(model.TableDescriptors[tableIndex].FieldValues[i][j].StringValue ?? "", new { @class = "TaoControl", @style = $"width:100%; background-color:{@color};  border:thick; font-weight: normal;" });
 
                 }
             }

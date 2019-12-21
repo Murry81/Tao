@@ -84,6 +84,62 @@ namespace TaoDatabaseService.Mappers
             return result;
         }
 
+        public static List<FieldDescriptorDto> ToFieldDescriptorsDto(this FieldDescriptor fieldDescriptor, List<FieldValue> values, List<PageDescriptor> pageDescriptorList)
+        {
+            var resultList = new List<FieldDescriptorDto>();
+            var pageDescriptor = pageDescriptorList?.FirstOrDefault(p => p.FieldId == fieldDescriptor.Id);
+
+            foreach (var currentValue in values)
+            {
+                var result = new FieldDescriptorDto
+                {
+                    Caption = fieldDescriptor.Caption,
+                    Id = fieldDescriptor.Id,
+                    IsCaculated = fieldDescriptor.IsCalculated,
+                    IsEditable = fieldDescriptor.IsEditable,
+                    IsMandatory = fieldDescriptor.IsMandatory,
+                    Title = fieldDescriptor.Title,
+                    TypeName = fieldDescriptor.TypeName,
+                    TypeOptions = fieldDescriptor.TypeOptions,
+                    Description = pageDescriptor?.Description,
+                    OrderCharacter = pageDescriptor?.OrderCharacter,
+                    IsSpecial = fieldDescriptor.IsSpecial,
+                    SectionGroup = pageDescriptor?.SectionGroup,
+                    Order = pageDescriptor?.Order,
+                    HtmlClass = fieldDescriptor.HtmlClass
+                };
+
+
+                if (currentValue != null)
+                {
+                    result.FieldValueId = currentValue.Id;
+                    switch (fieldDescriptor.TypeName)
+                    {
+                        case "numeric":
+                            result.DecimalValue = currentValue.DecimalValue;
+                            break;
+                        case "bool":
+                            result.BoolFieldValue = currentValue.BoolValue.HasValue ? currentValue.BoolValue.Value : false;
+                            break;
+                        case "date":
+                            result.DateValue = currentValue.DateValue;
+                            break;
+                        default:
+                            result.StringValue = currentValue.StringValue;
+                            break;
+                    }
+                    result.RowIndex = currentValue.RowIndex;
+                }
+                else
+                {
+                    result.FieldValueId = null;
+                }
+                resultList.Add(result);
+            }
+
+            return resultList;
+        }
+
         public static FieldDescriptorDto ToBaseFieldDescriptorDto(this FieldDescriptor fieldDescriptor)
         {
             var result = new FieldDescriptorDto

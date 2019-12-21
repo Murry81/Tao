@@ -12,5 +12,8 @@ namespace TaoWebApplication.Models
         public PageDto CurrentPage { get; set; }
         public List<PageDescriptorDto> PageDescriptors { get; set; }
         public List<FieldDescriptorDto> Fields { get; set; }
+        
+        // Need for the navigation menu
+        public bool? IpaKapcsolt { get; set; }
     }
 }

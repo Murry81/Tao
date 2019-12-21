@@ -104,6 +104,14 @@ namespace TaoDatabaseService.Services
             return fieldDescriptor.ToFieldDescriptorDto(fieldValues, null);
         }
 
+        public List<FieldDescriptorDto> GetFieldValuesById(int fieldId, Guid sessionId)
+        {
+            var fieldDescriptor = entities.FieldDescriptor.Where(f => fieldId == f.Id).FirstOrDefault();
+            var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId && fv.FieldDescriptorId == fieldId).ToList();
+
+            return fieldDescriptor.ToFieldDescriptorsDto(fieldValues, null);
+        }
+
         public List<SessionDto> GetCustomerSessions(int customerId)
         {
             var sessions = entities.Session.Where(s => s.CustomerId == customerId).ToList();
@@ -187,6 +195,39 @@ namespace TaoDatabaseService.Services
             entities.SaveChanges();
 
             return sessionCreated.ToSession();
+        }
+
+        public List<FieldValue> GetAllPageFieldValues(int pageId, Guid sessionId)
+        {
+            var result = new List<FieldValue>();
+            var fields = entities.PageDescriptor.Where(t => t.PageId == pageId).Select(p => p.FieldDescriptor.Id).ToList();
+            var tableFieldIds = entities.TableDescriptor.Where(t => t.PageId == pageId).Select(t => t.FieldDescriptorId).Distinct().ToList();
+            fields.AddRange(tableFieldIds);
+
+            return entities.FieldValue.Where(t => fields.Contains(t.FieldDescriptorId)).ToList();
+        }
+
+        public void SaveValues(List<FieldValue> fields, Guid sessionId)
+        { 
+            foreach (var myEntity in fields)
+            {
+                if (string.IsNullOrEmpty(myEntity.StringValue) && myEntity.DecimalValue == null && myEntity.DateValue == null && myEntity.BoolValue == null)
+                {
+                    var result = entities.FieldValue.FirstOrDefault(f => f.Id == myEntity.Id && f.RowIndex == myEntity.RowIndex);
+                    if (result != null)
+                    {
+                        entities.FieldValue.Remove(result);
+                    }
+                }
+                else
+                {
+                    entities.FieldValue.AddOrUpdate(myEntity);
+                }
+            }
+
+            var sessionEntity = entities.Session.First(e => e.Id == sessionId);
+            sessionEntity.LastModifyDate = DateTime.UtcNow;
+            entities.SaveChanges();
         }
 
         public List<TableDescriptorDto> GetTableData(int pageId, Guid session)

@@ -150,6 +150,7 @@
     <Compile Include="Calculators\AdozottEredmenyCalculations.cs" />
     <Compile Include="Calculators\AEEVarhatoAdatokCalculation.cs" />
     <Compile Include="Calculators\AlultokesitesCalculation.cs" />
+    <Compile Include="Calculators\AthozottVesztesegCalculation.cs" />
     <Compile Include="Calculators\EnergiaEllatokCalculations.cs" />
     <Compile Include="Calculators\GenericCalculations.cs" />
     <Compile Include="Calculators\InnovaciosJarulekCalculation.cs" />
@@ -215,6 +216,9 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\AdoTestApplication - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\AdoTestApplication - ReadOnly - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\AdoTestApplication - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\TaoWebApplication20190910065615 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

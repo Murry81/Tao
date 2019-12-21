@@ -22,6 +22,8 @@ namespace TaoDatabaseService.Interfaces
 
         List<FieldDescriptorDto> GetPageFields(int pageId, Guid sessionId);
 
+        void SaveValues(List<FieldValue> fields, Guid sessionId);
+
         List<BaseFieldDescriptorDto> GetTableFields(int tableId);
 
         void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, Guid sessionId);
@@ -29,6 +31,10 @@ namespace TaoDatabaseService.Interfaces
         List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId);
 
         FieldDescriptorDto GetFieldById(int fieldId, Guid sessionId);
+
+        List<FieldDescriptorDto> GetFieldValuesById(int fieldId, Guid sessionId);
+
+        List<FieldValue> GetAllPageFieldValues(int pageId, Guid sessionId);
 
         List<SessionDto> GetCustomerSessions(int customerId);
 
