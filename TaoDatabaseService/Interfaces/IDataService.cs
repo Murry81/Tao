@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using TaoContracts.Contracts;
 
@@ -41,5 +42,11 @@ namespace TaoDatabaseService.Interfaces
         List<TableDescriptorDto> GetTableData(int pageId, Guid session);
 
         List<TaxesByCitiesDto> GetCityTaxes();
+
+        ExportReportDto GetExportReportData(Guid session, int reportId);
+
+        string GetCustomerTaxNumberBySessionId(Guid sessionId);
+
+        List<FieldDescriptorDto> GetTableFieldsByFieldIdList(int fieldId, Guid sessionId);
     }
 }

@@ -16,6 +16,14 @@ namespace TaoWebApplication.Calculators
                 if (!field.IsCaculated || max == field.RowIndex)
                     continue;
 
+                var f1800 = fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1800).StringValue;
+                if (string.IsNullOrEmpty(f1800))
+                {
+                    field.DecimalValue = null;
+                    field.StringValue = null;
+                    continue;
+                }
+
                 switch (field.Id)
                 {
                     case 1802: // Adó mértéke (%, két tizedes)
@@ -92,7 +100,12 @@ namespace TaoWebApplication.Calculators
             }
         }
 
-        
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(18, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
 
         private static decimal? Calculate1827(FieldDescriptorDto field, List<FieldDescriptorDto> fields)
         {
@@ -167,6 +180,9 @@ namespace TaoWebApplication.Calculators
             var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
             var adoalap = CalculateAdoAlap(service, sessionId);
 
+            if (adoalap == 0)
+                return 0;
+
             return f403 * f1808 / adoalap;
         }
 
@@ -178,6 +194,9 @@ namespace TaoWebApplication.Calculators
             var f412 = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 412 }, sessionId).FirstOrDefault()?.DecimalValue);
             var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
             var adoalap = CalculateAdoAlap(service, sessionId);
+
+            if (adoalap == 0)
+                return 0;
 
             return f412 * f1808 / adoalap;
         }
@@ -191,6 +210,9 @@ namespace TaoWebApplication.Calculators
             var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
             var adoalap = CalculateAdoAlap(service, sessionId);
 
+            if (adoalap == 0)
+                return 0;
+
             return f411 * f1808 / adoalap;
         }
 
@@ -202,6 +224,9 @@ namespace TaoWebApplication.Calculators
             var f410 = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 410 }, sessionId).FirstOrDefault()?.DecimalValue);
             var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
             var adoalap = CalculateAdoAlap(service, sessionId);
+
+            if (adoalap == 0)
+                return 0;
 
             return f410 * f1808 / adoalap;
         }
@@ -267,16 +292,26 @@ namespace TaoWebApplication.Calculators
                         var f1804 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1804).DecimalValue);
                         var sumF1807 = GenericCalculations.SumList(fields.Where(f => f.Id == 1807).ToList());
                         var sumF1804 = GenericCalculations.SumList(fields.Where(f => f.Id == 1804).ToList());
-                        var s = f1804 / (sumF1807 + sumF1804);
+
+                        decimal? s = 0;
+                        if (sumF1807 + sumF1804 != 0)
+                            s = f1804 / (sumF1807 + sumF1804);
+                                                
 
                         // Declare E as Szum (Eszközérték) / (szum (Eszközérték) + szum (Személyi jellegű ráfordítás)
                         // f1807 / ( sum(f1807) + sum(1804))
                         var f1807 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1807).DecimalValue);
-                        var e = f1807 / (sumF1807 + sumF1804);
+
+                        decimal? e = 0;
+                        if (sumF1807 + sumF1804 != 0)
+                            e = f1807 / (sumF1807 + sumF1804);
 
                         //	Személyi jellegű ráfordítás / szum(Személyi jellegű ráfordítás) * S * 2.1.Iparűzési adó alapja +Eszközérték / szum(Eszközérték) * E * 2.1.Iparűzési adó alapja
                         // f1804 / sum(1804) * s * adoalap + f1807 / sum(1807) * E * adoalap
                         var adoalap = CalculateAdoAlap(service, sessionId);
+
+                        if (sumF1804 == 0 || sumF1807 == 0)
+                            return 0;
 
                         return f1804 / sumF1804 * s * adoalap + f1807 / sumF1807 * e * adoalap;
                     }
@@ -313,10 +348,13 @@ namespace TaoWebApplication.Calculators
             return field.StringValue;
         }
 
-        private static decimal Calculate1802(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service)
+        private static decimal? Calculate1802(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service)
         {
             // f1800 település
             var f1800 = fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1800).StringValue;
+            if (string.IsNullOrEmpty(f1800))
+                return null;
+
             var tax = service.GetCityTaxes().FirstOrDefault(c => c.City.ToLower() == f1800.ToLower());
             if (tax == null)
                 return (decimal)2;

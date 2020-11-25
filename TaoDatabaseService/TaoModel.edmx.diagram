@@ -27,11 +27,26 @@
         <AssociationConnector Association="CustomerNameTaoModel.FK_Session_DocumentType" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" />
-        <AssociationConnector Association="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" />
+        <AssociationConnector Association="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" ManuallyRouted="true" >
+          <ConnectorPoint PointX="6.75" PointY="14.087461798853166" />
+          <ConnectorPoint PointX="8.1666666666666661" PointY="14.087461798853166" />
+          <ConnectorPoint PointX="8.3333333333333339" PointY="14.087461798853166" />
+          <ConnectorPoint PointX="11.25" PointY="14.087461798853166" />
+          <ConnectorPoint PointX="11.25" PointY="10.239889322916667" />
+        </AssociationConnector>
         <AssociationConnector Association="CustomerNameTaoModel.FK_FieldValue_Session" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_PageDescriptor_Pages" />
         <AssociationConnector Association="CustomerNameTaoModel.FK_TableDescriptor_Page" />
         <EntityTypeShape EntityType="CustomerNameTaoModel.TaxesByCities" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CustomerNameTaoModel.DocumentExport" Width="1.5" PointX="10.5" PointY="5.125" />
+        <AssociationConnector Association="CustomerNameTaoModel.FK_DocumentExport_DocumentType" />
+        <AssociationConnector Association="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" ManuallyRouted="true" >
+          <ConnectorPoint PointX="6.75" PointY="16.069787766401245" />
+          <ConnectorPoint PointX="12.333333333333334" PointY="16.069787766401245" />
+          <ConnectorPoint PointX="12.333333333333334" PointY="7.480286458420256" />
+          <ConnectorPoint PointX="11.25" PointY="7.480286458420256" />
+          <ConnectorPoint PointX="11.25" PointY="7.1052864583333317" />
+        </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

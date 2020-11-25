@@ -15,5 +15,8 @@ namespace TaoWebApplication.Models
         
         // Need for the navigation menu
         public bool? IpaKapcsolt { get; set; }
+
+        // Kalkuláció jellege for navigation
+        public bool isVegleges { get; set; }
     }
 }

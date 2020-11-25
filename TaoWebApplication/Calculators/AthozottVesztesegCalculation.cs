@@ -9,7 +9,7 @@ namespace TaoWebApplication.Calculators
 {
     public class AthozottVesztesegCalculation
     {
-        public static void CalculateAndSaveValues(IDataService service, Guid sessionId)
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
         {
             var fields = service.GetAllPageFieldValues(19, sessionId);
 
@@ -86,7 +86,6 @@ namespace TaoWebApplication.Calculators
         {
             // (Szum (Nyitó) - Nyitó 2004) - (Szum (Elévülés) - Elévülés 2004)
             // azaz Szum (Nyitó) - Szum (Elévülés) ahol év nem 2004
-
             var f1913 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1913);
             var rowIndex = fields.Where(f => f.FieldDescriptorId == 1905 && f.StringValue != "2004").Select(r=> r.RowIndex).ToList();
 

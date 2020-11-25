@@ -58,6 +58,9 @@
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DataServiceConfiguration.cs" />
+    <Compile Include="DocumentExport.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentState.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>

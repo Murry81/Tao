@@ -59,8 +59,17 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(1, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static bool Calculate35(FieldDescriptorDto uzletiEvVegefield)
         {
+            // Eltérő üzleti év jelölő
+            // Ha az üzleti év vége nem december 31., akkor = igaz
             if (uzletiEvVegefield == null)
                 return false;
 
@@ -81,7 +90,7 @@ namespace TaoWebApplication.Calculators
             if (uzletiEvVegefield == null || !uzletiEvVegefield.DateValue.HasValue)
                 return null;
 
-            var result = uzletiEvVegefield.DateValue.Value.AddMonths(13);
+            var result = uzletiEvVegefield.DateValue.Value.AddMonths(19);
             return new DateTimeOffset(result.Year, result.Month, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1);
         }
 

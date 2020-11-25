@@ -39,6 +39,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(2, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static bool Calculate64(List<FieldDescriptorDto> fields)
         {
             if (fields.FirstOrDefault(f => f.Id == 63).BoolFieldValue)

@@ -70,6 +70,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(8, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate808(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
         {
             // 1.Alvállalkozói teljesítmények / 0.Figyelembe vett hónapok száma * 12 + 1.1.Alvállalkozó teljesítmények

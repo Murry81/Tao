@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using TaoContracts.Contracts;
 using TaoDatabaseService.Interfaces;
+using TaoWebApplication.Models;
 
 namespace TaoWebApplication.Calculators
 {
@@ -94,6 +95,18 @@ namespace TaoWebApplication.Calculators
                 }
             }
         }
+
+
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(10, sessionId);
+            var tableFields = service.GetTableData(5, sessionId);
+            var fullTableFields = TaggalSzembeniKotelezettsegModel.RemoveDefaultFieldsBeforeSave(tableFields);
+
+            CalculateValues(fullTableFields, service, sessionId, fields);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
 
         private static decimal? Calculate1006(List<FieldDescriptorDto> fields, decimal? nyito)
         {

@@ -62,6 +62,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(15, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate1528(List<FieldDescriptorDto> fields)
         {
             // 2019.12.20-feltöltési kötelezettség + Az adóévre bevallott, de be nem fizetett előleg - Folyószámlán fennálló túlfizetés

@@ -57,6 +57,14 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(13, sessionId);
+            CalculateValues(fields, service, sessionId);
+
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? CalculateMegFelhasznalhato70(List<FieldDescriptorDto> fields, FieldDescriptorDto currentField)
         {
             // Figyelembe vehető maximum adókedvezmény - Még felhasználható 70 % az előző rekordban, ha nagyobb, mint 0, különben 0

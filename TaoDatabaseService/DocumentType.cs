@@ -19,6 +19,7 @@ namespace TaoDatabaseService
         {
             this.Page = new HashSet<Page>();
             this.Session = new HashSet<Session>();
+            this.DocumentExport = new HashSet<DocumentExport>();
         }
     
         public int Id { get; set; }
@@ -28,5 +29,7 @@ namespace TaoDatabaseService
         public virtual ICollection<Page> Page { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Session> Session { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DocumentExport> DocumentExport { get; set; }
     }
 }

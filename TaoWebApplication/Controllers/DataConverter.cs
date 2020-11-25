@@ -30,5 +30,20 @@ namespace TaoWebApplication.Controllers
                     break;
             }
         }
+
+        public static string GetTypedValue(FieldDescriptorDto field)
+        {
+            switch (field.TypeName)
+            {
+                case "numeric":
+                    return field.DecimalValue.Value.ToString("0");
+                case "bool":
+                    return field.BoolFieldValue ? "1" : "0";
+                case "date":
+                    return field.DateValue.Value.ToString("yyyyMMdd");
+                default:
+                    return field.StringValue;
+            }
+        }
     }
 }

@@ -57,6 +57,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(22, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate2207(List<FieldDescriptorDto> fields)
         {
             // Korrigált adózás előtti eredmény - Nyereséget terhelő adók

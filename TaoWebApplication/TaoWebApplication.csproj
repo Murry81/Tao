@@ -202,6 +202,7 @@
     <Compile Include="Validators\IpaMegosztasValidator.cs" />
     <Compile Include="Validators\IValidator.cs" />
     <Compile Include="Validators\TartalomValidator.cs" />
+    <Compile Include="XmlExport\XmlExport.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />

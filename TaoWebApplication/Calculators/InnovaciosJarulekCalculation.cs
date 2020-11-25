@@ -44,6 +44,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(7, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate707(List<FieldDescriptorDto> fields)
         {
             // Innovációs járulék +12.20 előírt előleg +Be nem fizetett, korábban előírt előleg -folyószámlán fennálló túlfizetés

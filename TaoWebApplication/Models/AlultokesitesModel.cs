@@ -133,19 +133,25 @@ namespace TaoWebApplication.Models
             {
                foreach(var item in row.Where(r => r.RowIndex < 4))
                 {
-                    item.IsEditable = false;
+                    if (item.Id != 905)
+                    {
+                        item.IsEditable = false;
+                    }
                 }
             }
             foreach (var row in this.TableDescriptors[1].FieldValues)
             {
                 foreach (var item in row.Where(r => r.RowIndex < 1))
                 {
-                    item.IsEditable = false;
+                    if (item.Id != 908)
+                    {
+                        item.IsEditable = false;
+                    }
                 }
             }
         }
 
-        internal List<FieldDescriptorDto> RemoveDefaultFieldsBeforeSave(List<TableDescriptorDto> tables)
+        internal static List<FieldDescriptorDto> RemoveDefaultFieldsBeforeSave(List<TableDescriptorDto> tables)
         {
             var result = new List<FieldDescriptorDto>();
             foreach (var table in tables)
@@ -155,6 +161,7 @@ namespace TaoWebApplication.Models
                 {
                     if (list.Any(t => t.RowIndex < ignoreRows))
                     {
+                        result.Add(list.First(i => i.Id == 905 || i.Id == 908 ));
                         continue;
                     }
                     result.AddRange(list);

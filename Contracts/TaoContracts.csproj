@@ -46,6 +46,7 @@
     <Compile Include="Contracts\CurrencyDto.cs" />
     <Compile Include="Contracts\CustomerDto.cs" />
     <Compile Include="Contracts\DocumentDto.cs" />
+    <Compile Include="Contracts\ExportReportDto.cs" />
     <Compile Include="Contracts\FieldDescriptorDto.cs" />
     <Compile Include="Contracts\PageDescriptorDto.cs" />
     <Compile Include="Contracts\PageDto.cs" />

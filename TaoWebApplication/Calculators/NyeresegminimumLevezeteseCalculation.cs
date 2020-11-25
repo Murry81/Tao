@@ -61,6 +61,13 @@ namespace TaoWebApplication.Calculators
             f1208.BoolFieldValue = Calculate1208(fields);
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(12, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate2105(IDataService service, Guid sessionId)
         {
             // 3.3 Adóalap korrekció nyereségminimum esetén

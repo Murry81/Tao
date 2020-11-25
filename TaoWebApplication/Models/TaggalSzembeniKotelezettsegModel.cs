@@ -51,7 +51,7 @@ namespace TaoWebApplication.Models
             }
         }
 
-        internal List<FieldDescriptorDto> RemoveDefaultFieldsBeforeSave(List<TableDescriptorDto> tables)
+        internal static List<FieldDescriptorDto> RemoveDefaultFieldsBeforeSave(List<TableDescriptorDto> tables)
         {
             var result = new List<FieldDescriptorDto>();
             foreach (var table in tables)

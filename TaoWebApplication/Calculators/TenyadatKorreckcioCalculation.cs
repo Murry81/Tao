@@ -64,6 +64,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(3, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate329(List<FieldDescriptorDto> fields)
         {
             var anyagkoltseg = fields.FirstOrDefault(f => f.Id == 330);

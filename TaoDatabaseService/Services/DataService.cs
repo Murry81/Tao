@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -92,6 +93,38 @@ namespace TaoDatabaseService.Services
             foreach (var field in fieldDescriptor)
             {
                 result.Add(field.ToFieldDescriptorDto(fieldValues, null));
+            }
+            return result;
+        }
+
+        public List<FieldDescriptorDto> GetTableFieldsByFieldIdList(int fieldId, Guid sessionId)
+        {
+            var fieldDescriptor = entities.FieldDescriptor.First(f => fieldId == f.Id);
+            var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId && fv.FieldDescriptorId == fieldId).ToList();
+
+            var result = new List<FieldDescriptorDto>();
+
+            foreach (var value in fieldValues)
+            {
+                result.Add(new FieldDescriptorDto
+                {
+                    AnykId = fieldDescriptor.AnykId,
+                    BoolFieldValue = value.BoolValue.HasValue ? value.BoolValue.Value : false,
+                    Caption = fieldDescriptor.Caption,
+                    DateValue = value.DateValue,
+                    DecimalValue = value.DecimalValue,
+                    FieldValueId = value.Id,
+                    IsCaculated = fieldDescriptor.IsCalculated,
+                    Id = fieldDescriptor.Id,
+                    IsEditable = fieldDescriptor.IsEditable,
+                    IsMandatory = fieldDescriptor.IsMandatory,
+                    IsSpecial = fieldDescriptor.IsSpecial,
+                    RowIndex = value.RowIndex,
+                    StringValue = value.StringValue,
+                    Title = fieldDescriptor.Title,
+                    TypeName = fieldDescriptor.TypeName,
+                    TypeOptions = fieldDescriptor.TypeOptions
+                });
             }
             return result;
         }
@@ -303,6 +336,31 @@ namespace TaoDatabaseService.Services
                 City = c.City,
                 IparuzesiAdo = c.HelyiIparuzesiAdo
             }).ToList();
+        }
+
+        public ExportReportDto GetExportReportData(Guid sessionId, int reportId)
+        {
+            var export = entities.DocumentExport.Where(de => de.DocumentTypeId == reportId).ToList();
+            var fieldIds = export.Select(f => f.FieldDescriptor.Id).ToList();
+            var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId &&  fieldIds.Contains(fv.FieldDescriptorId)).ToList();
+
+            var result = new ExportReportDto
+            {
+                DocumentId = reportId,
+                Fields = export.Select(e => e.FieldDescriptor.ToFieldDescriptorDto(fieldValues, null)).ToList()
+            };
+
+            foreach(FieldDescriptorDto field in result.Fields)
+            {
+                field.AnykId = export.FirstOrDefault(e => e.FieldId == field.Id).AnykId;
+            }
+
+            return result;
+        }
+
+        public string GetCustomerTaxNumberBySessionId(Guid sessionId)
+        {
+            return entities.Session.FirstOrDefault(s => s.Id == sessionId).Customer.Adoszam;
         }
     }
 }

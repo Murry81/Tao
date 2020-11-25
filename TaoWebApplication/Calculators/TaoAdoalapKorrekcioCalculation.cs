@@ -31,5 +31,12 @@ namespace TaoWebApplication.Calculators
                 }
             }
         }
+
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(11, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
     }
 }

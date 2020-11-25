@@ -81,6 +81,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(14, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate1418(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // Ha a kalkuláció jellege végleges, akkor Számított adó * 0,8 

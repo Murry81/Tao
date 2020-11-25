@@ -140,6 +140,8 @@
                                         {
                                             @Html.HiddenFor(m => m.SelectedCustomer.Id);
                                             <button type="submit" value=@session.Id name="Continue" class="btn btn-default">Folytat</button>
+                                            <button type="submit" value=@session.Id name="ExportIpa" class="btn btn-default">Export IPA</button>
+                                            <button type="submit" value=@session.Id name="ExportTarsasagi" class="btn btn-default">Export Társasági</button>
                                         }
                                     }
                                 </td>

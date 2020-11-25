@@ -172,19 +172,19 @@ namespace TaoWebApplication.Calculators
                             field.DecimalValue = Calculate450(fields, service, sessionId, arfolyam);
                             break;
                         }
-                    case 451: //Kapcsolt vállalkozásokra jutó adóalap !!!! NOT READY page 2.1
+                    case 451: //Kapcsolt vállalkozásokra jutó adóalap
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate451(fields, service, sessionId);
                             break;
                         }
-                    case 437: // Iparűzési adó mértéke !!!! NOT READY page 2.4
+                    case 437: // Iparűzési adó mértéke
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate437(fields, service, sessionId);
                             break;
                         }
-                    case 438: // Iparűzési adó összege   !!!! NOT READY page 2.4
+                    case 438: // Iparűzési adó összege
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate438(fields, service, sessionId);
                             break;
                         }
                     case 439: // Megfizetett útdíj 7,5%-a
@@ -192,43 +192,132 @@ namespace TaoWebApplication.Calculators
                             field.DecimalValue = GenericCalculations.SumList(fields, new List<int> { 409, 410, 411 });
                             break;
                         }
-                    case 440: // Iparűzési adó csökkentett összege  !!!! NOT READY page 2.4
+                    case 440: // Iparűzési adó csökkentett összege
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate440(fields, service, sessionId);
                             break;
                         }
-                    case 441: // Összes be nem fizetett, korábban előírt előleg !!!! NOT READY page 2.4
+                    case 441: // Összes be nem fizetett, korábban előírt előleg
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate441(fields, service, sessionId);
                             break;
                         }
-                    case 442: // Összes befizetett előleg !!!! NOT READY page 2.4
+                    case 442: // Összes befizetett előleg
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate442(fields, service, sessionId);
                             break;
                         }
-                    case 443: // Összes folyószámlán fennálló túlfizetés !!!! NOT READY page 2.4
+                    case 443: // Összes folyószámlán fennálló túlfizetés
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate443(fields, service, sessionId);
                             break;
                         }
-                    case 444: // Összes feltöltési kötelezettség/Adókülönbözet !!!! NOT READY page 2.4
+                    case 444: // Összes feltöltési kötelezettség/Adókülönbözet
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate444(fields, service, sessionId);
                             break;
                         }
-                    case 445: // Összes pénzügyileg rendezendő !!!! NOT READY page 2.4
+                    case 445: // Összes pénzügyileg rendezendő 
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate445(fields, service, sessionId);
                             break;
                         }
-                    case 446: // Alapkutatás, alkalmazott kutatás, kísérleti fejlesztés 10%-ából az adóalapcsökkentőként figyelembe vett összeg !!!! NOT READY page 2.4
+                    case 446: // Alapkutatás, alkalmazott kutatás, kísérleti fejlesztés 10%-ából az adóalapcsökkentőként figyelembe vett összeg
                         {
-                            field.DecimalValue = Calculate436(fields, service, sessionId);
+                            field.DecimalValue = Calculate446(fields, service, sessionId);
                             break;
                         }
                 }
             }
+        }
+
+
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(5, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
+        private static decimal? Calculate446(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Szum (2.4.Kutatási kedvezmény)
+            // sum(f1821)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1821, sessionId).ToList());
+        }
+
+        private static decimal? Calculate445(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Szum (2.4.Összes pénzügyileg rendezendő)
+            // sum(f1827)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1827, sessionId).ToList());
+        }
+
+        private static decimal? Calculate444(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Szum (2.4.Feltöltési kötelezettség/Adókülönbözet)
+            // sum(f1826)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1826, sessionId).ToList());
+        }
+
+        private static decimal? Calculate443(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Szum (2.4.Folyószámlán fennálló túlfizetés)
+            // sum(f1825)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1825, sessionId).ToList());
+        }
+
+        private static decimal? Calculate442(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            //	Szum (2.4.Befizetett előleg)
+            // sum(1824)
+            return GenericCalculations.SumList(service.GetFieldValuesById(1824, sessionId).ToList());
+        }
+
+        private static decimal? Calculate441(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Szum (2.4.Be nem fizetett, korábban előírt előleg)
+            // szum(1823)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1823, sessionId).ToList());
+        }
+
+        private static decimal? Calculate440(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // 	Szum (2.4.Települési adó összege)
+            // Sum(f1822)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1822, sessionId).ToList());
+        }
+
+        private static decimal? Calculate451(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // Szum(2.2.1.Kapcsolt vállalkozásra jutó adóalap)
+            // sum(f614)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(614, sessionId).ToList());
+        }
+
+        private static decimal? Calculate438(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // sum Adó kedvezmények nélkül
+            // sum(1812)
+
+            return GenericCalculations.SumList(service.GetFieldValuesById(1812, sessionId).ToList());
+        }
+
+        private static decimal? Calculate437(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            //	Ha csak egy település van rögzítve a 2.4 lapon, akkor az ahhoz tartozó adómérték, egyébként inaktív és üres
+            var adomertek = service.GetFieldValuesById(1802, sessionId).ToList();
+            if (adomertek.Count == 1)
+                return adomertek.FirstOrDefault().DecimalValue;
+
+            return null;
         }
 
         private static decimal GetArfolyamSzorzo(IDataService service, Guid sessionId, CustomerDto customer)
@@ -583,7 +672,7 @@ namespace TaoWebApplication.Calculators
         {
             // Értékesítés nettó árbevétele + Transzferár korrekció + IFRS korrekció - Összes figyelembe vehető ELÁBÉ - Korrigált anyagköltség - Alvállalkozói teljesítések értéke, 
             // ha ez negatív, akkor 0
-            // Max(0, f413 + f400 + f405 - f435 - f417 - f418 )
+            // Max(0, f413 + f400 + f405 - f435 - f417 - f418 -f403 -f407 + f406)
 
             return Math.Max(0,
                 GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue) +
@@ -591,7 +680,10 @@ namespace TaoWebApplication.Calculators
                 GenericCalculations.GetValue(fields.First(f => f.Id == 405).DecimalValue) -
                 GenericCalculations.GetValue(fields.First(f => f.Id == 435).DecimalValue) -
                 GenericCalculations.GetValue(fields.First(f => f.Id == 417).DecimalValue) -
-                GenericCalculations.GetValue(fields.First(f => f.Id == 418).DecimalValue));
+                GenericCalculations.GetValue(fields.First(f => f.Id == 418).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 403).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 407).DecimalValue) +
+                GenericCalculations.GetValue(fields.First(f => f.Id == 406).DecimalValue));
         }
 
 

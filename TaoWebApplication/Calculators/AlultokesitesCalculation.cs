@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaoContracts.Contracts;
 using TaoDatabaseService.Interfaces;
+using TaoWebApplication.Models;
 
 namespace TaoWebApplication.Calculators
 {
@@ -12,9 +13,9 @@ namespace TaoWebApplication.Calculators
         {
             var endOfBusinessYear = service.GetFieldById(32, sessionId).DateValue.Value;
 
-            var valueFieldsForTable = service.GetFieldsByFieldIdList(new List<int> { 905 }, sessionId).Where(f => f.RowIndex < 4).ToList();
+            var valueFieldsForTable = service.GetTableFieldsByFieldIdList(905, sessionId).Where(f => f.RowIndex < 4).ToList();
             var previousYearValue = GenericCalculations.SumList(valueFieldsForTable);
-            valueFieldsForTable = service.GetFieldsByFieldIdList(new List<int> { 908 }, sessionId).Where(f => f.RowIndex < 1).ToList();
+            valueFieldsForTable = service.GetTableFieldsByFieldIdList(908, sessionId).Where(f => f.RowIndex < 1).ToList();
             var previousYearValueTableTwo = GenericCalculations.SumList(valueFieldsForTable);
 
             var customer = service.GetCustomer(int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString()));
@@ -92,41 +93,55 @@ namespace TaoWebApplication.Calculators
 
             var currentValue = previousYearValue;
             RowItem previousItem = null;
+            int dayCount = 0;
+            
             // Do calculatations
-            foreach (var item in tableOneItems.Keys.OrderBy(s => s.Date))
+            if (tableOneItems.Any())
             {
-                currentValue += GenericCalculations.GetValue(item.Value);
-                tableOneItems[item].FirstOrDefault(f => f.Id == 909).DecimalValue = currentValue;
-                item.CumulatedValue = currentValue.Value;
-                if (previousItem != null)
+                foreach (var item in tableOneItems.Keys.OrderBy(s => s.Date))
                 {
-                    tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = (int)(item.Date - previousItem.Date).Value.TotalDays;
-                    previousItem.DayCount = (int)(item.Date - previousItem.Date).Value.TotalDays;
+                    currentValue += GenericCalculations.GetValue(item.Value);
+                    tableOneItems[item].FirstOrDefault(f => f.Id == 909).DecimalValue = currentValue;
+                    item.CumulatedValue = currentValue.Value;
+                    if (previousItem != null)
+                    {
+                        dayCount = CalculateDayCount(item.Date, previousItem.Date);
+                        tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = dayCount;
+                        previousItem.DayCount = dayCount;
+                    }
+                    previousItem = item;
                 }
-                previousItem = item;
-            }
 
-            tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
-            previousItem.DayCount = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
+                dayCount = CalculateDayCount(endOfBusinessYear, previousItem.Date) + 1;
+                tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = dayCount;
+                previousItem.DayCount = dayCount;
+            }
 
             currentValue = previousYearValueTableTwo;
             previousItem = null;
-            // Do calculatations
-            foreach (var item in tableTwoItems.Keys.OrderBy(s => s.Date))
-            {
-                currentValue += GenericCalculations.GetValue(item.Value);
-                tableTwoItems[item].FirstOrDefault(f => f.Id == 911).DecimalValue = currentValue;
-                item.CumulatedValue = currentValue.Value;
-                if (previousItem != null)
-                {
-                    tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = (int)(item.Date - previousItem.Date).Value.TotalDays;
-                    previousItem.DayCount = (int)(item.Date - previousItem.Date).Value.TotalDays;
-                }
-                previousItem = item;
-            }
 
-            tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
-            previousItem.DayCount = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
+            // Do calculatations
+            dayCount = 0;
+            if (tableTwoItems.Any())
+            {
+                foreach (var item in tableTwoItems.Keys.OrderBy(s => s.Date))
+                {
+                    currentValue += GenericCalculations.GetValue(item.Value);
+                    tableTwoItems[item].FirstOrDefault(f => f.Id == 911).DecimalValue = currentValue;
+                    item.CumulatedValue = currentValue.Value;
+                    if (previousItem != null)
+                    {
+                        dayCount = CalculateDayCount(item.Date, previousItem.Date);
+                        tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = dayCount;
+                        previousItem.DayCount = dayCount;
+                    }
+                    previousItem = item;
+                }
+
+                dayCount = CalculateDayCount(endOfBusinessYear, previousItem.Date) + 1;
+                tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = dayCount;
+                previousItem.DayCount = dayCount;
+            }
 
             foreach (var field in otherFields)
             {
@@ -154,6 +169,24 @@ namespace TaoWebApplication.Calculators
                         }
                 }
             }
+        }
+
+        private static int CalculateDayCount(DateTimeOffset? first, DateTimeOffset? second)
+        {
+            DateTimeOffset f = first == null ? DateTimeOffset.UtcNow : new DateTimeOffset(first.Value.Year, first.Value.Month, first.Value.Day, 0, 0, 0, TimeSpan.Zero);
+            DateTimeOffset s = second == null ? DateTimeOffset.UtcNow :  new DateTimeOffset(second.Value.Year, second.Value.Month, second.Value.Day, 0, 0, 0, TimeSpan.Zero);
+
+            return (int)(f - s).TotalDays;
+        }
+
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(9, sessionId);
+            var tableFields = service.GetTableData(9, sessionId);
+            var fullTableFields = AlultokesitesModel.RemoveDefaultFieldsBeforeSave(tableFields);
+
+            CalculateValues(fullTableFields, service, sessionId, fields);
+            service.UpdateFieldValues(fields, sessionId);
         }
 
         private static decimal? Calculate916(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)

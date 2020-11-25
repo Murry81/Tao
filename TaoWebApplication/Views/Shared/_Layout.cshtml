@@ -16,6 +16,17 @@
     </style>
 </head>
 <body style="background-color:#e6f2ff;">
+
+    <script type="text/javascript">
+        document.onkeyup = function (e) {
+            var e = e || window.event; // for IE to cover IEs window event-object
+            if (e.ctrlKey && e.which == 77) {
+                document.getElementsByName("buttonAction")[1].click();
+                return false;
+            }
+        };
+    </script>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-collapse collapse">
@@ -23,14 +34,17 @@
                     @if (Model.CurrentPage != null)
                     {
                         <li>@Html.ActionLink("Kezdőlap", "Index", "Selector")</li>
-                        <li>@Html.ActionLink("Tartalomjegyzék", "Tartalomjegyzek", "Tao")</li>
+                        <li>@Html.ActionLink("0. Alapadatok", "Tartalomjegyzek", "Tao")</li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 1. Tényadatok
                             </a>
                             <div class="dropdown-menu navbar-inverse">
                                 <a class="dropdown-item" href="/Tao/Tenyadatok">1. Tényadatok</a><br />
-                                <a class="dropdown-item" href="/Tao/TenyadatKorrekcio">1.1 Tényadat korrekció</a><br />
+                                @if (!Model.isVegleges)
+                                {
+                                    <a class="dropdown-item" href="/Tao/TenyadatKorrekcio">1.1 Tényadat korrekció</a><br />
+                                }
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -40,14 +54,15 @@
                             <div class="dropdown-menu navbar-inverse">
                                 @if (Model.IpaKapcsolt.Value)
                                 {
-                                    <a class="dropdown-item" href="/Tao/IPAKapcsolt">2.1 IPA kapcsolt</a><br />
-                                    <a class="dropdown-item" href="/Tao/IPAKapcsoltStatus">2.1.1 IPA kapcsolt státusz</a><br />
+                                    <a class="dropdown-item" href="/Tao/IPAKapcsolt">2.2 IPA kapcsolt</a><br />
+                                    <a class="dropdown-item" href="/Tao/IPAKapcsoltStatus">2.2.1 IPA kapcsolt státusz</a><br />
                                 }
                                 else
                                 {
                                     <a class="dropdown-item" href="/Tao/IPANemKapcsolt">2.1 IPA nem kapcsolt</a><br />
                                 }
-                                <a class="dropdown-item" href="/Tao/InnovaciosJarulek">2.2  Innovácios Járulék</a><br />
+                                <a class="dropdown-item" href="/Tao/InnovaciosJarulek">2.3  Innovácios Járulék</a><br />
+                                <a class="dropdown-item" href="/Tao/IpaMegosztas">2.4  IPA megosztás</a><br />
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -76,44 +91,44 @@
                         <li>@Html.ActionLink("5. Energiaellátók", "EnergiaEllatok", "Tao")</li>
                     }
                 </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid body-content">
+        <div class="container-fluid" style="height: 110px; display:block; margin-left:auto; margin-right:auto; margin-top:30px;">
+            <div class="row">
+                <div class="col-md-4" style="margin-top:30px; ">
+                    @if (Model.Customer != null)
+                    {
+                        <div style="border:outset;">
+                            Cégnév: @Model.Customer.Nev <br />
+                            Adószám: @Model.Customer.Adoszam
+                        </div>
+                    }
+
+                </div>
+                <div class="col-md-4">
+                    <img src="~/Images/logo.png" style="height: 110px; display:block; margin-left:auto; margin-right:auto;" />
                 </div>
             </div>
         </div>
-        <div class="container-fluid body-content">
-                <div class="container-fluid" style="height: 110px; display:block; margin-left:auto; margin-right:auto; margin-top:30px;">
-                    <div class="row">
-                        <div class="col-md-4" style="margin-top:30px; ">
-                            @if (Model.Customer != null)
-                            {
-                                <div style="border:outset;">
-                                    Cégnév: @Model.Customer.Nev <br />
-                                    Adószám: @Model.Customer.Adoszam
-                                </div>
-                            }
+        <div class="col-md-12" style="text-align:center; color:darkslategrey;">
 
-                        </div>
-                        <div class="col-md-4">
-                            <img src="~/Images/logo.png" style="height: 110px; display:block; margin-left:auto; margin-right:auto;" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12" style="text-align:center; color:darkslategrey;">
-
-                    @if (Model.CurrentPage != null)
-                    {
-                         <h2>
-                            @Model.CurrentPage.CaptionText
-                             <br/>
-                        </h2>
-                    }
+            @if (Model.CurrentPage != null)
+            {
+                <h2>
+                    @Model.CurrentPage.CaptionText
+                    <br />
+                </h2>
+            }
+        </div>
     </div>
-                 </div>
-                <div>
-                    @RenderBody()
-                </div>
+    <div>
+        @RenderBody()
+    </div>
 
-                    @Scripts.Render("~/bundles/jquery")
-                    @Scripts.Render("~/bundles/bootstrap")
-                    @RenderSection("scripts", required: false)
-    </body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
     </html>

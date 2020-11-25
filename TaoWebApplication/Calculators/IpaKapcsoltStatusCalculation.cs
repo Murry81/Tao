@@ -61,6 +61,14 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+
+        public static void ReCalculateValues(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetPageFields(6, sessionId);
+            CalculateValues(fields, service, sessionId);
+            service.UpdateFieldValues(fields, sessionId);
+        }
+
         private static decimal? Calculate608(FieldDescriptorDto currentField, List<FieldDescriptorDto> fields)
         {
             // Kapcsolt státusz vége - Kapcsolt státusz kezdete
