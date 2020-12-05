@@ -21,7 +21,7 @@ namespace TaoWebApplication.XmlExport
             nyomtatvanyok.Add(nyomtatvany);
 
             var nyomtatvanyinformacio = new XElement("nyomtatvanyinformacio");
-            nyomtatvanyinformacio.Add(new XElement("nyomtatvanyazonosito", "1929"));
+            nyomtatvanyinformacio.Add(new XElement("nyomtatvanyazonosito", service.GetDocumentIdentifier(documentId)));
             nyomtatvanyinformacio.Add(new XElement("nyomtatvanyverzio", "7.0"));
 
             nyomtatvany.Add(nyomtatvanyinformacio);

@@ -53,32 +53,32 @@ namespace TaoWebApplication.Calculators
 
         private static decimal? Calculate707(List<FieldDescriptorDto> fields)
         {
-            // Innovációs járulék +12.20 előírt előleg +Be nem fizetett, korábban előírt előleg -folyószámlán fennálló túlfizetés
-            // f705 + f706 + f701 - f703
+            // Innovációs járulék + 12.20 előírt előleg + Be nem fizetett, korábban előírt előleg - folyószámlán fennálló túlfizetés
+            // f705 + f700 + f701 - f703
 
-            var f705 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.Id == 705)?.DecimalValue);
-            var f706 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 706)?.DecimalValue);
+            var f700 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.Id == 700)?.DecimalValue);
+            var f705 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 705)?.DecimalValue);
             var f701 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 701)?.DecimalValue);
             var f703 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 703)?.DecimalValue);
 
-            return f705 + f706 + f701 - f703;
+            return f705 + f700 + f701 - f703;
         }
 
         private static decimal? Calculate706(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
-            //	Innovációs járulék -12.20 előírt előleg -Be nem fizetett, korábban előírt előleg -Folyószámlán fennálló túlfizetés
+            // Innovációs járulék - 12.20 előírt előleg - Be nem fizetett, korábban előírt előleg - Folyószámlán fennálló túlfizetés
             // Ha ez negatív és a kalkuláció jellege feltöltés, akkor 0
-            // f705 - f706 - f701 - f703;
+            // f705 - f700 - f701 - 703;
 
             var f705 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 705)?.DecimalValue);
-            var f706 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 706)?.DecimalValue);
+            var f700 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 700)?.DecimalValue);
             var f701 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 701)?.DecimalValue);
             var f703 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 703)?.DecimalValue);
 
             //f29 kalkuláció jellege
             var f29 = service.GetFieldsByFieldIdList(new List<int> { 29 }, sessionId).FirstOrDefault()?.StringValue;
 
-            var sum = f705 - f706 - f701 - f703;
+            var sum = f705 - f700 - f701 - f703;
             if (f29 == "Feltöltés" && sum < 0)
                 return 0;
 
@@ -91,7 +91,9 @@ namespace TaoWebApplication.Calculators
             // f704 * 0.003
 
             var f704 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 704)?.DecimalValue);
-            return f704 * (decimal)0.003;
+            var result = f704 * (decimal)0.003;
+
+            return decimal.Round(result / 1000) * 1000;
         }
 
         private static decimal? Calculate704(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)

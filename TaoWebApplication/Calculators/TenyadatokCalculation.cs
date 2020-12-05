@@ -84,12 +84,12 @@ namespace TaoWebApplication.Calculators
 
         private static decimal? Calculate62(List<FieldDescriptorDto> fields)
         {
-            var anyagkoltseg = fields.FirstOrDefault(f => f.Id == 26).DecimalValue;
-            var notAnyagkoltseg = fields.FirstOrDefault(f => f.Id == 10).DecimalValue;
-            if (anyagkoltseg.HasValue && notAnyagkoltseg.HasValue)
-                return anyagkoltseg - notAnyagkoltseg;
-
-            return null;
-        }
+            // 	Anyagköltség - Anyagköltségként figyelembe nem vehető tételek
+            // f26 - f10
+            var anyagkoltseg = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 26).DecimalValue);
+            var notAnyagkoltseg = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 10).DecimalValue);
+            
+            return anyagkoltseg - notAnyagkoltseg;
+       }
     }
 }

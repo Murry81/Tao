@@ -22,11 +22,6 @@ namespace TaoWebApplication.Calculators
                             field.DecimalValue = Calculate1204(service, sessionId);
                             break;
                         }
-                    case 1205: // Összes bevételt módosító tényezők hatása
-                        {
-                            field.DecimalValue = Calculate1205(service, sessionId);
-                            break;
-                        }
                     case 1206: // Korrigált bevétel
                         {
                             field.DecimalValue = Calculate1206(fields);
@@ -59,6 +54,9 @@ namespace TaoWebApplication.Calculators
             // A vállalkozás a jövedelem (nyereség) -minimumot tekinti adóalapnak
             var f1208 = fields.FirstOrDefault(f => f.Id == 1208);
             f1208.BoolFieldValue = Calculate1208(fields);
+
+            var f1205 = fields.FirstOrDefault(f => f.Id == 1205);
+            f1205.DecimalValue = Calculate1205(fields);
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)
@@ -117,7 +115,7 @@ namespace TaoWebApplication.Calculators
             var f1210 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1210).BoolFieldValue);
             var f1209 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1209).BoolFieldValue);
 
-            return f1210 || f1200 || f1209;
+            return !(f1210 || f1200 || f1209);
         }
 
         private static decimal? Calculate1207(List<FieldDescriptorDto> fields)
@@ -139,14 +137,19 @@ namespace TaoWebApplication.Calculators
             return f1204 + f1205;
         }
 
-        private static decimal? Calculate1205(IDataService service, Guid sessionId)
+        private static decimal? Calculate1205(List<FieldDescriptorDto> fields)
         {
             // Szum(3.5.1.Növelő) - Szum(3.5.1.Csökkentő)
-            // f1172 - f1171
-            var f1172 = GenericCalculations.GetValue(service.GetFieldById(1172, sessionId).DecimalValue);
-            var f1171 = GenericCalculations.GetValue(service.GetFieldById(1171, sessionId).DecimalValue);
+            // f2103 + f2104 + f2105 - f2100 - f2101 - 2102
+            var f2103 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2103).DecimalValue);
+            var f2104 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2104).DecimalValue);
+            var f2105 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2105).DecimalValue);
 
-            return f1172 - f1171;
+            var f2102 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2102).DecimalValue);
+            var f2101 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2101).DecimalValue);
+            var f2100 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2100).DecimalValue);
+
+            return f2103 + f2104 + f2105 - f2100 - f2101 - f2102;
         }
 
         private static decimal? Calculate1204(IDataService service, Guid sessionId)

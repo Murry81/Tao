@@ -115,7 +115,7 @@ namespace TaoWebApplication.Calculators
             var f1823 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1823).DecimalValue);
             var f1825 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1825).DecimalValue);
 
-            return 1826 + f1823 - f1825;
+            return f1826 + f1823 - f1825;
         }
 
         private static decimal? Calculate1826(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
@@ -256,7 +256,7 @@ namespace TaoWebApplication.Calculators
         {
             //• (f436)	2.1.Iparűzési adó alapja helyett a (f450) 2.2.Adóalanyra jutó adóalap mezőt kell használni, ha 0.IPA kapcsolt státusz = igaz (40)
             // f1803 Megosztás módja:
-            var f1803 = fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1803).StringValue;
+            var f1803 = fields.FirstOrDefault(f => f.Id == 1803).StringValue;
             switch (f1803)
             {
                 case "személyi jellegű ráfordítás":
@@ -295,7 +295,7 @@ namespace TaoWebApplication.Calculators
 
                         decimal? s = 0;
                         if (sumF1807 + sumF1804 != 0)
-                            s = f1804 / (sumF1807 + sumF1804);
+                            s = sumF1804 / (sumF1807 + sumF1804);
                                                 
 
                         // Declare E as Szum (Eszközérték) / (szum (Eszközérték) + szum (Személyi jellegű ráfordítás)
@@ -304,7 +304,7 @@ namespace TaoWebApplication.Calculators
 
                         decimal? e = 0;
                         if (sumF1807 + sumF1804 != 0)
-                            e = f1807 / (sumF1807 + sumF1804);
+                            e = sumF1807 / (sumF1807 + sumF1804);
 
                         //	Személyi jellegű ráfordítás / szum(Személyi jellegű ráfordítás) * S * 2.1.Iparűzési adó alapja +Eszközérték / szum(Eszközérték) * E * 2.1.Iparűzési adó alapja
                         // f1804 / sum(1804) * s * adoalap + f1807 / sum(1807) * E * adoalap

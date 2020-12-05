@@ -175,11 +175,6 @@ namespace TaoWebApplication.Models
                 {
                     item.IsEditable = false;
                 }
-
-                if(row.FirstOrDefault(f=>f.Id == 1901).StringValue == "Tárgyévi veszteség")
-                {
-                    row.FirstOrDefault(f => f.Id == 1902).IsEditable = false;
-                }
             }
         }
 

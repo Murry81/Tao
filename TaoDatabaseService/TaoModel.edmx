@@ -65,6 +65,14 @@ warning 6002: The table/view 'Tao.dbo.DocumentExport' does not have a primary ke
           <Property Name="FieldId" Type="int" Nullable="false" />
           <Property Name="AnykId" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="DocumentExportType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="DocumentState">
           <Key>
             <PropertyRef Name="Id" />
@@ -221,11 +229,11 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DocumentExport_DocumentType">
-          <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="1" />
+        <Association Name="FK_DocumentExport_DocumentExportType">
+          <End Role="DocumentExportType" Type="Self.DocumentExportType" Multiplicity="1" />
           <End Role="DocumentExport" Type="Self.DocumentExport" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DocumentType">
+            <Principal Role="DocumentExportType">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DocumentExport">
@@ -370,6 +378,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySet Name="ContactDetail" EntityType="Self.ContactDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentExportType" EntityType="Self.DocumentExportType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentState" EntityType="Self.DocumentState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldDescriptor" EntityType="Self.FieldDescriptor" Schema="dbo" store:Type="Tables" />
@@ -417,8 +426,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             <End Role="Currency" EntitySet="Currency" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK_DocumentExport_DocumentType" Association="Self.FK_DocumentExport_DocumentType">
-            <End Role="DocumentType" EntitySet="DocumentType" />
+          <AssociationSet Name="FK_DocumentExport_DocumentExportType" Association="Self.FK_DocumentExport_DocumentExportType">
+            <End Role="DocumentExportType" EntitySet="DocumentExportType" />
             <End Role="DocumentExport" EntitySet="DocumentExport" />
           </AssociationSet>
           <AssociationSet Name="FK_DocumentExport_FieldDescriptor" Association="Self.FK_DocumentExport_FieldDescriptor">
@@ -475,6 +484,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySet Name="ContactDetail" EntityType="CustomerNameTaoModel.ContactDetail" />
           <EntitySet Name="Currency" EntityType="CustomerNameTaoModel.Currency" />
           <EntitySet Name="Customer" EntityType="CustomerNameTaoModel.Customer" />
+          <EntitySet Name="DocumentExportType" EntityType="CustomerNameTaoModel.DocumentExportType" />
           <EntitySet Name="DocumentState" EntityType="CustomerNameTaoModel.DocumentState" />
           <EntitySet Name="DocumentType" EntityType="CustomerNameTaoModel.DocumentType" />
           <EntitySet Name="FieldDescriptor" EntityType="CustomerNameTaoModel.FieldDescriptor" />
@@ -482,7 +492,9 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySet Name="Page" EntityType="CustomerNameTaoModel.Page" />
           <EntitySet Name="PageDescriptor" EntityType="CustomerNameTaoModel.PageDescriptor" />
           <EntitySet Name="Session" EntityType="CustomerNameTaoModel.Session" />
+          <EntitySet Name="DocumentExport" EntityType="CustomerNameTaoModel.DocumentExport" />
           <EntitySet Name="TableDescriptor" EntityType="CustomerNameTaoModel.TableDescriptor" />
+          <EntitySet Name="TaxesByCities" EntityType="CustomerNameTaoModel.TaxesByCities" />
           <AssociationSet Name="FK_Address_Customer" Association="CustomerNameTaoModel.FK_Address_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Address" EntitySet="Address" />
@@ -503,6 +515,10 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Session" EntitySet="Session" />
           </AssociationSet>
+          <AssociationSet Name="FK_DocumentExport_DocumentExportType" Association="CustomerNameTaoModel.FK_DocumentExport_DocumentExportType">
+            <End Role="DocumentExportType" EntitySet="DocumentExportType" />
+            <End Role="DocumentExport" EntitySet="DocumentExport" />
+          </AssociationSet>
           <AssociationSet Name="FK_Session_DocumentState" Association="CustomerNameTaoModel.FK_Session_DocumentState">
             <End Role="DocumentState" EntitySet="DocumentState" />
             <End Role="Session" EntitySet="Session" />
@@ -514,6 +530,10 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <AssociationSet Name="FK_Session_DocumentType" Association="CustomerNameTaoModel.FK_Session_DocumentType">
             <End Role="DocumentType" EntitySet="DocumentType" />
             <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DocumentExport_FieldDescriptor" Association="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor">
+            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
+            <End Role="DocumentExport" EntitySet="DocumentExport" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldValue_FieldDescriptor1" Association="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1">
             <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
@@ -539,16 +559,6 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             <End Role="Page" EntitySet="Page" />
             <End Role="TableDescriptor" EntitySet="TableDescriptor" />
           </AssociationSet>
-          <EntitySet Name="TaxesByCities" EntityType="CustomerNameTaoModel.TaxesByCities" />
-          <EntitySet Name="DocumentExport" EntityType="CustomerNameTaoModel.DocumentExport" />
-          <AssociationSet Name="FK_DocumentExport_DocumentType" Association="CustomerNameTaoModel.FK_DocumentExport_DocumentType">
-            <End Role="DocumentType" EntitySet="DocumentType" />
-            <End Role="DocumentExport" EntitySet="DocumentExport" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DocumentExport_FieldDescriptor" Association="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor">
-            <End Role="FieldDescriptor" EntitySet="FieldDescriptor" />
-            <End Role="DocumentExport" EntitySet="DocumentExport" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Address">
           <Key>
@@ -573,8 +583,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="Email2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Phone2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Customer" Relationship="CustomerNameTaoModel.FK_Customer_ContactDetail" FromRole="ContactDetail" ToRole="Customer" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="CustomerNameTaoModel.FK_Customer_ContactDetail" FromRole="ContactDetail" ToRole="Customer" />
         </EntityType>
         <EntityType Name="Currency">
           <Key>
@@ -607,6 +617,15 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <NavigationProperty Name="Currency1" Relationship="CustomerNameTaoModel.FK_Customer_Currency1" FromRole="Customer" ToRole="Currency" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_Customer" FromRole="Customer" ToRole="Session" />
         </EntityType>
+        <EntityType Name="DocumentExportType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DocumentExport" Relationship="CustomerNameTaoModel.FK_DocumentExport_DocumentExportType" FromRole="DocumentExportType" ToRole="DocumentExport" />
+        </EntityType>
         <EntityType Name="DocumentState">
           <Key>
             <PropertyRef Name="Id" />
@@ -623,7 +642,6 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="DocumentName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Page" Relationship="CustomerNameTaoModel.FK_Page_DocumentType" FromRole="DocumentType" ToRole="Page" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="DocumentType" ToRole="Session" />
-          <NavigationProperty Name="DocumentExport" Relationship="CustomerNameTaoModel.FK_DocumentExport_DocumentType" FromRole="DocumentType" ToRole="DocumentExport" />
         </EntityType>
         <EntityType Name="FieldDescriptor">
           <Key>
@@ -640,10 +658,10 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="TypeOptions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IsSpecial" Type="Boolean" />
           <Property Name="HtmlClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DocumentExport" Relationship="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" FromRole="FieldDescriptor" ToRole="DocumentExport" />
           <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_FieldDescriptor1" FromRole="FieldDescriptor" ToRole="FieldValue" />
           <NavigationProperty Name="PageDescriptor" Relationship="CustomerNameTaoModel.FK_PageDescriptor_FieldDescriptor" FromRole="FieldDescriptor" ToRole="PageDescriptor" />
           <NavigationProperty Name="TableDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="FieldDescriptor" ToRole="TableDescriptor" />
-          <NavigationProperty Name="DocumentExport" Relationship="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" FromRole="FieldDescriptor" ToRole="DocumentExport" />
         </EntityType>
         <EntityType Name="FieldValue">
           <Key>
@@ -706,6 +724,18 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_Session_DocumentType" FromRole="Session" ToRole="DocumentType" />
           <NavigationProperty Name="FieldValue" Relationship="CustomerNameTaoModel.FK_FieldValue_Session" FromRole="Session" ToRole="FieldValue" />
         </EntityType>
+        <EntityType Name="DocumentExport">
+          <Key>
+            <PropertyRef Name="DocumentTypeId" />
+            <PropertyRef Name="FieldId" />
+            <PropertyRef Name="AnykId" />
+          </Key>
+          <Property Name="DocumentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="FieldId" Type="Int32" Nullable="false" />
+          <Property Name="AnykId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DocumentExportType" Relationship="CustomerNameTaoModel.FK_DocumentExport_DocumentExportType" FromRole="DocumentExport" ToRole="DocumentExportType" />
+          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" FromRole="DocumentExport" ToRole="FieldDescriptor" />
+        </EntityType>
         <EntityType Name="TableDescriptor">
           <Key>
             <PropertyRef Name="TableId" />
@@ -719,6 +749,18 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="PageId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_TableDescriptor_FieldDescriptor" FromRole="TableDescriptor" ToRole="FieldDescriptor" />
           <NavigationProperty Name="Page" Relationship="CustomerNameTaoModel.FK_TableDescriptor_Page" FromRole="TableDescriptor" ToRole="Page" />
+        </EntityType>
+        <EntityType Name="TaxesByCities">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Megye" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="HelyiIparuzesiAdo" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Megye" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="HelyiIparuzesiAdo" Type="Decimal" Nullable="false" Precision="16" Scale="10" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="1" />
@@ -780,6 +822,18 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DocumentExport_DocumentExportType">
+          <End Type="CustomerNameTaoModel.DocumentExportType" Role="DocumentExportType" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.DocumentExport" Role="DocumentExport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentExportType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentExport">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Session_DocumentState">
           <End Type="CustomerNameTaoModel.DocumentState" Role="DocumentState" Multiplicity="1" />
           <End Type="CustomerNameTaoModel.Session" Role="Session" Multiplicity="*" />
@@ -813,6 +867,18 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             </Principal>
             <Dependent Role="Session">
               <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DocumentExport_FieldDescriptor">
+          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
+          <End Type="CustomerNameTaoModel.DocumentExport" Role="DocumentExport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldDescriptor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentExport">
+              <PropertyRef Name="FieldId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -888,54 +954,6 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="TaxesByCities">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Megye" />
-            <PropertyRef Name="City" />
-            <PropertyRef Name="HelyiIparuzesiAdo" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Megye" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="HelyiIparuzesiAdo" Type="Decimal" Nullable="false" Precision="16" Scale="10" />
-        </EntityType>
-        <EntityType Name="DocumentExport">
-          <Key>
-            <PropertyRef Name="DocumentTypeId" />
-            <PropertyRef Name="FieldId" />
-            <PropertyRef Name="AnykId" />
-          </Key>
-          <Property Name="DocumentTypeId" Type="Int32" Nullable="false" />
-          <Property Name="FieldId" Type="Int32" Nullable="false" />
-          <Property Name="AnykId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DocumentType" Relationship="CustomerNameTaoModel.FK_DocumentExport_DocumentType" FromRole="DocumentExport" ToRole="DocumentType" />
-          <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" FromRole="DocumentExport" ToRole="FieldDescriptor" />
-        </EntityType>
-        <Association Name="FK_DocumentExport_DocumentType">
-          <End Type="CustomerNameTaoModel.DocumentType" Role="DocumentType" Multiplicity="1" />
-          <End Type="CustomerNameTaoModel.DocumentExport" Role="DocumentExport" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DocumentType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DocumentExport">
-              <PropertyRef Name="DocumentTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DocumentExport_FieldDescriptor">
-          <End Type="CustomerNameTaoModel.FieldDescriptor" Role="FieldDescriptor" Multiplicity="1" />
-          <End Type="CustomerNameTaoModel.DocumentExport" Role="DocumentExport" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FieldDescriptor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DocumentExport">
-              <PropertyRef Name="FieldId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -990,6 +1008,15 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
                 <ScalarProperty Name="ContactDetailId" ColumnName="ContactDetailId" />
                 <ScalarProperty Name="SharePointId" ColumnName="SharePointId" />
                 <ScalarProperty Name="Nev" ColumnName="Nev" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentExportType">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentExportType">
+              <MappingFragment StoreEntitySet="DocumentExportType">
+                <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1081,6 +1108,15 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DocumentExport">
+            <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentExport">
+              <MappingFragment StoreEntitySet="DocumentExport">
+                <ScalarProperty Name="AnykId" ColumnName="AnykId" />
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TableDescriptor">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.TableDescriptor">
               <MappingFragment StoreEntitySet="TableDescriptor">
@@ -1099,15 +1135,6 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
                 <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="Megye" ColumnName="Megye" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DocumentExport">
-            <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentExport">
-              <MappingFragment StoreEntitySet="DocumentExport">
-                <ScalarProperty Name="AnykId" ColumnName="AnykId" />
-                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
-                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

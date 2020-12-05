@@ -29,6 +29,7 @@ namespace TaoDatabaseService
         public virtual DbSet<ContactDetail> ContactDetail { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<DocumentExportType> DocumentExportType { get; set; }
         public virtual DbSet<DocumentState> DocumentState { get; set; }
         public virtual DbSet<DocumentType> DocumentType { get; set; }
         public virtual DbSet<FieldDescriptor> FieldDescriptor { get; set; }
@@ -36,8 +37,8 @@ namespace TaoDatabaseService
         public virtual DbSet<Page> Page { get; set; }
         public virtual DbSet<PageDescriptor> PageDescriptor { get; set; }
         public virtual DbSet<Session> Session { get; set; }
+        public virtual DbSet<DocumentExport> DocumentExport { get; set; }
         public virtual DbSet<TableDescriptor> TableDescriptor { get; set; }
         public virtual DbSet<TaxesByCities> TaxesByCities { get; set; }
-        public virtual DbSet<DocumentExport> DocumentExport { get; set; }
     }
 }

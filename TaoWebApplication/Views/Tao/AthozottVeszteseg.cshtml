@@ -93,19 +93,26 @@
                     @{
                         for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
                         {
-                            <tr>
-                                @for (int j = 0; j < Model.TableDescriptors[0].Captions.Count; j++)
-                                {
-                                    <td style="text-align:center;">
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].IsEditable)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
+                                        <tr>
+                                            @for (int j = 0; j < Model.TableDescriptors[0].Captions.Count; j++)
+                                            {
+                                                <td style="text-align:center;">
+                                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
+                                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].IsEditable)
+                                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
+                                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
 
-                                        @Html.CreateActualControlForTable(Model, i, j, 0)
-                                    </td>
-                                }
-                            </tr>
+                                                    @Html.CreateActualControlForTable(Model, i, j, 0)
+                                                </td>
+                                            }
+
+                                            @if (i > 4)
+                                            {
+                                                <td>
+                                                    <input type="button" class="btn btn-default" title="D" value="X" onclick="location.href='@Url.Action("DeleteRow", "Tao", new { id = Model.TableDescriptors[0].FieldValues[i][0].RowIndex })'" />
+                                                </td>
+                                            }
+                                        </tr>
                         }
                     }
 

@@ -56,6 +56,8 @@ namespace TaoWebApplication.Calculators
                         break;
                 }
             }
+
+            previousRowIndex = -1;
             foreach (var field in tableTwoList)
             {
                 var rowindex = field.RowIndex.Value;

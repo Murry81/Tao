@@ -18,7 +18,7 @@ namespace TaoDatabaseService
         public int FieldId { get; set; }
         public string AnykId { get; set; }
     
-        public virtual DocumentType DocumentType { get; set; }
+        public virtual DocumentExportType DocumentExportType { get; set; }
         public virtual FieldDescriptor FieldDescriptor { get; set; }
     }
 }

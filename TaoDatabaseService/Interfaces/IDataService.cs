@@ -29,6 +29,8 @@ namespace TaoDatabaseService.Interfaces
 
         void UpdateFieldValues(List<FieldDescriptorDto> updatedFields, Guid sessionId);
 
+        string GetDocumentIdentifier(int documentId);
+
         List<FieldDescriptorDto> GetFieldsByFieldIdList(List<int> fieldIds, Guid sessionId);
 
         FieldDescriptorDto GetFieldById(int fieldId, Guid sessionId);

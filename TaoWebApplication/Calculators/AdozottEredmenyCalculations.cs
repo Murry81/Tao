@@ -11,7 +11,18 @@ namespace TaoWebApplication.Calculators
     {
         public static void CalculateValues(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
-            foreach (var field in fields.OrderBy(s => s.Id))
+            var calculationList = new List<FieldDescriptorDto>
+            {
+                fields.FirstOrDefault(f => f.Id == 2202),
+                fields.FirstOrDefault(f => f.Id == 2203),
+                fields.FirstOrDefault(f => f.Id == 2204),
+                fields.FirstOrDefault(f => f.Id == 2201),
+                fields.FirstOrDefault(f => f.Id == 2205),
+                fields.FirstOrDefault(f => f.Id == 2206),
+                fields.FirstOrDefault(f => f.Id == 2207)
+            };
+
+            foreach (var field in calculationList)
             {
                 if (!field.IsCaculated)
                     continue;
@@ -20,7 +31,7 @@ namespace TaoWebApplication.Calculators
                 {
                     case 2201: // Adózás előtti eredmény
                         {
-                            field.DecimalValue = Calculate2201(service, sessionId);
+                            field.DecimalValue = Calculate2201(service, sessionId, fields);
                             break;
                         }
                     case 2204: // Ráfordításként elszámolandó adók
@@ -79,11 +90,17 @@ namespace TaoWebApplication.Calculators
         {
             // 4.Tárgyévi társasági adó + 5.Energiaellátók jövedelemadója
             // f1414 + f1526
-
+            //Ha 1. Tényadatok/Energiaellátó (61) nincs jelölve, akkor 5. Energiellátók jövedelemadója nem tölthető, az ottani értékekkel nem kell számolni 
+            
             var f1414 = GenericCalculations.GetValue(service.GetFieldById(1414, sessionId).DecimalValue);
-            var f1526 = GenericCalculations.GetValue(service.GetFieldById(1526, sessionId)?.DecimalValue);
-
-            return f1414 + f1526;
+            var f61 = GenericCalculations.GetValue(service.GetFieldById(1414, sessionId).BoolFieldValue);
+            
+            if(f61)
+            {
+                var f1526 = GenericCalculations.GetValue(service.GetFieldById(1526, sessionId)?.DecimalValue);
+                return f1414 + f1526;
+            }
+            return f1414;
         }
 
         private static decimal? Calculate2205(List<FieldDescriptorDto> fields)
@@ -123,15 +140,16 @@ namespace TaoWebApplication.Calculators
             return f2202 + f2203;
         }
 
-        private static decimal? Calculate2201(IDataService service, Guid sessionId)
+        private static decimal? Calculate2201(IDataService service, Guid sessionId, List<FieldDescriptorDto> fields)
         {
-            // 4.Évesre átszámított nyereség + 4.Várható korrekció
-            // f1408 + f1409
+            // 4.Évesre átszámított nyereség + 4.Várható korrekció + 4.1.Ráfordításként elszámolandó adók (2204)
+            // f1408 + f1409 + f2204
 
             var f1408 = GenericCalculations.GetValue(service.GetFieldById(1408, sessionId).DecimalValue);
             var f1409 = GenericCalculations.GetValue(service.GetFieldById(1409, sessionId).DecimalValue);
+            var f2204 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 2204).DecimalValue);
 
-            return f1408 + f1409;
+            return f1408 + f1409 + f2204;
         }
     }
 }

@@ -10,67 +10,95 @@
 
 @using (Html.BeginForm("IpaMegosztas", "Tao", FormMethod.Post))
 {
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 DivStyle">
-                <table class="TaoDataTable table" style="width:auto">
-                    <thead>
-                        <tr>
-                            @{
-                                int width = 20;
-                                var numberOfColumns = Model.TableDescriptors[0].FieldDescriptorIds.Count;
-                                <th style="width:20%"></th>
-                                for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
-                                {
-                                    width += 9;
-                                    <th style="width:9%">
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].FieldValueId)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].Id)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].RowIndex, new { Value = i })
-                                        @Html.CreateActualControlForTable(Model, i, 0, 0, ViewData.ModelState)
-                                    </th>
-                                }
-                                if (width < 100)
-                                {
-                                    var w = 100 - width;
-                                    <th style="width:@w" />
-                                }
-                            }
-                        </tr>
-                    </thead>
-                    @{
-                        for (int j = 1; j < numberOfColumns; j++)
-                        {
-                            <tr>
-                                <td style="border-right:outset;">
-                                    @Model.TableDescriptors[0].Captions[Model.TableDescriptors[0].FieldDescriptorIds[j]]
-                                </td>
-                                @for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
-                                {
-                                    <td style="border-right:outset;">
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
-                                        @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
+<div class="container-fluid">
 
-                                        @Html.CreateActualControlForTable(Model, i, j, 0, ViewData.ModelState)
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    }
-                </table>
-            </div>
-        </div>
+    <div class="row">
+        <div class="col-md-6 DivStyle">
+            <table class="TaoDataTable table">
 
-        <div class="row">
-            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
-                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
-                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
-                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
-                <button type="submit" value="SaveAll" name="buttonAction" class="btn btn-default">Mindent újraszámol</button>
-            </div>
+                @for (int i = 0; i < Model.Fields.Count; i++)
+                {
+                    @Html.HiddenFor(m => Model.Fields[i].Id);
+                    @Html.HiddenFor(m => Model.Fields[i].FieldValueId);
+                    <tr>
+                        <td>
+                            @Model.Fields[i].OrderCharacter
+                        </td>
+                        <td>
+                            @Model.Fields[i].Title
+                        </td>
+                        <td>
+                            @Html.CreateActualControl((IFieldList)Model, i)
+                        </td>
+                        <td>
+                            @Model.Fields[i].Description
+                        </td>
+                    </tr>
+                }
+            </table>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-12 DivStyle">
+            <table class="TaoDataTable table" style="width:auto">
+                <thead>
+                    <tr>
+                        @{
+                            int width = 20;
+                            var numberOfColumns = Model.TableDescriptors[0].FieldDescriptorIds.Count;
+                            <th style="width:20%"></th>
+                            for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
+                            {
+                                width += 9;
+                                <th style="width:9%">
+                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].FieldValueId)
+                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].Id)
+                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][0].RowIndex, new { Value = i })
+                                    @Html.CreateActualControlForTable(Model, i, 0, 0, ViewData.ModelState)
+                                </th>
+                            }
+                            if (width < 100)
+                            {
+                                var w = 100 - width;
+                                <th style="width:@w" />
+                            }
+                        }
+                    </tr>
+                </thead>
+                @{
+                    for (int j = 1; j < numberOfColumns; j++)
+                    {
+                        <tr>
+                            <td style="border-right:outset;">
+                                @Model.TableDescriptors[0].Captions[Model.TableDescriptors[0].FieldDescriptorIds[j]]
+                            </td>
+                            @for (int i = 0; i < Model.TableDescriptors[0].FieldValues.Count; i++)
+                            {
+                                <td style="border-right:outset;">
+                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].FieldValueId)
+                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].Id)
+                                    @Html.HiddenFor(m => Model.TableDescriptors[0].FieldValues[i][j].RowIndex, new { Value = i })
+
+                                    @Html.CreateActualControlForTable(Model, i, j, 0, ViewData.ModelState)
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+            <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+            <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+            <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+            <button type="submit" value="SaveAll" name="buttonAction" class="btn btn-default">Mindent újraszámol</button>
+        </div>
+    </div>
+</div>
 }
 @using (Html.BeginForm("GenerateIpaMegosztasExcel", "Tao", FormMethod.Post))
 {

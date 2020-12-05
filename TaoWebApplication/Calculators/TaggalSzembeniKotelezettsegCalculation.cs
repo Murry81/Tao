@@ -69,14 +69,17 @@ namespace TaoWebApplication.Calculators
                 item.CumulatedValue = currentValue.Value;
                 if (previousItem != null)
                 {
-                    tableItems[previousItem].FirstOrDefault(f => f.Id == 1004).DecimalValue = (int)(item.Date - previousItem.Date).Value.TotalDays;
-                    previousItem.DayCount = (int)(item.Date - previousItem.Date).Value.TotalDays;
+                    tableItems[previousItem].FirstOrDefault(f => f.Id == 1004).DecimalValue = CalculateDayCount(item.Date.Value, previousItem.Date.Value);
+                    previousItem.DayCount = CalculateDayCount(item.Date.Value, previousItem.Date.Value);
                 }
                 previousItem = item;
             }
 
-            tableItems[previousItem].FirstOrDefault(f => f.Id == 1004).DecimalValue = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
-            previousItem.DayCount = (int)(endOfBusinessYear - previousItem.Date).Value.TotalDays;
+            if (tableItems.Any())
+            {
+                tableItems[previousItem].FirstOrDefault(f => f.Id == 1004).DecimalValue = CalculateDayCount(endOfBusinessYear, previousItem.Date.Value) + 1;
+                previousItem.DayCount = CalculateDayCount(endOfBusinessYear, previousItem.Date.Value) + 1;
+            }
 
             foreach (var field in otherFields.OrderBy(s => s.Id))
             {
@@ -96,6 +99,13 @@ namespace TaoWebApplication.Calculators
             }
         }
 
+        private static int CalculateDayCount(DateTimeOffset first, DateTimeOffset second)
+        {
+            var f = new DateTimeOffset(first.Year, first.Month, first.Day, 0, 0, 0, TimeSpan.Zero);
+            var s = new DateTimeOffset(second.Year, second.Month, second.Day, 0, 0, 0, TimeSpan.Zero);
+
+            return (int)(f - s).TotalDays;
+        }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)
         {

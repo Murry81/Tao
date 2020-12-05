@@ -59,8 +59,8 @@ namespace TaoWebApplication.Calculators
             // Korlátlanul felhasználható + 50%-ig felhasználható
             // f1912 + f1913
             var f1914 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1914);
-            var f1912 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.FieldDescriptorId == 1912).DecimalValue);
-            var f1913 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.FieldDescriptorId == 1913).DecimalValue);
+            var f1912 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.FieldDescriptorId == 1912)?.DecimalValue);
+            var f1913 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.FieldDescriptorId == 1913)?.DecimalValue);
 
             var value = f1912 + f1913;
             if (f1914 != null)
@@ -119,12 +119,15 @@ namespace TaoWebApplication.Calculators
             // Nyitó 2004 - Elévülés 2004
 
             var f1912 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1912);
-            var rowIndex = fields.FirstOrDefault(f => f.FieldDescriptorId == 1905 && f.StringValue == "2004").RowIndex;
+            var rowIndex = fields.FirstOrDefault(f => f.FieldDescriptorId == 1905 && f.StringValue == "2004")?.RowIndex;
+
+            if (rowIndex == null)
+                return;
 
             //Nyitó
-            var f1907 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.FieldDescriptorId == 1907 && f.RowIndex == rowIndex).DecimalValue);
+            var f1907 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.FieldDescriptorId == 1907 && f.RowIndex == rowIndex)?.DecimalValue);
             //Elévülés
-            var f1908 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.FieldDescriptorId == 1908 && f.RowIndex == rowIndex).DecimalValue);
+            var f1908 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.FieldDescriptorId == 1908 && f.RowIndex == rowIndex)?.DecimalValue);
 
             var value = f1907 - f1908;
             if (f1912 != null)
@@ -149,7 +152,10 @@ namespace TaoWebApplication.Calculators
         private static void CalculateTargyeviVeszteseg(IDataService service, Guid sessionId, List<FieldValue> fields)
         {
             // select rowindex
-            var rowindex = fields.FirstOrDefault(f => f.FieldDescriptorId == 1901 && f.StringValue == "Tárgyévi veszteség").RowIndex;
+            var rowindex = fields.FirstOrDefault(f => f.FieldDescriptorId == 1901 && f.StringValue == "Tárgyévi veszteség")?.RowIndex;
+
+            if (rowindex == null)
+                return;
 
             //select f1902
             var f1902 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1902 && f.RowIndex == rowindex);

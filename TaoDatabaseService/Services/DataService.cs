@@ -11,7 +11,7 @@ namespace TaoDatabaseService.Services
 {
     public class DataService : IDataService
     {
-        TaoDatabaseService.CustomerNameTaoEntities entities;
+        CustomerNameTaoEntities entities;
 
         public DataService(IDataServiceConfiguration configuration)
         {
@@ -237,7 +237,7 @@ namespace TaoDatabaseService.Services
             var tableFieldIds = entities.TableDescriptor.Where(t => t.PageId == pageId).Select(t => t.FieldDescriptorId).Distinct().ToList();
             fields.AddRange(tableFieldIds);
 
-            return entities.FieldValue.Where(t => fields.Contains(t.FieldDescriptorId)).ToList();
+            return entities.FieldValue.Where(fv => fv.SessionId == sessionId).Where(t => fields.Contains(t.FieldDescriptorId)).ToList();
         }
 
         public void SaveValues(List<FieldValue> fields, Guid sessionId)
@@ -361,6 +361,11 @@ namespace TaoDatabaseService.Services
         public string GetCustomerTaxNumberBySessionId(Guid sessionId)
         {
             return entities.Session.FirstOrDefault(s => s.Id == sessionId).Customer.Adoszam;
+        }
+
+        public string GetDocumentIdentifier(int documentId)
+        {
+            return entities.DocumentExportType.FirstOrDefault(t => t.Id == documentId).DocumentId;
         }
     }
 }

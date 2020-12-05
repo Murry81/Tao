@@ -40,12 +40,12 @@ namespace TaoWebApplication.Controllers
 
                 sessionId = result.Id;
             }
-            if (Request.Form.AllKeys.Contains("ExportIpa"))
+            else if (Request.Form.AllKeys.Contains("ExportIpa"))
             {
                 sessionId = Guid.Parse(Request.Form["ExportIpa"]);
                 return GenerateXml(1, sessionId);
             }
-            if (Request.Form.AllKeys.Contains("ExportTarsasagi"))
+            else if (Request.Form.AllKeys.Contains("ExportTarsasagi"))
             {
                 sessionId = Guid.Parse(Request.Form["ExportTarsasagi"]);
                 return GenerateXml(2, sessionId);
@@ -397,6 +397,12 @@ namespace TaoWebApplication.Controllers
             }
 
             field = FillFieldValuesForTable(field, 2);
+
+            foreach (var item in fc.Fields)
+            {
+                field.Add(item);
+            }
+
             SaveValues(field, IpaMegosztasCalculation.CalculateValues);
             if (buttonAction == "SaveAll")
             {
@@ -692,11 +698,11 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("AthozottVeszteseg", "Tao");
             }
-            if (buttonAction == "Save")
+            if (buttonAction == "Next")
             {
-                return RedirectToAction("NyeresegminimumLevezetese", "Tao");
+                return RedirectToAction("Adokedvezmeny", "Tao");
             }
-            return RedirectToAction("Adokedvezmeny", "Tao");
+            return RedirectToAction("NyeresegminimumLevezetese", "Tao");
         }
 
         public ActionResult Adokedvezmeny()
@@ -720,11 +726,11 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("NyeresegminimumLevezetese", "Tao");
             }
-            if (buttonAction == "Save")
+            if (buttonAction == "Next")
             {
-                return RedirectToAction("Adokedvezmeny", "Tao");
+                return RedirectToAction("TarsasagiAdo", "Tao");
             }
-            return RedirectToAction("TarsasagiAdo", "Tao");
+            return RedirectToAction("Adokedvezmeny", "Tao");
         }
 
 
@@ -749,11 +755,11 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("Adokedvezmeny", "Tao");
             }
-            if (buttonAction == "Save")
+            if (buttonAction == "Next")
             {
-                return RedirectToAction("TarsasagiAdo", "Tao");
+                return RedirectToAction("AdozottEredmeny", "Tao");
             }
-            return RedirectToAction("AdozottEredmeny", "Tao");
+            return RedirectToAction("TarsasagiAdo", "Tao");
         }
 
         public ActionResult AdozottEredmeny()
@@ -778,11 +784,11 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("TarsasagiAdo", "Tao");
             }
-            if (buttonAction == "Save")
+            if (buttonAction == "Next")
             {
-                return RedirectToAction("AdozottEredmeny", "Tao");
+                return RedirectToAction("EnergiaEllatok", "Tao");
             }
-            return RedirectToAction("EnergiaEllatok", "Tao");
+            return RedirectToAction("AdozottEredmeny", "Tao");
         }
 
         public ActionResult EnergiaEllatok()
@@ -807,7 +813,7 @@ namespace TaoWebApplication.Controllers
             {
                 return RedirectToAction("AdozottEredmeny", "Tao");
             }
-            if (buttonAction == "Save")
+            if (buttonAction == "Next")
             {
                 return RedirectToAction("EnergiaEllatok", "Tao");
             }
@@ -868,9 +874,8 @@ namespace TaoWebApplication.Controllers
         public FileContentResult GenerateXml(int documentType, Guid sessionId)
         {
             string file = XmlExport.XmlExport.GenerateDocument(documentType, sessionId, _service);
-            return File(Encoding.UTF8.GetBytes(file), MediaTypeNames.Text.Xml,  $"{DateTime.Now.ToString("yyyyMMdd")}result.xml");
+            return File(Encoding.UTF8.GetBytes(file), MediaTypeNames.Text.Xml,  $"{DateTime.Now.ToString("yyyyMMdd")}_{_service.GetDocumentIdentifier(documentType)}.xml");
         }
-
 
         private static Dictionary<int, Action<IDataService, Guid>> calculatorPageIdMap = new Dictionary<int, Action<IDataService, Guid>>
         {
@@ -926,7 +931,7 @@ namespace TaoWebApplication.Controllers
                  InnovaciosJarulekCalculation.ReCalculateValues,
                  AEEVarhatoAdatokCalculation.ReCalculateValues,
                  AlultokesitesCalculation.ReCalculateValues,
-                // TaggalSzembeniKotelezettsegCalculation.ReCalculateValues,
+                 TaggalSzembeniKotelezettsegCalculation.ReCalculateValues,
                  TaoAdoalapKorrekcioCalculation.ReCalculateValues,
                  NyeresegminimumLevezeteseCalculation.ReCalculateValues,
                  AdokedvezmenyCalculation.ReCalculateValues,
@@ -937,6 +942,16 @@ namespace TaoWebApplication.Controllers
                  AdozottEredmenyCalculations.ReCalculateValues
             });
 
+            if (isKapcsolt.Value)
+            {
+                calculators.Add(IpaKapcsoltCalculation.ReCalculateValues);
+                calculators.Add(IpaKapcsoltStatusCalculation.ReCalculateValues);
+            }
+            else
+            {
+                calculators.Add(IpaNemKapcsoltCalculation.ReCalculateValues);
+            }
+
             var currentCalculator = calculatorPageIdMap[pageId];
 
             var index = calculators.IndexOf(currentCalculator);
@@ -944,6 +959,12 @@ namespace TaoWebApplication.Controllers
             {
                 calculators[i].Invoke(_service, sessionId);
             }
+        }
+
+        public ActionResult DeleteRow(int id)
+        {
+
+            return RedirectToAction("AthozottVeszteseg", "Tao");
         }
     }
 }

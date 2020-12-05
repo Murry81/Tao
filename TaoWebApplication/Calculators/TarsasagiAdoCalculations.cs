@@ -206,11 +206,11 @@ namespace TaoWebApplication.Calculators
 
         private static decimal? Calculate1409(IDataService service, Guid sessionId)
         {
-            // 1.1.Összes korrekció / 1000
-            // f390 / 1000
+            // 1.1.Összes korrekció
+            // f390
 
             var f390 = GenericCalculations.GetValue(service.GetFieldById(390, sessionId).DecimalValue);
-            return f390 / 1000;
+            return f390;
         }
 
         private static decimal? Calculate1408(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)

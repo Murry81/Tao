@@ -145,33 +145,33 @@ namespace TaoWebApplication.Calculators
 
         private static decimal? Calculate802(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
         {
-            // 2.3.Innovációs járulék / 12 * 0.Figyelembe vett hónapok száma / 1000
-            // f705 / 12 * figyelembeVettHonapokSzama / 1000
+            // 2.3.Innovációs járulék / 12 * 0.Figyelembe vett hónapok száma
+            // f705 / 12 * figyelembeVettHonapokSzama
 
             var f705 = GenericCalculations.GetValue(service.GetFieldById(705, sessionId).DecimalValue);
-            return Math.Round(f705 / 12 * figyelembeVettHonapokSzama / 1000);
+            return Math.Round(f705 / 12 * figyelembeVettHonapokSzama);
         }
 
         private static decimal? Calculate801(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
         {
-            // Ha 0.IPA kapcsolt státusz = igaz, akkor 2.1.Iparűzési adó csökkentett összege / 12 * 0.Figyelembe vett hónapok száma / 1000
-            // Ha 0.IPA kapcsolt státusz = hamis, akkor 2.2.Iparűzési adó csökkentett összege / 12 * 0.Figyelembe vett hónapok száma / 1000
-            // F440 / 12 * f5 / 1000
+            // Ha 0.IPA kapcsolt státusz = igaz, akkor 2.1.Iparűzési adó csökkentett összege / 12 * 0.Figyelembe vett hónapok száma
+            // Ha 0.IPA kapcsolt státusz = hamis, akkor 2.2.Iparűzési adó csökkentett összege / 12 * 0.Figyelembe vett hónapok száma 
+            // F440 / 12 * f5 
             var f440 = GenericCalculations.GetValue(service.GetFieldById(440, sessionId).DecimalValue);
            
-            return Math.Round(f440 / 12 * figyelembeVettHonapokSzama / 1000);
+            return Math.Round(f440 / 12 * figyelembeVettHonapokSzama);
         }
 
         private static decimal? Calculate800(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
-            // 1.Adózás előtti eredmény(IPA és innovációs járulék nélkül) / 1000 - Figyelembe vett hónapokra vonatkozó IPA -Figyelembe vett hónapokra vonatkozó innovációs járulék
-            // f53 / 1000 - f801 - f802
+            // 1.Adózás előtti eredmény(IPA és innovációs járulék nélkül) - Figyelembe vett hónapokra vonatkozó IPA -Figyelembe vett hónapokra vonatkozó innovációs járulék
+            // f53 - f801 - f802
 
             var f53 = GenericCalculations.GetValue(service.GetFieldById(53, sessionId).DecimalValue);
             var f801 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 801).DecimalValue);
             var f802 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 802).DecimalValue);
 
-            return Math.Round(f53 / 1000 - f801 - f802);
+            return Math.Round(f53 - f801 - f802);
         }
     }
 }

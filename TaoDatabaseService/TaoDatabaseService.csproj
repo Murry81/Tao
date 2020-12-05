@@ -61,6 +61,9 @@
     <Compile Include="DocumentExport.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DocumentExportType.cs">
+      <DependentUpon>TaoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentState.cs">
       <DependentUpon>TaoModel.tt</DependentUpon>
     </Compile>
