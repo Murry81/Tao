@@ -17,6 +17,6 @@ namespace TaoWebApplication.Models
         public bool? IpaKapcsolt { get; set; }
 
         // Kalkuláció jellege for navigation
-        public bool isVegleges { get; set; }
+        public bool IsEnergiaellato { get; set; }
     }
 }

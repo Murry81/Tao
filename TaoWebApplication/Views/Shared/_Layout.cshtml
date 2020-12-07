@@ -41,10 +41,6 @@
                             </a>
                             <div class="dropdown-menu navbar-inverse">
                                 <a class="dropdown-item" href="/Tao/Tenyadatok">1. Tényadatok</a><br />
-                                @if (!Model.isVegleges)
-                                {
-                                    <a class="dropdown-item" href="/Tao/TenyadatKorrekcio">1.1 Tényadat korrekció</a><br />
-                                }
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -88,9 +84,12 @@
                                 <a class="dropdown-item" href="/Tao/AdozottEredmeny">4.1 Adózott eredmény</a><br />
                             </div>
                         </li>
-                        <li>@Html.ActionLink("5. Energiaellátók", "EnergiaEllatok", "Tao")</li>
-                    }
-                </ul>
+                        if (Model.IsEnergiaellato)
+                        {
+                            <li>@Html.ActionLink("5. Energiaellátók", "EnergiaEllatok", "Tao")</li>
+                        }
+                        }
+                    </ul>
             </div>
         </div>
     </div>
@@ -110,21 +109,25 @@
                 <div class="col-md-4">
                     <img src="~/Images/logo.png" style="height: 110px; display:block; margin-left:auto; margin-right:auto;" />
                 </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="text-align:center; color:darkslategrey;">
+
+                    @if (Model.CurrentPage != null)
+                    {
+                        <h2 style="margin-block-start: 0px;">
+                            @Model.CurrentPage.CaptionText
+                            <br />
+                        </h2>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                @RenderBody()
             </div>
         </div>
-        <div class="col-md-12" style="text-align:center; color:darkslategrey;">
-
-            @if (Model.CurrentPage != null)
-            {
-                <h2>
-                    @Model.CurrentPage.CaptionText
-                    <br />
-                </h2>
-            }
-        </div>
-    </div>
-    <div>
-        @RenderBody()
     </div>
 
     @Scripts.Render("~/bundles/jquery")

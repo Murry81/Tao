@@ -122,7 +122,7 @@ namespace TaoWebApplication.Calculators
             var rowIndex = fields.FirstOrDefault(f => f.FieldDescriptorId == 1905 && f.StringValue == "2004")?.RowIndex;
 
             if (rowIndex == null)
-                return;
+                rowIndex = -1;
 
             //Nyitó
             var f1907 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.FieldDescriptorId == 1907 && f.RowIndex == rowIndex)?.DecimalValue);

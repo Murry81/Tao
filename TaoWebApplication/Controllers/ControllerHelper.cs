@@ -15,7 +15,7 @@ namespace TaoWebApplication.Controllers
             model.PageDescriptors = service.GetPageDescriptor(page.Id).OrderBy(p => p.SectionGroup).ThenBy(p => p.Order).ToList();
             model.Fields = service.GetPageFields(page.Id, sessionId).OrderBy(p => p.SectionGroup).ThenBy(p => p.Order).ToList();
             model.IpaKapcsolt = service.GetFieldById(40, sessionId)?.BoolFieldValue;
-            model.isVegleges = service.GetFieldById(29, sessionId).StringValue == "Végleges kalkuláció";
+            model.IsEnergiaellato = service.GetFieldById(61, sessionId).BoolFieldValue;
             if (customerId.HasValue)
                 model.Customer = service.GetCustomer(customerId.Value);
             return model;

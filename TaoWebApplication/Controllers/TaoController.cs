@@ -148,12 +148,7 @@ namespace TaoWebApplication.Controllers
             if (buttonAction == "Next")
             {
                 var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
-                var isVegleges = _service.GetFieldById(29, sessionId).StringValue == "Végleges kalkuláció";
-                if (!isVegleges)
-                {
-                    return RedirectToAction("TenyadatKorrekcio", "Tao");
-                }
-
+                
                 var isKapcsolt = _service.GetFieldsByFieldIdList(new List<int> { 40 }, sessionId).FirstOrDefault()?.BoolFieldValue;
                 if (isKapcsolt == null || !isKapcsolt.Value)
                 {
@@ -236,16 +231,7 @@ namespace TaoWebApplication.Controllers
             }
             if (buttonAction == "Previous")
             {
-                var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
-                var isVegleges = _service.GetFieldById(29, sessionId).StringValue == "Végleges kalkuláció";
-                if (!isVegleges)
-                {
-                    return RedirectToAction("TenyadatKorrekcio", "Tao");
-                }
-                else
-                {
-                    return RedirectToAction("Tenyadatok", "Tao");
-                }
+                return RedirectToAction("Tenyadatok", "Tao");
             }
             if (buttonAction == "Next")
             {
@@ -786,7 +772,11 @@ namespace TaoWebApplication.Controllers
             }
             if (buttonAction == "Next")
             {
-                return RedirectToAction("EnergiaEllatok", "Tao");
+                var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+                if (_service.GetFieldById(61, sessionId).BoolFieldValue)
+                {
+                    return RedirectToAction("EnergiaEllatok", "Tao");
+                }
             }
             return RedirectToAction("AdozottEredmeny", "Tao");
         }
