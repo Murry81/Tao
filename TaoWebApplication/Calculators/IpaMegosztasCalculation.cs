@@ -191,21 +191,6 @@ namespace TaoWebApplication.Calculators
             // 2.1.Megfizetett belföldi matricás úthasználati díj 7,5%-a * Megosztott alap / 2.1.Iparűzési adó alapja
             // f412 * f1808 / adoalap
 
-            var f412 = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 412 }, sessionId).FirstOrDefault()?.DecimalValue);
-            var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
-            var adoalap = CalculateAdoAlap(service, sessionId);
-
-            if (adoalap == 0)
-                return 0;
-
-            return f412 * f1808 / adoalap;
-        }
-
-        private static decimal? Calculate1817(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
-        {
-            // 2.1.Megfizetett külföldi távolságarányos e-útdíj 7,5%-a * Megosztott alap / 2.1.Iparűzési adó alapja
-            // f411 * f1808 / adoalap
-
             var f411 = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 411 }, sessionId).FirstOrDefault()?.DecimalValue);
             var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
             var adoalap = CalculateAdoAlap(service, sessionId);
@@ -216,10 +201,10 @@ namespace TaoWebApplication.Calculators
             return f411 * f1808 / adoalap;
         }
 
-        private static decimal? Calculate1816(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        private static decimal? Calculate1817(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
-            // 2.1.Megfizetett belföldi távolságarányos e - útdíj 7,5 % -a * Megosztott alap / 2.1.Iparűzési adó alapja f410 - 411 - 412
-            // f410 * f1808 / adoalap
+            // 2.1.Megfizetett külföldi távolságarányos e-útdíj 7,5%-a * Megosztott alap / 2.1.Iparűzési adó alapja
+            // f411 * f1808 / adoalap
 
             var f410 = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 410 }, sessionId).FirstOrDefault()?.DecimalValue);
             var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
@@ -229,6 +214,21 @@ namespace TaoWebApplication.Calculators
                 return 0;
 
             return f410 * f1808 / adoalap;
+        }
+
+        private static decimal? Calculate1816(FieldDescriptorDto field, List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
+        {
+            // 2.1.Megfizetett belföldi távolságarányos e - útdíj 7,5 % -a * Megosztott alap / 2.1.Iparűzési adó alapja 
+            // f410 * f1808 / adoalap
+
+            var f409 = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 409 }, sessionId).FirstOrDefault()?.DecimalValue);
+            var f1808 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.RowIndex == field.RowIndex && f.Id == 1808).DecimalValue);
+            var adoalap = CalculateAdoAlap(service, sessionId);
+
+            if (adoalap == 0)
+                return 0;
+
+            return f409 * f1808 / adoalap;
         }
 
         private static decimal? Calculate1812(FieldDescriptorDto field, List<FieldDescriptorDto> fields)

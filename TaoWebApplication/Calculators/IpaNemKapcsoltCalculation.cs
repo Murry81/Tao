@@ -652,17 +652,26 @@ namespace TaoWebApplication.Calculators
 
         private static decimal? Calculate436(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
-            // Értékesítés nettó árbevétele + Transzferár korrekció + IFRS korrekció - Összes figyelembe vehető ELÁBÉ - Korrigált anyagköltség - Alvállalkozói teljesítések értéke, 
+            // Értékesítés nettó árbevétele + Transzferár korrekció + IFRS korrekció 
+            //       - (401)Export árbevételhez kapcsolódó ELÁBÉ és közvetített szolgáltatás 
+            // - Összes figyelembe vehető ELÁBÉ - Korrigált anyagköltség - Alvállalkozói teljesítések értéke 
+            //    - (402)Kutatás, kísérleti fejlesztés adóévben elszámolt közvetlen költsége 
+            //    - (406)Foglalkoztatás növelése miatti adóalap csökkentés
+            //    + (407)Foglalkoztatás csökkentése miatti adóalap növelés, 
             // ha ez negatív, akkor 0
-            // Max(0, f413 + f400 + f405 - f435 - f417 - f418 )
+            // Max(0, f413 + f400 + f405 - f401 - f435 - f417 - f418 - f402 - f406 + f407 )
 
             return Math.Max(0,
                 GenericCalculations.GetValue(fields.First(f => f.Id == 413).DecimalValue) +
                 GenericCalculations.GetValue(fields.First(f => f.Id == 400).DecimalValue) +
                 GenericCalculations.GetValue(fields.First(f => f.Id == 405).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 401).DecimalValue) -
                 GenericCalculations.GetValue(fields.First(f => f.Id == 435).DecimalValue) -
                 GenericCalculations.GetValue(fields.First(f => f.Id == 417).DecimalValue) -
-                GenericCalculations.GetValue(fields.First(f => f.Id == 418).DecimalValue));
+                GenericCalculations.GetValue(fields.First(f => f.Id == 418).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 402).DecimalValue) -
+                GenericCalculations.GetValue(fields.First(f => f.Id == 406).DecimalValue) +
+                GenericCalculations.GetValue(fields.First(f => f.Id == 407).DecimalValue));
         }
     }
 }

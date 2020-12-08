@@ -53,15 +53,15 @@ namespace TaoWebApplication.Calculators
 
         private static decimal? Calculate707(List<FieldDescriptorDto> fields)
         {
-            // Innovációs járulék + 12.20 előírt előleg + Be nem fizetett, korábban előírt előleg - folyószámlán fennálló túlfizetés
-            // f705 + f700 + f701 - f703
+            // 12.20 - i feltöltési kötelezettség/ Adókülönbözet + 12.20 előírt előleg +Be nem fizetett, korábban előírt előleg -folyószámlán fennálló túlfizetés
+            // f706 + f700 + f701 - f703
 
-            var f700 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.Id == 700)?.DecimalValue);
-            var f705 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 705)?.DecimalValue);
+            var f706 = GenericCalculations.GetValue( fields.FirstOrDefault(f => f.Id == 706)?.DecimalValue);
+            var f700 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 700)?.DecimalValue);
             var f701 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 701)?.DecimalValue);
             var f703 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 703)?.DecimalValue);
 
-            return f705 + f700 + f701 - f703;
+            return f706 + f700 + f701 - f703;
         }
 
         private static decimal? Calculate706(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
@@ -73,12 +73,12 @@ namespace TaoWebApplication.Calculators
             var f705 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 705)?.DecimalValue);
             var f700 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 700)?.DecimalValue);
             var f701 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 701)?.DecimalValue);
-            var f703 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 703)?.DecimalValue);
+            var f702 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 702)?.DecimalValue);
 
             //f29 kalkuláció jellege
             var f29 = service.GetFieldsByFieldIdList(new List<int> { 29 }, sessionId).FirstOrDefault()?.StringValue;
 
-            var sum = f705 - f700 - f701 - f703;
+            var sum = f705 - f700 - f701 - f702;
             if (f29 == "Feltöltés" && sum < 0)
                 return 0;
 
