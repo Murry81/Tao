@@ -47,8 +47,12 @@ namespace TaoDatabaseService.Interfaces
 
         ExportReportDto GetExportReportData(Guid session, int reportId);
 
-        string GetCustomerTaxNumberBySessionId(Guid sessionId);
+        CustomerDto GetCustomerBySessionId(Guid sessionId);
 
         List<FieldDescriptorDto> GetTableFieldsByFieldIdList(int fieldId, Guid sessionId);
+
+        List<FieldValueDto> GetFieldValuesByFieldIdList(List<int> lists, Guid sessionId);
+
+        void UpdateFieldValues(List<FieldValueDto> fields, Guid sessionId);
     }
 }

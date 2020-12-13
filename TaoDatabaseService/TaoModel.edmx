@@ -64,6 +64,7 @@ warning 6002: The table/view 'Tao.dbo.DocumentExport' does not have a primary ke
           <Property Name="DocumentTypeId" Type="int" Nullable="false" />
           <Property Name="FieldId" Type="int" Nullable="false" />
           <Property Name="AnykId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Format" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DocumentExportType">
           <Key>
@@ -180,6 +181,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="Megye" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="City" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="HelyiIparuzesiAdo" Type="decimal" Precision="16" Scale="10" Nullable="false" />
+          <Property Name="Onkormanyzat" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
@@ -390,7 +392,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
             <DefiningQuery>SELECT 
     [DocumentExport].[DocumentTypeId] AS [DocumentTypeId], 
     [DocumentExport].[FieldId] AS [FieldId], 
-    [DocumentExport].[AnykId] AS [AnykId]
+    [DocumentExport].[AnykId] AS [AnykId], 
+    [DocumentExport].[Format] AS [Format]
     FROM [dbo].[DocumentExport] AS [DocumentExport]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="TableDescriptor" EntityType="Self.TableDescriptor" store:Type="Tables" store:Schema="dbo">
@@ -407,7 +410,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
     [TaxesByCities].[Id] AS [Id], 
     [TaxesByCities].[Megye] AS [Megye], 
     [TaxesByCities].[City] AS [City], 
-    [TaxesByCities].[HelyiIparuzesiAdo] AS [HelyiIparuzesiAdo]
+    [TaxesByCities].[HelyiIparuzesiAdo] AS [HelyiIparuzesiAdo], 
+    [TaxesByCities].[Onkormanyzat] AS [Onkormanyzat]
     FROM [dbo].[TaxesByCities] AS [TaxesByCities]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Address_Customer" Association="Self.FK_Address_Customer">
@@ -735,6 +739,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="AnykId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="DocumentExportType" Relationship="CustomerNameTaoModel.FK_DocumentExport_DocumentExportType" FromRole="DocumentExport" ToRole="DocumentExportType" />
           <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" FromRole="DocumentExport" ToRole="FieldDescriptor" />
+          <Property Name="Format" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TableDescriptor">
           <Key>
@@ -761,6 +766,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="Megye" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="City" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="HelyiIparuzesiAdo" Type="Decimal" Nullable="false" Precision="16" Scale="10" />
+          <Property Name="Onkormanyzat" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Address_Customer">
           <End Type="CustomerNameTaoModel.Customer" Role="Customer" Multiplicity="1" />
@@ -1111,6 +1117,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySetMapping Name="DocumentExport">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentExport">
               <MappingFragment StoreEntitySet="DocumentExport">
+                <ScalarProperty Name="Format" ColumnName="Format" />
                 <ScalarProperty Name="AnykId" ColumnName="AnykId" />
                 <ScalarProperty Name="FieldId" ColumnName="FieldId" />
                 <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
@@ -1131,6 +1138,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySetMapping Name="TaxesByCities">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.TaxesByCities">
               <MappingFragment StoreEntitySet="TaxesByCities">
+                <ScalarProperty Name="Onkormanyzat" ColumnName="Onkormanyzat" />
                 <ScalarProperty Name="HelyiIparuzesiAdo" ColumnName="HelyiIparuzesiAdo" />
                 <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="Megye" ColumnName="Megye" />

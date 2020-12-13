@@ -28,7 +28,7 @@ namespace TaoWebApplication.XmlExport
 
             var adozo = new XElement("adozo");
             adozo.Add(new XElement("nev", service.GetFieldById(1, sessionId).StringValue));
-            adozo.Add(new XElement("adoszam", service.GetCustomerTaxNumberBySessionId(sessionId)));
+            adozo.Add(new XElement("adoszam", service.GetCustomerBySessionId(sessionId).Adoszam));
             nyomtatvanyinformacio.Add(adozo);
 
             // 32/33 field

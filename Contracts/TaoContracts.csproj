@@ -48,6 +48,7 @@
     <Compile Include="Contracts\DocumentDto.cs" />
     <Compile Include="Contracts\ExportReportDto.cs" />
     <Compile Include="Contracts\FieldDescriptorDto.cs" />
+    <Compile Include="Contracts\FieldValueDto.cs" />
     <Compile Include="Contracts\PageDescriptorDto.cs" />
     <Compile Include="Contracts\PageDto.cs" />
     <Compile Include="Contracts\SessionDto.cs" />

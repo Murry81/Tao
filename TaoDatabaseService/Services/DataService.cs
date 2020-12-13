@@ -358,14 +358,66 @@ namespace TaoDatabaseService.Services
             return result;
         }
 
-        public string GetCustomerTaxNumberBySessionId(Guid sessionId)
+        public CustomerDto GetCustomerBySessionId(Guid sessionId)
         {
-            return entities.Session.FirstOrDefault(s => s.Id == sessionId).Customer.Adoszam;
+            var customerId = entities.Session.FirstOrDefault(s => s.Id == sessionId).Customer.Id;
+            return GetCustomer(customerId);
         }
 
         public string GetDocumentIdentifier(int documentId)
         {
             return entities.DocumentExportType.FirstOrDefault(t => t.Id == documentId).DocumentId;
+        }
+
+        public List<FieldValueDto> GetFieldValuesByFieldIdList(List<int> fieldIds, Guid sessionId)
+        {
+            var items = entities.FieldValue.Where(e => e.SessionId == sessionId && fieldIds.Contains(e.FieldDescriptorId));
+            return items.Select(item => new FieldValueDto
+            {
+                Id = item.Id,
+                SessionId = item.SessionId,
+                RowIndex = item.RowIndex,
+                FieldDescriptorId = item.FieldDescriptorId,
+                BoolValue = item.BoolValue,
+                DateValue = item.DateValue,
+                DecimalValue = item.DecimalValue,
+                StringValue = item.StringValue
+            }).ToList();
+        }
+
+        public void UpdateFieldValues(List<FieldValueDto> fields, Guid sessionId)
+        {
+            var fieldValues = fields.Select(f => new FieldValue
+            {
+                StringValue = f.StringValue,
+                BoolValue = f.BoolValue,
+                DateValue = f.DateValue,
+                DecimalValue = f.DecimalValue,
+                FieldDescriptorId = f.FieldDescriptorId,
+                Id = f.Id == Guid.Empty ? Guid.NewGuid() : f.Id,
+                RowIndex = f.RowIndex,
+                SessionId = sessionId
+            });
+
+            foreach (var myEntity in fieldValues)
+            {
+                if (string.IsNullOrEmpty(myEntity.StringValue) && myEntity.DecimalValue == null && myEntity.DateValue == null && myEntity.BoolValue == null)
+                {
+                    var result = entities.FieldValue.FirstOrDefault(f => f.Id == myEntity.Id && f.RowIndex == myEntity.RowIndex);
+                    if (result != null)
+                    {
+                        entities.FieldValue.Remove(result);
+                    }
+                }
+                else
+                {
+                    entities.FieldValue.AddOrUpdate(myEntity);
+                }
+            }
+
+            var sessionEntity = entities.Session.First(e => e.Id == sessionId);
+            sessionEntity.LastModifyDate = DateTime.UtcNow;
+            entities.SaveChanges();
         }
     }
 }

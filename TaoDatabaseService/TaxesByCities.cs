@@ -18,5 +18,6 @@ namespace TaoDatabaseService
         public string Megye { get; set; }
         public string City { get; set; }
         public decimal HelyiIparuzesiAdo { get; set; }
+        public string Onkormanyzat { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -57,6 +58,70 @@ namespace TaoWebApplication.Calculators
                         }
                 }
             }
+
+            CalculateExtraFields(service, sessionId);
+        }
+
+        private static void CalculateExtraFields(IDataService service, Guid sessionId)
+        {
+            CalculateCegadatok(service, sessionId);
+        }
+
+        private static void CalculateCegadatok(IDataService service, Guid sessionId)
+        {
+            var fields = service.GetFieldValuesByFieldIdList(new List<int> { 71, 72, 73, 74, 75, 80 }, sessionId);
+
+            var f80 = fields.FirstOrDefault(f => f.FieldDescriptorId == 80);
+            if (f80 != null)
+                return;
+
+            var customer = service.GetCustomerBySessionId(sessionId);
+            var result = new List<FieldValueDto>
+            {
+                new FieldValueDto
+                {
+                    SessionId = sessionId,
+                    FieldDescriptorId = 80,
+                    StringValue = "Budapest"
+                },
+                new FieldValueDto
+                {
+                    // cegnev
+                    SessionId = sessionId,
+                    FieldDescriptorId = 71,
+                    StringValue = customer.Nev
+                },
+                new FieldValueDto
+                {
+                    // adoszám
+                    SessionId = sessionId,
+                    FieldDescriptorId = 72,
+                    StringValue = customer.Adoszam
+                },
+                new FieldValueDto
+                {
+                    // iranyitoszám
+                    SessionId = sessionId,
+                    FieldDescriptorId = 73,
+                    StringValue = customer.Address.FirstOrDefault()?.PostCode
+                },
+                new FieldValueDto
+                {
+                    // település
+                    SessionId = sessionId,
+                    FieldDescriptorId = 74,
+                    StringValue = customer.Address.FirstOrDefault()?.City
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 75,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Line1} {customer.Address.FirstOrDefault()?.Line2}"
+                }
+            };
+
+            service.UpdateFieldValues(result, sessionId);
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)

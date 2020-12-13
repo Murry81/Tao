@@ -80,7 +80,9 @@ namespace TaoWebApplication.Controllers
         {
             var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
             var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
-
+            
+            SaveValues(fc.Fields, TartalomCalculation.CalculateValues, 1);
+            
             var validationResult = TartalomValidator.Validate(fc.Fields);
             if(validationResult.Keys.Count > 0)
             {
@@ -105,8 +107,6 @@ namespace TaoWebApplication.Controllers
                 }
                 return View(model);
             }
-            
-            SaveValues(fc.Fields, TartalomCalculation.CalculateValues, 1);
        
             if(buttonAction == "Previous")
             {
