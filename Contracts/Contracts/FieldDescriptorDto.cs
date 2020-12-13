@@ -16,5 +16,7 @@ namespace TaoContracts.Contracts
         public int? RowIndex { get; set; }
 
         public string AnykId { get; set; }
+
+        public string ExportFormat { get; set; }
     }
 }

@@ -344,17 +344,23 @@ namespace TaoDatabaseService.Services
             var fieldIds = export.Select(f => f.FieldDescriptor.Id).ToList();
             var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId &&  fieldIds.Contains(fv.FieldDescriptorId)).ToList();
 
+            List<ExportFieldDescriptorDto> fields = new List<ExportFieldDescriptorDto>();
+            foreach(var exportItem in export)
+            {
+                var values = fieldValues.Where(f => f.FieldDescriptorId == exportItem.FieldId);
+                foreach(var value in values)
+                {
+                    fields.Add(exportItem.ToExportFieldDescriptorDto(value));
+                }
+            }
+
             var result = new ExportReportDto
             {
                 DocumentId = reportId,
-                Fields = export.Select(e => e.FieldDescriptor.ToFieldDescriptorDto(fieldValues, null)).ToList()
+                Fields = fields
             };
 
-            foreach(FieldDescriptorDto field in result.Fields)
-            {
-                field.AnykId = export.FirstOrDefault(e => e.FieldId == field.Id).AnykId;
-            }
-
+            result.RowIds = entities.FieldValue.Where(f => f.FieldDescriptorId == 1800 && f.SessionId == sessionId).Select(f => f.RowIndex).Distinct().ToList();
             return result;
         }
 

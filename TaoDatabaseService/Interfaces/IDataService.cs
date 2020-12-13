@@ -45,7 +45,7 @@ namespace TaoDatabaseService.Interfaces
 
         List<TaxesByCitiesDto> GetCityTaxes();
 
-        ExportReportDto GetExportReportData(Guid session, int reportId);
+        ExportReportDto GetExportReportData(Guid sessionId, int reportId);
 
         CustomerDto GetCustomerBySessionId(Guid sessionId);
 

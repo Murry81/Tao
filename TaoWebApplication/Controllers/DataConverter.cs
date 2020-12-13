@@ -36,11 +36,11 @@ namespace TaoWebApplication.Controllers
             switch (field.TypeName)
             {
                 case "numeric":
-                    return field.DecimalValue.Value.ToString("0");
+                    return field.DecimalValue.HasValue ? field.DecimalValue.Value.ToString("0") : string.Empty;
                 case "bool":
                     return field.BoolFieldValue ? "1" : "0";
                 case "date":
-                    return field.DateValue.Value.ToString("yyyyMMdd");
+                    return field.DateValue.HasValue ? field.DateValue.Value.ToString(string.IsNullOrEmpty(field.ExportFormat) ? "yyyyMMdd" : field.ExportFormat ) : string.Empty;
                 default:
                     return field.StringValue;
             }

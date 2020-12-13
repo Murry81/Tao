@@ -43,12 +43,12 @@ namespace TaoWebApplication.Controllers
             else if (Request.Form.AllKeys.Contains("ExportIpa"))
             {
                 sessionId = Guid.Parse(Request.Form["ExportIpa"]);
-                return GenerateXml(1, sessionId);
+                return GenerateXml(2, sessionId);
             }
             else if (Request.Form.AllKeys.Contains("ExportTarsasagi"))
             {
                 sessionId = Guid.Parse(Request.Form["ExportTarsasagi"]);
-                return GenerateXml(2, sessionId);
+                return GenerateXml(1, sessionId);
             }
             else
             {
@@ -863,8 +863,8 @@ namespace TaoWebApplication.Controllers
 
         public FileContentResult GenerateXml(int documentType, Guid sessionId)
         {
-            string file = XmlExport.XmlExport.GenerateDocument(documentType, sessionId, _service);
-            return File(Encoding.UTF8.GetBytes(file), MediaTypeNames.Text.Xml,  $"{DateTime.Now.ToString("yyyyMMdd")}_{_service.GetDocumentIdentifier(documentType)}.xml");
+            var file = XmlExport.XmlExport.GenerateDocument(documentType, sessionId, _service);
+            return File(file, MediaTypeNames.Application.Zip,  $"{DateTime.Now.ToString("yyyyMMdd")}_{_service.GetDocumentIdentifier(documentType)}.zip");
         }
 
         private static Dictionary<int, Action<IDataService, Guid>> calculatorPageIdMap = new Dictionary<int, Action<IDataService, Guid>>

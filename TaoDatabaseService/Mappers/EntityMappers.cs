@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Contracts.Contracts;
+using System.Collections.Generic;
 using System.Linq;
 using TaoContracts.Contracts;
 
@@ -198,6 +199,38 @@ namespace TaoDatabaseService.Mappers
             }
 
             result.RowIndex = rowIndex;
+            return result;
+        }
+
+
+        public static ExportFieldDescriptorDto ToExportFieldDescriptorDto(this DocumentExport fieldDescriptor, FieldValue value)
+        {
+            var result = new ExportFieldDescriptorDto
+            {
+               AnykId = fieldDescriptor.AnykId
+            };
+
+            result.rowId = value.RowIndex;
+            result.FieldId = fieldDescriptor.FieldId;
+
+            if (value != null)
+            {
+                switch (fieldDescriptor.FieldDescriptor.TypeName)
+                {
+                    case "numeric":
+                        result.FormattedValue = value.DecimalValue.Value.ToString("0");
+                        break;
+                    case "bool":
+                        result.FormattedValue = value.BoolValue.HasValue ? (value.BoolValue.Value ? "1" : "0") : string.Empty;
+                        break;
+                    case "date":
+                        result.FormattedValue = value.DateValue.HasValue ? value.DateValue.Value.ToString(fieldDescriptor.Format) : string.Empty;
+                        break;
+                    default:
+                        result.FormattedValue = value.StringValue;
+                        break;
+                }
+            }
             return result;
         }
 
