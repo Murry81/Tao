@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaoContracts.Contracts;
@@ -98,6 +99,168 @@ namespace TaoWebApplication.Calculators
                         }
                 }
             }
+
+            CalculateExtraFields(service, fields, sessionId);
+        }
+
+        private static void CalculateExtraFields(IDataService service, List<FieldDescriptorDto> pageFields, Guid sessionId)
+        {
+            // (1831) Total személyi jellegő ráfordítás sum(1804)
+            // (1832) Total eszközérték sum(1807)
+            // (1833) Külföldi telephely(1808 if kulfold)
+            // (1834) Onkormányzat neve
+            // (1835) true, ha 1803 = személyi jellegű ráfordítás
+            // (1836) true, ha 1803 = eszközérték
+            // (1837) true, ha 1803 = komplex módszer
+
+            var fields = service.GetFieldValuesByFieldIdList(new List<int> { 1831, 1832, 1833, 1834, 1835, 1836, 1837 }, sessionId);
+
+            var sum1804 = GenericCalculations.SumList(pageFields.Where(f => f.Id == 1804).ToList());
+            var sum1807 = GenericCalculations.SumList(pageFields.Where(f => f.Id == 1807).ToList());
+
+            var f54Value = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 54 }, sessionId).FirstOrDefault().DecimalValue);
+            var f55Value = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 55 }, sessionId).FirstOrDefault().DecimalValue);
+
+
+            var f1831 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1831);
+            if (f1831 != null)
+            {
+                f1831.DecimalValue = sum1804;
+            }
+            else
+            {
+                f1831 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = sum1804,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 1831,
+                    SessionId = sessionId
+                };
+            }
+
+            var f1832 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1832);
+            if (f1832 != null)
+            {
+                f1832.DecimalValue = sum1807;
+            }
+            else
+            {
+                f1832 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = sum1807,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 1832,
+                    SessionId = sessionId
+                };
+            }
+
+            // (1833) Külföldi telephely(1808 if kulfold)
+            var kulfold = pageFields.FirstOrDefault(f => f.Id == 1800 && f.StringValue == "Külföld");
+            var f1833 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1833);
+            if (kulfold != null)
+            {
+                if (f1833 != null)
+                {
+                    f1833.DecimalValue = pageFields.FirstOrDefault(f => f.Id == 1808 && f.RowIndex == kulfold.RowIndex).DecimalValue; 
+                }
+                else
+                {
+                    f1833 = new Contracts.Contracts.FieldValueDto
+                    {
+                        DecimalValue = pageFields.FirstOrDefault(f => f.Id == 1808 && f.RowIndex == kulfold.RowIndex).DecimalValue,
+                        Id = Guid.NewGuid(),
+                        FieldDescriptorId = 1833,
+                        SessionId = sessionId
+                    };
+                }
+            }
+
+            // (1834) Onkormányzat neve
+            var onkormanyzatList = new List<FieldValueDto>();
+            foreach (var currentCity in pageFields.Where(f => f.Id == 1800))
+            {
+                var f1834 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1834 && f.RowIndex == currentCity.RowIndex);
+                if (string.IsNullOrEmpty(currentCity.StringValue))
+                    continue;
+
+                var onkormanyzat = service.GetOnkormanyzat(currentCity.StringValue);
+
+                if (f1834 != null)
+                {
+                    f1834.StringValue = onkormanyzat;
+                }
+                else
+                {
+                    f1834 = new FieldValueDto
+                    {
+                        StringValue = onkormanyzat,
+                        Id = Guid.NewGuid(),
+                        FieldDescriptorId = 1834,
+                        SessionId = sessionId,
+                        RowIndex = currentCity.RowIndex
+                    };
+                }
+
+                onkormanyzatList.Add(f1834);
+            }
+
+            // (1835) true, ha 1803 = személyi jellegű ráfordítás
+            var type = pageFields.FirstOrDefault(f => f.Id == 1803).StringValue;
+
+            var f1835 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1835);
+            if (f1835 != null)
+            {
+                f1835.BoolValue = type == "személyi jellegű ráfordítás";
+            }
+            else
+            {
+                f1835 = new FieldValueDto
+                {
+                    BoolValue = type == "személyi jellegű ráfordítás",
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 1835,
+                    SessionId = sessionId
+                };
+            }
+
+            // (1836) true, ha 1803 = eszközérték
+            var f1836 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1836);
+            if (f1836 != null)
+            {
+                f1836.BoolValue = type == "eszközérték";
+            }
+            else
+            {
+                f1836 = new FieldValueDto
+                {
+                    BoolValue = type == "eszközérték",
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 1836,
+                    SessionId = sessionId
+                };
+            }
+
+            // (1837) true, ha 1803 = komplex módszer
+            var f1837 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1837);
+            if (f1837 != null)
+            {
+                f1837.BoolValue = type == "komplex módszer";
+            }
+            else
+            {
+                f1837 = new FieldValueDto
+                {
+                    BoolValue = type == "komplex módszer",
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 1837,
+                    SessionId = sessionId
+                };
+            }
+
+            var resultList = new List<FieldValueDto> { f1831, f1832, f1833, f1835, f1836, f1837 };
+            resultList.AddRange(onkormanyzatList);
+            resultList.RemoveAll(f => f == null);
+            service.UpdateFieldValues(resultList, sessionId);
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)

@@ -407,6 +407,9 @@ namespace TaoDatabaseService.Services
 
             foreach (var myEntity in fieldValues)
             {
+                if (myEntity == null)
+                    continue;
+
                 if (string.IsNullOrEmpty(myEntity.StringValue) && myEntity.DecimalValue == null && myEntity.DateValue == null && myEntity.BoolValue == null)
                 {
                     var result = entities.FieldValue.FirstOrDefault(f => f.Id == myEntity.Id && f.RowIndex == myEntity.RowIndex);
@@ -424,6 +427,11 @@ namespace TaoDatabaseService.Services
             var sessionEntity = entities.Session.First(e => e.Id == sessionId);
             sessionEntity.LastModifyDate = DateTime.UtcNow;
             entities.SaveChanges();
+        }
+
+        public string GetOnkormanyzat(string cityName)
+        {
+            return entities.TaxesByCities.FirstOrDefault(c => c.City.ToLower() == cityName.ToLower())?.Onkormanyzat;
         }
     }
 }

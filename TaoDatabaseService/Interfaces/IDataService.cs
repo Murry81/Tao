@@ -54,5 +54,7 @@ namespace TaoDatabaseService.Interfaces
         List<FieldValueDto> GetFieldValuesByFieldIdList(List<int> lists, Guid sessionId);
 
         void UpdateFieldValues(List<FieldValueDto> fields, Guid sessionId);
+
+        string GetOnkormanyzat(string cityName);
     }
 }

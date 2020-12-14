@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -229,8 +230,83 @@ namespace TaoWebApplication.Calculators
                         }
                 }
             }
+
+            CalculateExtraFields(service, sessionId, fields);
         }
 
+        private static void CalculateExtraFields(IDataService service, Guid sessionId, List<FieldDescriptorDto> fields)
+        {
+            // (460) Új mező:  436 - 400 - 405
+            // (461) Uj mező 2: (9 + 24 + 13 * árfolyam) =< 500.000.000 : 401 + 435
+            // (462) Új mező 3: 13 * árfolyam > 500000000 : 435
+
+            var calculatedFields = service.GetFieldValuesByFieldIdList(new List<int> { 460, 461, 462}, sessionId);
+
+            var f436Value = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 436).DecimalValue);
+            var f400Value = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 400).DecimalValue);
+            var f405Value = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 405).DecimalValue);
+            var f401Value = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 401).DecimalValue);
+            var f435Value = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 435).DecimalValue);
+
+            var f9Value = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 9 }, sessionId).FirstOrDefault().DecimalValue);
+            var f24Value = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 24 }, sessionId).FirstOrDefault().DecimalValue);
+            var f13Value = GenericCalculations.GetValue(service.GetFieldsByFieldIdList(new List<int> { 13 }, sessionId).FirstOrDefault().DecimalValue);
+
+            var customer = service.GetCustomer(int.Parse(HttpContext.Current.Session["CustomerId"].ToString()));
+            decimal arfolyam = IpaKapcsoltCalculation.GetArfolyamSzorzo(service, sessionId, customer);
+
+            var f460 = calculatedFields.FirstOrDefault(f => f.FieldDescriptorId == 460);
+            if (f460 != null)
+            {
+                f460.DecimalValue = f436Value - f400Value - f405Value;
+            }
+            else
+            {
+                f460 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = f436Value - f400Value - f405Value,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 460,
+                    SessionId = sessionId
+                };
+            }
+
+            var value = (f9Value + f24Value + f13Value) * arfolyam <= 500000000 ? f401Value + f435Value : 0;
+            var f461 = calculatedFields.FirstOrDefault(f => f.FieldDescriptorId == 461);
+            if (f461 != null)
+            {
+                f461.DecimalValue = value;
+            }
+            else
+            {
+                f461 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = value,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 461,
+                    SessionId = sessionId
+                };
+            }
+
+            value = f13Value * arfolyam > 500000000 ? f435Value : 0;
+            var f462 = calculatedFields.FirstOrDefault(f => f.FieldDescriptorId == 462);
+            if (f462 != null)
+            {
+                f462.DecimalValue = value;
+            }
+            else
+            {
+                f462 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = value,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 462,
+                    SessionId = sessionId
+                };
+            }
+
+            service.UpdateFieldValues(new List<FieldValueDto> { f460, f461, f462 }, sessionId);
+        }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)
         {
@@ -320,7 +396,7 @@ namespace TaoWebApplication.Calculators
             return null;
         }
 
-        private static decimal GetArfolyamSzorzo(IDataService service, Guid sessionId, CustomerDto customer)
+        internal static decimal GetArfolyamSzorzo(IDataService service, Guid sessionId, CustomerDto customer)
         {
             if (customer.KonyvelesPenzneme.ISO != "HUF")
             {
