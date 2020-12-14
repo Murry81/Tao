@@ -20,12 +20,12 @@ namespace TaoWebApplication.XmlExport
                 {
                     if (reportData.RowIds.Any())
                     {
-                        foreach (int? rowIndex in reportData.Fields.Where(r => r.FieldId == 1800).Select(f => f.rowId).Distinct())
+                        foreach (int? rowIndex in reportData.Fields.Where(r => r.FieldId == 1834).Select(f => f.rowId).Distinct())
                         {
                             XDocument document = CreateDocument(documentId, sessionId, service, reportData, rowIndex);
                             var documentResult = document.ToString();
 
-                            var onkormanyzat = reportData.Fields.FirstOrDefault(f => f.rowId == rowIndex && f.FieldId == 1800).FormattedValue;
+                            var onkormanyzat = reportData.Fields.FirstOrDefault(f => f.rowId == rowIndex && f.FieldId == 1834).FormattedValue;
                             var zipEntry = archive.CreateEntry($"{onkormanyzat}_IPA.xml", CompressionLevel.Fastest);
                             using (var zipStream = zipEntry.Open())
                             {
