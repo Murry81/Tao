@@ -18,6 +18,7 @@ namespace TaoDatabaseService
         public int FieldId { get; set; }
         public string AnykId { get; set; }
         public string Format { get; set; }
+        public Nullable<int> Condition { get; set; }
     
         public virtual DocumentExportType DocumentExportType { get; set; }
         public virtual FieldDescriptor FieldDescriptor { get; set; }

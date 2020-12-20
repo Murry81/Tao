@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaoContracts.Contracts;
@@ -57,6 +58,8 @@ namespace TaoWebApplication.Calculators
 
             var f1205 = fields.FirstOrDefault(f => f.Id == 1205);
             f1205.DecimalValue = Calculate1205(fields);
+
+            CalculateOthers(fields, service, sessionId);
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)
@@ -64,6 +67,56 @@ namespace TaoWebApplication.Calculators
             var fields = service.GetPageFields(12, sessionId);
             CalculateValues(fields, service, sessionId);
             service.UpdateFieldValues(fields, sessionId);
+        }
+
+        private static void CalculateOthers(List<FieldDescriptorDto> pageFields, IDataService service, Guid sessionId)
+        {
+            var fields = service.GetFieldValuesByFieldIdList(new List<int> { 2110, 2111 }, sessionId);
+
+            var f2100 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 2100).DecimalValue);
+            var f2101 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 2101).DecimalValue);
+            var f2102 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 2102).DecimalValue);
+
+            var f2103 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 2103).DecimalValue);
+            var f2104 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 2104).DecimalValue);
+            var f2105 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 2105).DecimalValue);
+
+            // 2110  f2100 + f2101 + f2102
+            var f2110 = fields.FirstOrDefault(f => f.FieldDescriptorId == 2110);
+            if (f2110 != null)
+            {
+                f2110.DecimalValue = f2100 + f2101 + f2102;
+            }
+            else
+            {
+                f2110 = new FieldValueDto
+                {
+                    DecimalValue = f2100 + f2101 + f2102,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 2110,
+                    SessionId = sessionId
+                };
+            }
+
+
+            // 2110  f2103 + f2104 + f2105
+            var f2111 = fields.FirstOrDefault(f => f.FieldDescriptorId == 2111);
+            if (f2111 != null)
+            {
+                f2111.DecimalValue = f2103 + f2104 + f2105;
+            }
+            else
+            {
+                f2111 = new FieldValueDto
+                {
+                    DecimalValue = f2103 + f2104 + f2105,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 2111,
+                    SessionId = sessionId
+                };
+            }
+
+            service.UpdateFieldValues(new List<FieldValueDto> { f2110, f2111 }, sessionId);
         }
 
         private static decimal? Calculate2105(IDataService service, Guid sessionId)

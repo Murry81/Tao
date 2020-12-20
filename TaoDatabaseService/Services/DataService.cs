@@ -340,17 +340,43 @@ namespace TaoDatabaseService.Services
 
         public ExportReportDto GetExportReportData(Guid sessionId, int reportId)
         {
-            var export = entities.DocumentExport.Where(de => de.DocumentTypeId == reportId).ToList();
+            var export = entities.DocumentExport.AsNoTracking().Where(de => de.DocumentTypeId == reportId).ToList();
             var fieldIds = export.Select(f => f.FieldDescriptor.Id).ToList();
-            var fieldValues = entities.FieldValue.Where(fv => fv.SessionId == sessionId &&  fieldIds.Contains(fv.FieldDescriptorId)).ToList();
+            var fieldValues = entities.FieldValue.AsNoTracking().Where(fv => fv.SessionId == sessionId &&  fieldIds.Contains(fv.FieldDescriptorId)).ToList();
 
             List<ExportFieldDescriptorDto> fields = new List<ExportFieldDescriptorDto>();
             foreach(var exportItem in export)
             {
+                if(exportItem.FieldId == -2)
+                {
+                    fields.Add(new ExportFieldDescriptorDto
+                    {
+                        AnykId = exportItem.AnykId,
+                        FieldId = exportItem.FieldId,
+                        FormattedValue = exportItem.Format
+                    });
+                    continue;
+                }
+
                 var values = fieldValues.Where(f => f.FieldDescriptorId == exportItem.FieldId);
                 foreach(var value in values)
                 {
-                    fields.Add(exportItem.ToExportFieldDescriptorDto(value));
+                    if (exportItem.Condition.HasValue)
+                    {
+                        var condition = entities.FieldValue.AsNoTracking().FirstOrDefault(fv => fv.FieldDescriptorId == Math.Abs(exportItem.Condition.Value) && fv.SessionId == sessionId)?.BoolValue;
+                        condition = condition.HasValue && condition.Value;
+                        if (exportItem.Condition.Value < 0)
+                            condition = !condition;
+
+                        if(condition.Value)
+                        {
+                            fields.Add(exportItem.ToExportFieldDescriptorDto(value));
+                        }
+                    }
+                    else
+                    {
+                        fields.Add(exportItem.ToExportFieldDescriptorDto(value));
+                    }
                 }
             }
 

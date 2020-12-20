@@ -864,7 +864,15 @@ namespace TaoWebApplication.Controllers
         public FileContentResult GenerateXml(int documentType, Guid sessionId)
         {
             var file = XmlExport.XmlExport.GenerateDocument(documentType, sessionId, _service);
-            return File(file, MediaTypeNames.Application.Zip,  $"{DateTime.Now.ToString("yyyyMMdd")}_{_service.GetDocumentIdentifier(documentType)}.zip");
+            if (documentType == 2)
+            {
+                return File(file, MediaTypeNames.Application.Zip, $"{DateTime.Now.ToString("yyyyMMdd")}_{_service.GetDocumentIdentifier(documentType)}.zip");
+            }
+            if(documentType == 1)
+            {
+                return File(file, MediaTypeNames.Text.Xml, $"{DateTime.Now.ToString("yyyyMMdd")}_{_service.GetDocumentIdentifier(documentType)}.xml");
+            }
+            return null;
         }
 
         private static Dictionary<int, Action<IDataService, Guid>> calculatorPageIdMap = new Dictionary<int, Action<IDataService, Guid>>

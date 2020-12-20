@@ -14,6 +14,24 @@ namespace TaoWebApplication.XmlExport
         {
             var reportData = service.GetExportReportData(sessionId, documentId);
 
+            if (documentId == 2)
+            {
+                return GenerateIpa(documentId, sessionId, service, reportData);
+            }
+            if (documentId == 1)
+            {
+                return GenerateTarsasagiAdoDoc(documentId, sessionId, service, reportData);
+            }
+            return null;
+        }
+
+        private static byte[] GenerateTarsasagiAdoDoc(int documentId, Guid sessionId, IDataService service, Contracts.Contracts.ExportReportDto reportData)
+        {
+            return Encoding.UTF8.GetBytes(CreateDocument(documentId, sessionId, service, reportData).ToString());
+        }
+
+        private static byte[] GenerateIpa(int documentId, Guid sessionId, IDataService service, Contracts.Contracts.ExportReportDto reportData)
+        {
             using (var ms = new MemoryStream())
             {
                 using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
@@ -38,7 +56,7 @@ namespace TaoWebApplication.XmlExport
                     {
                         XDocument document = CreateDocument(documentId, sessionId, service, reportData);
                     }
-                }   
+                }
                 return ms.ToArray();
             }
         }

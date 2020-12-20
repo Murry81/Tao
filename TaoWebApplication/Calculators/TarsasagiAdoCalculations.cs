@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaoContracts.Contracts;
@@ -78,7 +79,37 @@ namespace TaoWebApplication.Calculators
                             break;
                         }
                 }
+
+                Calculate1420(fields, service, sessionId);
             }
+        }
+
+        private static void Calculate1420(List<FieldDescriptorDto> pageFields, IDataService service, Guid sessionId)
+        {
+            var fields = service.GetFieldValuesByFieldIdList(new List<int> { 1420 }, sessionId);
+
+            var f1414 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 1414).DecimalValue);
+            var f1401 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 1401).DecimalValue);
+            var f1402 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 1402).DecimalValue);
+
+            // (1420) 1414-1401-1402
+            var f1420 = fields.FirstOrDefault(f => f.FieldDescriptorId == 1420);
+            if (f1420 != null)
+            {
+                f1420.DecimalValue = f1414 - f1401 - f1402;
+            }
+            else
+            {
+                f1420 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = f1414 - f1401 - f1402,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 1420,
+                    SessionId = sessionId
+                };
+            }
+
+            service.UpdateFieldValues(new List<FieldValueDto> { f1420 }, sessionId);
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)

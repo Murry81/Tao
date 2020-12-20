@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -42,6 +43,9 @@ namespace TaoWebApplication.Calculators
                         }
                 }
             }
+
+            CalculateOthers(fields, service, sessionId);
+
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)
@@ -49,6 +53,35 @@ namespace TaoWebApplication.Calculators
             var fields = service.GetPageFields(7, sessionId);
             CalculateValues(fields, service, sessionId);
             service.UpdateFieldValues(fields, sessionId);
+        }
+
+        private static void CalculateOthers(List<FieldDescriptorDto> pageFields, IDataService service, Guid sessionId)
+        {
+            var fields = service.GetFieldValuesByFieldIdList(new List<int> { 710 }, sessionId);
+
+            var f705 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 705).DecimalValue);
+            var f701 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 701).DecimalValue);
+            var f702 = GenericCalculations.GetValue(pageFields.FirstOrDefault(f => f.Id == 702).DecimalValue);
+
+            // (1420) f705-f701-f702
+
+            var f710 = fields.FirstOrDefault(f => f.FieldDescriptorId == 710);
+            if (f710 != null)
+            {
+                f710.DecimalValue = f705 - f701 - f702;
+            }
+            else
+            {
+                f710 = new Contracts.Contracts.FieldValueDto
+                {
+                    DecimalValue = f705 - f701 - f702,
+                    Id = Guid.NewGuid(),
+                    FieldDescriptorId = 710,
+                    SessionId = sessionId
+                };
+            }
+
+            service.UpdateFieldValues(new List<FieldValueDto> { f710 }, sessionId);
         }
 
         private static decimal? Calculate707(List<FieldDescriptorDto> fields)

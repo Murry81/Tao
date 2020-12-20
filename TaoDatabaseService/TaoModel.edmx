@@ -65,6 +65,7 @@ warning 6002: The table/view 'Tao.dbo.DocumentExport' does not have a primary ke
           <Property Name="FieldId" Type="int" Nullable="false" />
           <Property Name="AnykId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Format" Type="nvarchar" MaxLength="50" />
+          <Property Name="Condition" Type="int" />
         </EntityType>
         <EntityType Name="DocumentExportType">
           <Key>
@@ -393,7 +394,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
     [DocumentExport].[DocumentTypeId] AS [DocumentTypeId], 
     [DocumentExport].[FieldId] AS [FieldId], 
     [DocumentExport].[AnykId] AS [AnykId], 
-    [DocumentExport].[Format] AS [Format]
+    [DocumentExport].[Format] AS [Format], 
+    [DocumentExport].[Condition] AS [Condition]
     FROM [dbo].[DocumentExport] AS [DocumentExport]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="TableDescriptor" EntityType="Self.TableDescriptor" store:Type="Tables" store:Schema="dbo">
@@ -740,6 +742,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <NavigationProperty Name="DocumentExportType" Relationship="CustomerNameTaoModel.FK_DocumentExport_DocumentExportType" FromRole="DocumentExport" ToRole="DocumentExportType" />
           <NavigationProperty Name="FieldDescriptor" Relationship="CustomerNameTaoModel.FK_DocumentExport_FieldDescriptor" FromRole="DocumentExport" ToRole="FieldDescriptor" />
           <Property Name="Format" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Condition" Type="Int32" />
         </EntityType>
         <EntityType Name="TableDescriptor">
           <Key>
@@ -1117,6 +1120,7 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySetMapping Name="DocumentExport">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.DocumentExport">
               <MappingFragment StoreEntitySet="DocumentExport">
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
                 <ScalarProperty Name="Format" ColumnName="Format" />
                 <ScalarProperty Name="AnykId" ColumnName="AnykId" />
                 <ScalarProperty Name="FieldId" ColumnName="FieldId" />
