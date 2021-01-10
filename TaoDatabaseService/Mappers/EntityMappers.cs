@@ -255,8 +255,13 @@ namespace TaoDatabaseService.Mappers
                     City = address.City,
                     Country = address.Country,
                     County = address.County,
-                    Line1 = address.Line1,
-                    Line2 = address.Line2,
+                    Street = address.StreetName,
+                    StreetType = address.StreetType,
+                    Building = address.Building,
+                    Door = address.Door,
+                    Floor = address.Floor,
+                    Number = address.Number,
+                    Stairway = address.Stairway,
                     PostCode = address.PostCode
                 });
             }
@@ -277,7 +282,9 @@ namespace TaoDatabaseService.Mappers
                 Phone = customer.ContactDetail.Phone,
                 Phone2 = customer.ContactDetail.Phone2,
                 SharePointId = customer.SharePointId,
-                WLSzam = customer.WLSzam
+                WLSzam = customer.WLSzam,
+                AdministratorName = customer.AdministratorName,
+                AdministratorPhone = customer.AdministratorPhone
             };
         }
 

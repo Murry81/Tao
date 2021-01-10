@@ -13,9 +13,6 @@ namespace TaoWebApplication.Calculators
             var customer = service.GetCustomer(int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString()));
             var fieldIds = new List<int> { 801, 802, 800, 803, 804, 805, 806, 807, 808};
 
-            // Get FigyelembeVettHónapokSzáma
-            var f5 = decimal.Parse(service.GetFieldById(5, sessionId).StringValue);
-
             foreach (var id in fieldIds)
             {
                 var field = fields.FirstOrDefault(f => f.Id == id);
@@ -28,42 +25,42 @@ namespace TaoWebApplication.Calculators
                         }
                     case 801: // Figyelembe vett hónapokra vonatkozó IPA
                         {
-                            field.DecimalValue = Calculate801(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate801(fields, service, sessionId);
                             break;
                         }
                     case 802: // Figyelembe vett hónapokra vonatkozó innovációs járulék
                         {
-                            field.DecimalValue = Calculate802(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate802(fields, service, sessionId);
                             break;
                         }
                     case 803: // Értékesítés nettó árbevétele
                         {
-                            field.DecimalValue = Calculate803(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate803(fields, service, sessionId);
                             break;
                         }
                     case 804: // Egyéb bevételek
                         {
-                            field.DecimalValue = Calculate804(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate804(fields, service, sessionId);
                             break;
                         }
                     case 805: // Pénzügyi bevételek
                         {
-                            field.DecimalValue = Calculate805(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate805(fields, service, sessionId);
                             break;
                         }
                     case 806: // ELÁBÉ
                         {
-                            field.DecimalValue = Calculate806(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate806(fields, service, sessionId);
                             break;
                         }
                     case 807: // Közvetített szolgáltatások
                         {
-                            field.DecimalValue = Calculate807(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate807(fields, service, sessionId);
                             break;
                         }
                     case 808: // Alvállalkozói teljesítmény
                         {
-                            field.DecimalValue = Calculate808(fields, service, sessionId, f5);
+                            field.DecimalValue = Calculate808(fields, service, sessionId);
                             break;
                         }
                 }
@@ -77,7 +74,7 @@ namespace TaoWebApplication.Calculators
             service.UpdateFieldValues(fields, sessionId);
         }
 
-        private static decimal? Calculate808(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate808(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 1.Alvállalkozói teljesítmények / 0.Figyelembe vett hónapok száma * 12 + 1.1.Alvállalkozó teljesítmények
             // f25 / figyelembeVettHonapokSzama * 12 + f327
@@ -85,10 +82,10 @@ namespace TaoWebApplication.Calculators
             var f25 = GenericCalculations.GetValue(service.GetFieldById(25, sessionId).DecimalValue);
             var f327 = GenericCalculations.GetValue(service.GetFieldById(327, sessionId).DecimalValue);
 
-            return Math.Round(f25 / figyelembeVettHonapokSzama * 12 + f327);
+            return Math.Round(f25 + f327);
         }
 
-        private static decimal? Calculate807(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate807(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 1.Közvetített szolgáltatások / 0.Figyelembe vett hónapok száma * 12 + 1.1.Közvetített szolgáltatások
             // f24 / figyelembeVettHonapokSzama * 12 + f326
@@ -96,10 +93,10 @@ namespace TaoWebApplication.Calculators
             var f24 = GenericCalculations.GetValue(service.GetFieldById(24, sessionId).DecimalValue);
             var f326 = GenericCalculations.GetValue(service.GetFieldById(326, sessionId).DecimalValue);
 
-            return Math.Round(f24 / figyelembeVettHonapokSzama * 12 + f326);
+            return Math.Round(f24 + f326);
         }
 
-        private static decimal? Calculate806(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate806(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 1.ELÁBÉ / 0.Figyelembe vett hónapok száma * 12 + 1.1.ELÁBÉ
             // f9 / figyelembeVettHonapokSzama * 12 + f325
@@ -107,10 +104,10 @@ namespace TaoWebApplication.Calculators
             var f9 = GenericCalculations.GetValue(service.GetFieldById(9, sessionId).DecimalValue);
             var f325 = GenericCalculations.GetValue(service.GetFieldById(325, sessionId).DecimalValue);
 
-            return Math.Round(f9 / figyelembeVettHonapokSzama * 12 + f325);
+            return Math.Round(f9  + f325);
         }
 
-        private static decimal? Calculate805(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate805(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 1.Pénzügyi bevételek / 0.Figyelembe vett hónapok száma * 12 + 1.1.Pénzügyi műveletek bevétele
             // f18 / figyelembeVettHonapokSzama * 12 + f307
@@ -118,10 +115,10 @@ namespace TaoWebApplication.Calculators
             var f18 = GenericCalculations.GetValue(service.GetFieldById(18, sessionId).DecimalValue);
             var f307 = GenericCalculations.GetValue(service.GetFieldById(307, sessionId).DecimalValue);
 
-            return Math.Round(f18 / figyelembeVettHonapokSzama * 12 + f307);
+            return Math.Round(f18 + f307);
         }
 
-        private static decimal? Calculate804(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate804(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 1.Egyéb bevételek / 0.Figyelembe vett hónapok száma * 12 + 1.1.Egyéb bevételek
             // f14 / figyelembeVettHonapokSzama * 12 + f302
@@ -129,10 +126,10 @@ namespace TaoWebApplication.Calculators
             var f14 = GenericCalculations.GetValue(service.GetFieldById(14, sessionId).DecimalValue);
             var f302 = GenericCalculations.GetValue(service.GetFieldById(302, sessionId).DecimalValue);
 
-            return Math.Round(f14 / figyelembeVettHonapokSzama * 12 + f302);
+            return Math.Round(f14 + f302);
         }
 
-        private static decimal? Calculate803(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate803(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 1.Értékesítés nettó árbevétele / 0.Figyelembe vett hónapok száma * 12 + 1.1.Értékesítés nettó árbevétele
             // f13 / figyelembeVettHonapokSzama *12 + f301
@@ -140,26 +137,26 @@ namespace TaoWebApplication.Calculators
             var f13 = GenericCalculations.GetValue(service.GetFieldById(13, sessionId).DecimalValue);
             var f301 = GenericCalculations.GetValue(service.GetFieldById(301, sessionId).DecimalValue);
 
-            return Math.Round(f13 / figyelembeVettHonapokSzama * 12 + f301);
+            return Math.Round(f13 + f301);
         }
 
-        private static decimal? Calculate802(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate802(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // 2.3.Innovációs járulék / 12 * 0.Figyelembe vett hónapok száma
             // f705 / 12 * figyelembeVettHonapokSzama
 
             var f705 = GenericCalculations.GetValue(service.GetFieldById(705, sessionId).DecimalValue);
-            return Math.Round(f705 / 12 * figyelembeVettHonapokSzama);
+            return Math.Round(f705);
         }
 
-        private static decimal? Calculate801(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId, decimal figyelembeVettHonapokSzama)
+        private static decimal? Calculate801(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)
         {
             // Ha 0.IPA kapcsolt státusz = igaz, akkor 2.1.Iparűzési adó csökkentett összege / 12 * 0.Figyelembe vett hónapok száma
             // Ha 0.IPA kapcsolt státusz = hamis, akkor 2.2.Iparűzési adó csökkentett összege / 12 * 0.Figyelembe vett hónapok száma 
             // F440 / 12 * f5 
             var f440 = GenericCalculations.GetValue(service.GetFieldById(440, sessionId).DecimalValue);
            
-            return Math.Round(f440 / 12 * figyelembeVettHonapokSzama);
+            return Math.Round(f440);
         }
 
         private static decimal? Calculate800(List<FieldDescriptorDto> fields, IDataService service, Guid sessionId)

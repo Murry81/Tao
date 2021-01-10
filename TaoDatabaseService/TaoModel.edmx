@@ -12,11 +12,16 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Line1" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="Line2" Type="nvarchar" MaxLength="250" />
           <Property Name="PostCode" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="County" Type="nvarchar" MaxLength="250" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="StreetName" Type="nvarchar" MaxLength="250" />
+          <Property Name="StreetType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="Building" Type="nvarchar" MaxLength="50" />
+          <Property Name="Stairway" Type="nvarchar" MaxLength="50" />
+          <Property Name="Floor" Type="nvarchar" MaxLength="50" />
+          <Property Name="Door" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ContactDetail">
           <Key>
@@ -52,6 +57,8 @@
           <Property Name="Cegjegyzekszam" Type="nvarchar(max)" />
           <Property Name="KonyvelesPenzneme" Type="int" />
           <Property Name="BeszamoloPenzneme" Type="int" />
+          <Property Name="AdministratorName" Type="nvarchar(max)" />
+          <Property Name="AdministratorPhone" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Tao.dbo.DocumentExport' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -573,12 +580,17 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Line1" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Line2" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="PostCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="County" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="CustomerNameTaoModel.FK_Address_Customer" FromRole="Address" ToRole="Customer" />
+          <Property Name="StreetName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="StreetType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Building" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Stairway" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Floor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Door" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ContactDetail">
           <Key>
@@ -622,6 +634,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <NavigationProperty Name="Currency" Relationship="CustomerNameTaoModel.FK_Customer_Currency" FromRole="Customer" ToRole="Currency" />
           <NavigationProperty Name="Currency1" Relationship="CustomerNameTaoModel.FK_Customer_Currency1" FromRole="Customer" ToRole="Currency" />
           <NavigationProperty Name="Session" Relationship="CustomerNameTaoModel.FK_Session_Customer" FromRole="Customer" ToRole="Session" />
+          <Property Name="AdministratorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AdministratorPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentExportType">
           <Key>
@@ -972,11 +986,16 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySetMapping Name="Address">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.Address">
               <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="Door" ColumnName="Door" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Stairway" ColumnName="Stairway" />
+                <ScalarProperty Name="Building" ColumnName="Building" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="StreetType" ColumnName="StreetType" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="County" ColumnName="County" />
                 <ScalarProperty Name="PostCode" ColumnName="PostCode" />
-                <ScalarProperty Name="Line2" ColumnName="Line2" />
-                <ScalarProperty Name="Line1" ColumnName="Line1" />
                 <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -1008,6 +1027,8 @@ warning 6002: The table/view 'Tao.dbo.TaxesByCities' does not have a primary key
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="CustomerNameTaoModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="AdministratorPhone" ColumnName="AdministratorPhone" />
+                <ScalarProperty Name="AdministratorName" ColumnName="AdministratorName" />
                 <ScalarProperty Name="BeszamoloPenzneme" ColumnName="BeszamoloPenzneme" />
                 <ScalarProperty Name="KonyvelesPenzneme" ColumnName="KonyvelesPenzneme" />
                 <ScalarProperty Name="Cegjegyzekszam" ColumnName="Cegjegyzekszam" />

@@ -31,6 +31,8 @@ namespace TaoDatabaseService
         public string Cegjegyzekszam { get; set; }
         public Nullable<int> KonyvelesPenzneme { get; set; }
         public Nullable<int> BeszamoloPenzneme { get; set; }
+        public string AdministratorName { get; set; }
+        public string AdministratorPhone { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Address> Address { get; set; }

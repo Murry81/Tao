@@ -125,14 +125,6 @@ namespace TaoWebApplication.Calculators
             // - Adóelőleg terhére felajánlott összeg - Feltöltéskor felajánlott összeg
             // ha f29 == "Végleges kalkuláció" => f1412 * 0.8 - f1404 - f1405
 
-            var f1412 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1412).DecimalValue);
-            var f1404 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1404).DecimalValue);
-            var f1405 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1405).DecimalValue);
-            var f29 = service.GetFieldById(29, sessionId).StringValue;
-
-            if (f29 == "Végleges kalkuláció")
-                return f1412 * (decimal)0.8 - f1404 - f1405;
-
             return 0;
         }
 
@@ -141,13 +133,6 @@ namespace TaoWebApplication.Calculators
             // Ha a kalkuláció jellege feltöltés, akkor Számított adó * 0,8 
             // - Adóelőleg terhére felajánlott összeg, különben 0
             // f29 == Feltöltés => f1412 * 0.8 - f1404
-
-            var f1412 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1412).DecimalValue);
-            var f1404 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1404).DecimalValue);
-            var f29 = service.GetFieldById(29, sessionId).StringValue;
-
-            if (f29 == "Feltöltés")
-                return f1412 * (decimal)0.8 - f1404;
 
             return 0;
         }
@@ -248,10 +233,7 @@ namespace TaoWebApplication.Calculators
         {
             // Adózás előtti eredmény / 0.Figyelembe vett hónapok száma * 12
             // f1407 / f5 * 12
-            var f5 = service.GetFieldById(5, sessionId).StringValue;
-            var f1407 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1407).DecimalValue);
-
-            return f1407 / Convert.ToInt32(f5) * 12;
+            return GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1407).DecimalValue);
         }
 
         private static decimal? Calculate1407(IDataService service, Guid sessionId)

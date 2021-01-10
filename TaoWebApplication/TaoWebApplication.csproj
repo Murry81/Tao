@@ -182,6 +182,8 @@
     <Compile Include="Models\AlultokesitesModel.cs" />
     <Compile Include="Models\AthozottVesztesegModel.cs" />
     <Compile Include="Models\EnergiaEllatokModel.cs" />
+    <Compile Include="Models\ErtekcsokkenesModel.cs" />
+    <Compile Include="Models\EszkozokModel.cs" />
     <Compile Include="Models\IFieldList.cs" />
     <Compile Include="Models\InnovaciosJarulekModel.cs" />
     <Compile Include="Models\IpaKapcsoltModel.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="Models\IpaMegosztasModel.cs" />
     <Compile Include="Models\IpaNemKapcsoltModel.cs" />
     <Compile Include="Models\ITableDescriptor.cs" />
+    <Compile Include="Models\MerlegModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NyeresegminimumLevezeteseModel.cs" />
     <Compile Include="Models\SelectorModel.cs" />
@@ -263,6 +266,9 @@
     <Content Include="Views\Tao\TarsasagiAdo.cshtml" />
     <Content Include="Views\Tao\AdozottEredmeny.cshtml" />
     <Content Include="Views\Tao\EnergiaEllatok.cshtml" />
+    <Content Include="Views\Tao\Merleg.cshtml" />
+    <Content Include="Views\Tao\Eszkozok.cshtml" />
+    <Content Include="Views\Tao\ErtekCsokkenes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

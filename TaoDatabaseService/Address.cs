@@ -17,11 +17,16 @@ namespace TaoDatabaseService
         public int Id { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
-        public string Line1 { get; set; }
-        public string Line2 { get; set; }
         public string PostCode { get; set; }
         public string County { get; set; }
         public int CustomerId { get; set; }
+        public string StreetName { get; set; }
+        public string StreetType { get; set; }
+        public string Number { get; set; }
+        public string Building { get; set; }
+        public string Stairway { get; set; }
+        public string Floor { get; set; }
+        public string Door { get; set; }
     
         public virtual Customer Customer { get; set; }
     }

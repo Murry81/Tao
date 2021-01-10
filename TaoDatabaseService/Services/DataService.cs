@@ -459,5 +459,12 @@ namespace TaoDatabaseService.Services
         {
             return entities.TaxesByCities.FirstOrDefault(c => c.City.ToLower() == cityName.ToLower())?.Onkormanyzat;
         }
+
+        public void DeleteFieldValue(List<int> fieldIds, Guid sessionId)
+        {
+            var fieldsToRemove = entities.FieldValue.Where(f => fieldIds.Contains(f.FieldDescriptorId) && f.SessionId == sessionId).ToList();
+            entities.FieldValue.RemoveRange(fieldsToRemove);
+            entities.SaveChanges();
+        }
     }
 }

@@ -22,6 +22,10 @@ namespace TaoContracts.Contracts
         public string Phone { get; set; }
         public string Phone2 { get; set; }
 
+        public string AdministratorName { get; set; }
+        public string AdministratorPhone { get; set; }
+
+
         public override string ToString()
         {
             return $"{Nev} ({Adoszam})";

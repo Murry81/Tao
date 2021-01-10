@@ -69,11 +69,7 @@ namespace TaoWebApplication.Calculators
 
         private static void CalculateCegadatok(IDataService service, Guid sessionId)
         {
-            var fields = service.GetFieldValuesByFieldIdList(new List<int> { 71, 72, 73, 74, 75, 80 }, sessionId);
-
-            var f80 = fields.FirstOrDefault(f => f.FieldDescriptorId == 80);
-            if (f80 != null)
-                return;
+            service.DeleteFieldValue(new List<int> { 71, 72, 73, 74, 75, 80, 3000, 3001, 3002, 3003, 3004, 3005, 3006, 3007 }, sessionId);
 
             var customer = service.GetCustomerBySessionId(sessionId);
             var result = new List<FieldValueDto>
@@ -117,7 +113,63 @@ namespace TaoWebApplication.Calculators
                     // utca + hszm
                     SessionId = sessionId,
                     FieldDescriptorId = 75,
-                    StringValue = $"{customer.Address.FirstOrDefault()?.Line1} {customer.Address.FirstOrDefault()?.Line2}"
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Street}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3000,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.StreetType}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3001,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Number}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3002,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Building}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3003,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Stairway}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3004,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Floor}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3005,
+                    StringValue = $"{customer.Address.FirstOrDefault()?.Door}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3006,
+                    StringValue = $"{customer.AdministratorName}"
+                },
+                new FieldValueDto
+                {
+                    // utca + hszm
+                    SessionId = sessionId,
+                    FieldDescriptorId = 3007,
+                    StringValue = $"{customer.AdministratorPhone}"
                 }
             };
 

@@ -18,7 +18,7 @@
 {
 
     <div class="container pull-left" style="width: 100%">
-        Válasszon ki egy rögzítésre szánt céget:<br />
+        Válassz ki egy rögzítésre szánt céget:<br />
         @Html.DropDownListFor(m => m.SelectedCustomerId, new SelectList(Model.Customers, "Id", "Nev"), new { onchange = "this.form.submit();", style = $"width:100%; background-color:yellow;" })
     </div>
 }
@@ -26,7 +26,7 @@
 
 <div style="color: red;">
     <br /><br />
-    <br />  Kérem ellenőrizze, hogy az alábbi cégadatok helyesek-e.<br /><br />
+    <br />Ellenőrizd az alábbi cégadatok helyességét.<br /><br />
 </div>
 
 <div class="container-fluid">
@@ -48,8 +48,8 @@
                     <td>
                         @foreach (var address in Model.SelectedCustomer.Address)
                         {
-                            @address.PostCode @:&nbsp; @address.City,  <br />
-                            @address.Line1 @:&nbsp; @address.Country <br /><br />
+                            @address.PostCode  @address.City <br/>
+                            @address.Street @address.StreetType @address.Building @address.Stairway @address.Floor @address.Door <br/><br />
                         }
 
                     </td>
@@ -106,8 +106,7 @@
                         <tr>
                             <td>
                                 Új dokumentum kezdés:
-                                @Html.DropDownListFor(m => m.SelectedDocumentType, new SelectList(Model.DocumentTypes, "Id", "DocumentName"), new { style = $"width:100%; background-color:yellow;" })
-                                <input type="submit" value="Új kezdése" name="StartNew" class="btn btn-default" />
+                                <input type="submit" value="Új bevallás" name="StartNew" class="btn btn-default" />
                             </td>
                         </tr>
                     </tbody>
@@ -118,11 +117,10 @@
             <table class="TaoDataTable table" style="margin-bottom:0px">
                 <thead>
                     <tr>
-                        <th class="col-md-3">Dokumentum típusa</th>
-                        <th class="col-md-3">Státusz</th>
-                        <th class="col-md-2">Kezdés</th>
-                        <th class="col-md-2">Utolsó módosítás</th>
-                        <th class="col-md-2"></th>
+                        <th class="col-md-1">Státusz</th>
+                        <th class="col-md-1">Kezdés</th>
+                        <th class="col-md-1">Utolsó módosítás</th>
+                        <th class="col-md-5"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,7 +129,6 @@
                         foreach (var session in Model.CustomerSessions)
                         {
                             <tr>
-                                <td>@session.DocumentType.DocumentName</td>
                                 <td>@session.DocumentState</td>
                                 <td>@session.StartDateTime.ToString("yyyy-MM-dd")</td>
                                 <td>@session.LastModifyDate.ToString("yyyy-MM-dd")</td>

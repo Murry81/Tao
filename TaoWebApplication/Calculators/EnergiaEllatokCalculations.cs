@@ -153,11 +153,7 @@ namespace TaoWebApplication.Calculators
         {
             // 2019.01-YTD / 0.Figyelembe vett hónapok száma * 12
             // f1522 / f5 * 12
-
-            var f5 = Convert.ToDecimal(service.GetFieldById(5, sessionId).StringValue);
-            var f1522 = GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1522).DecimalValue);
-
-            return f1522 / f5 * 12;
+           return GenericCalculations.GetValue(fields.FirstOrDefault(f => f.Id == 1522).DecimalValue);
         }
 
         private static decimal? Calculate1522(IDataService service, Guid sessionId)

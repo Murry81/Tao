@@ -1,0 +1,79 @@
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
+@model ErtekcsokkenesModel
+
+@{
+    ViewBag.Title = "Ertekcsokkenes";
+}
+
+
+@using (Html.BeginForm("Ertekcsokkenes", "Tao", FormMethod.Post))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4" style="text-align:left; font-weight:bold; vertical-align: top;">Eszközök értékcsökkenése, értékcsökkenési leírása</th>
+                            <th class="col-md-2" style="text-align:center; font-weight:bold; vertical-align: top;">Költségként elszámolt (módosított) terv szerinti értékcsökkenés</th>
+                            <th class="col-md-2" style="text-align:center; font-weight:bold; vertical-align: top;">Egyéb ráfordításként elszámolt terven felüli értékcsökkenés</th>
+                            <th class="col-md-2" style="text-align:center; font-weight:bold; vertical-align: top;">Tao.tv.1 és 2.sz.melléklete szerinti értékcsökkenési leírás</th>
+                        </tr>
+                    </thead>
+                    @{
+                        var firstColumn = Model.Fields.Where(f => f.SectionGroup == 1).ToList();
+                        var secondColumn = Model.Fields.Where(f => f.SectionGroup == 2).ToList();
+                        var thirdColumn = Model.Fields.Where(f => f.SectionGroup == 3).ToList();
+
+                        for (int i = 0; i < thirdColumn.Count; i++)
+                        {
+                                        <tr>
+                                            <td>
+                                                @thirdColumn[i].Caption
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (i != 6)
+                                                    {
+                                                        int c = Model.Fields.IndexOf(firstColumn[i]);
+                                                        @Html.HiddenFor(m => Model.Fields[c].Id);
+                                                        @Html.CreateActualControl((IFieldList)Model, c);
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (i != 5)
+                                                    {
+
+                                                        int d = Model.Fields.IndexOf(secondColumn[i==6 ? 5: i]);
+                                                        @Html.HiddenFor(m => Model.Fields[d].Id);
+                                                        @Html.CreateActualControl((IFieldList)Model, d);
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+
+                                                    int e = Model.Fields.IndexOf(thirdColumn[i]);
+                                                    @Html.HiddenFor(m => Model.Fields[e].Id);
+                                                    @Html.CreateActualControl((IFieldList)Model, e);
+                                                 }
+                                            </td>
+                                        </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="SaveAll" name="buttonAction" class="btn btn-default">Mindent újraszámol</button>
+            </div>
+        </div>
+    </div>
+}

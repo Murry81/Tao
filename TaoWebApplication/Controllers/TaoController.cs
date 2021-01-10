@@ -35,7 +35,7 @@ namespace TaoWebApplication.Controllers
                 var result = _service.CreateSession(new SessionDto
                 {
                     CustomerId = int.Parse(Request.Form["SelectedCustomer.Id"]),
-                    DocumentType = new DocumentDto { Id = int.Parse(Request.Form["SelectedDocumentType"]) }
+                    DocumentType = new DocumentDto { Id = 1 }
                 });
 
                 sessionId = result.Id;
@@ -84,7 +84,7 @@ namespace TaoWebApplication.Controllers
             SaveValues(fc.Fields, TartalomCalculation.CalculateValues, 1);
             
             var validationResult = TartalomValidator.Validate(fc.Fields);
-            if(validationResult.Keys.Count > 0)
+            if(validationResult.Keys.Count > 0 && buttonAction != "Previous" && buttonAction != "Next")
             {
                 foreach (var error in validationResult.Keys)
                 {
@@ -777,6 +777,7 @@ namespace TaoWebApplication.Controllers
                 {
                     return RedirectToAction("EnergiaEllatok", "Tao");
                 }
+                return RedirectToAction("Merleg", "Tao");
             }
             return RedirectToAction("AdozottEredmeny", "Tao");
         }
@@ -805,9 +806,101 @@ namespace TaoWebApplication.Controllers
             }
             if (buttonAction == "Next")
             {
-                return RedirectToAction("EnergiaEllatok", "Tao");
+                return RedirectToAction("Merleg", "Tao");
             }
             return RedirectToAction("EnergiaEllatok", "Tao");
+        }
+
+        public ActionResult Merleg()
+        {
+            var model = new MerlegModel();
+            var currentpage = _service.GetPage("Merleg");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as MerlegModel;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Merleg(string buttonAction, MerlegModel fc)
+        {
+            SaveValues(fc.Fields, null, pageId: 24);
+            if (buttonAction == "SaveAll")
+            {
+                RecalculateAll(24);
+            }
+            if (buttonAction == "Previous")
+            {
+                var sessionId = Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString());
+                if (_service.GetFieldById(61, sessionId).BoolFieldValue)
+                {
+                    return RedirectToAction("EnergiaEllatok", "Tao");
+                }
+                return RedirectToAction("AdozottEredmeny", "Tao");
+            }
+            if (buttonAction == "Next")
+            {
+                return RedirectToAction("Eszkozok", "Tao");
+            }
+            return RedirectToAction("Merleg", "Tao");
+        }
+
+        public ActionResult Eszkozok()
+        {
+            var model = new EszkozokModel();
+            var currentpage = _service.GetPage("Eszkozok");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as EszkozokModel;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Eszkozok(string buttonAction, EszkozokModel fc)
+        {
+            SaveValues(fc.Fields, null, pageId: 25);
+            if (buttonAction == "SaveAll")
+            {
+                RecalculateAll(25);
+            }
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Merleg", "Tao");
+            }
+            if (buttonAction == "Next")
+            {
+                return RedirectToAction("Ertekcsokkenes", "Tao");
+            }
+            return RedirectToAction("Eszkozok", "Tao");
+        }
+
+        public ActionResult Ertekcsokkenes()
+        {
+            var model = new ErtekcsokkenesModel();
+            var currentpage = _service.GetPage("Ertekcsokkenes");
+            var customerId = int.Parse(System.Web.HttpContext.Current.Session["CustomerId"].ToString());
+            model = ControllerHelper.FillModel(model, _service, currentpage, Guid.Parse(System.Web.HttpContext.Current.Session["SessionId"].ToString()), customerId) as ErtekcsokkenesModel;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Ertekcsokkenes(string buttonAction, ErtekcsokkenesModel fc)
+        {
+            SaveValues(fc.Fields, null, pageId: 26);
+            if (buttonAction == "SaveAll")
+            {
+                RecalculateAll(26);
+            }
+            if (buttonAction == "Previous")
+            {
+                return RedirectToAction("Eszkozok", "Tao");
+            }
+            if (buttonAction == "Next")
+            {
+                return RedirectToAction("Ertekcsokkenes", "Tao");
+            }
+            return RedirectToAction("Ertekcsokkenes", "Tao");
         }
 
         private void SaveValues(List<FieldDescriptorDto> fieldValues, Action<List<FieldDescriptorDto>, IDataService, Guid> calulator, int pageId)

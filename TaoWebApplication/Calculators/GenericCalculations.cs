@@ -56,5 +56,13 @@ namespace TaoWebApplication.Calculators
 
             return result;
         }
+
+        internal static int CalculateDayCount(DateTimeOffset? first, DateTimeOffset? second)
+        {
+            DateTimeOffset f = first == null ? DateTimeOffset.UtcNow : new DateTimeOffset(first.Value.Year, first.Value.Month, first.Value.Day, 0, 0, 0, TimeSpan.Zero);
+            DateTimeOffset s = second == null ? DateTimeOffset.UtcNow : new DateTimeOffset(second.Value.Year, second.Value.Month, second.Value.Day, 0, 0, 0, TimeSpan.Zero);
+
+            return (int)(f - s).TotalDays;
+        }
     }
 }

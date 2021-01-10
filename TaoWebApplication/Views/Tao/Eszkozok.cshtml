@@ -1,0 +1,63 @@
+﻿@using TaoWebApplication.Extensions
+@using TaoWebApplication.Models
+@model EszkozokModel
+
+@{
+    ViewBag.Title = "Eszkozok";
+}
+
+
+@using (Html.BeginForm("Eszkozok", "Tao", FormMethod.Post))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 DivStyle">
+                <table class="TaoDataTable table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-4" style="text-align:left; font-weight:bold">Eszközök (értékhelyesbítés nélkül)</th>
+                            <th class="col-md-2"  style="text-align:center; font-weight:bold">Bekerülési érték a mérlegforduló napon</th>
+                            <th class="col-md-2" style="text-align:center; font-weight:bold">Nettó érték a mérlegforduló napon</th>
+                        </tr>
+                    </thead>
+                    @{ 
+                        var firstColumn = Model.Fields.Where(f => f.SectionGroup == 1).ToList();
+                        var secondColumn = Model.Fields.Where(f => f.SectionGroup == 2).ToList();
+
+                        for (int i = 0; i < firstColumn.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @firstColumn[i].Caption
+                                </td>
+                                <td>
+                                    @{ 
+                                        int c = Model.Fields.IndexOf(firstColumn[i]);
+                                        @Html.HiddenFor(m => Model.Fields[c].Id);
+                                        @Html.CreateActualControl((IFieldList)Model, c);
+                                     }
+                                </td>
+                                <td>
+                                    @{  
+                                        int d = Model.Fields.IndexOf(secondColumn[i]);
+                                        @Html.HiddenFor(m => Model.Fields[d].Id);
+                                        @Html.CreateActualControl((IFieldList)Model, d);
+                                     }
+                                </td>
+                            </tr>
+                        }
+                     }
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 DivStyle" style="display:flex; justify-content: center;">
+                <button type="submit" value="Previous" name="buttonAction" class="btn btn-default">Mentés és előző </button>
+                <button type="submit" value="Save" name="buttonAction" class="btn btn-default" style="margin-left:10px;margin-right:10px;">Mentés</button>
+                <button type="submit" value="Next" name="buttonAction" class="btn btn-default">Mentés és következő</button>
+                <button type="submit" value="SaveAll" name="buttonAction" class="btn btn-default">Mindent újraszámol</button>
+            </div>
+        </div>
+    </div>
+}

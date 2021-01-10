@@ -107,14 +107,14 @@ namespace TaoWebApplication.Calculators
                     item.CumulatedValue = currentValue.Value;
                     if (previousItem != null)
                     {
-                        dayCount = CalculateDayCount(item.Date, previousItem.Date);
+                        dayCount = GenericCalculations.CalculateDayCount(item.Date, previousItem.Date);
                         tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = dayCount;
                         previousItem.DayCount = dayCount;
                     }
                     previousItem = item;
                 }
 
-                dayCount = CalculateDayCount(endOfBusinessYear, previousItem.Date) + 1;
+                dayCount = GenericCalculations.CalculateDayCount(endOfBusinessYear, previousItem.Date) + 1;
                 tableOneItems[previousItem].FirstOrDefault(f => f.Id == 910).DecimalValue = dayCount;
                 previousItem.DayCount = dayCount;
             }
@@ -133,14 +133,14 @@ namespace TaoWebApplication.Calculators
                     item.CumulatedValue = currentValue.Value;
                     if (previousItem != null)
                     {
-                        dayCount = CalculateDayCount(item.Date, previousItem.Date);
+                        dayCount = GenericCalculations.CalculateDayCount(item.Date, previousItem.Date);
                         tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = dayCount;
                         previousItem.DayCount = dayCount;
                     }
                     previousItem = item;
                 }
 
-                dayCount = CalculateDayCount(endOfBusinessYear, previousItem.Date) + 1;
+                dayCount = GenericCalculations.CalculateDayCount(endOfBusinessYear, previousItem.Date) + 1;
                 tableTwoItems[previousItem].FirstOrDefault(f => f.Id == 912).DecimalValue = dayCount;
                 previousItem.DayCount = dayCount;
             }
@@ -171,14 +171,6 @@ namespace TaoWebApplication.Calculators
                         }
                 }
             }
-        }
-
-        private static int CalculateDayCount(DateTimeOffset? first, DateTimeOffset? second)
-        {
-            DateTimeOffset f = first == null ? DateTimeOffset.UtcNow : new DateTimeOffset(first.Value.Year, first.Value.Month, first.Value.Day, 0, 0, 0, TimeSpan.Zero);
-            DateTimeOffset s = second == null ? DateTimeOffset.UtcNow :  new DateTimeOffset(second.Value.Year, second.Value.Month, second.Value.Day, 0, 0, 0, TimeSpan.Zero);
-
-            return (int)(f - s).TotalDays;
         }
 
         public static void ReCalculateValues(IDataService service, Guid sessionId)

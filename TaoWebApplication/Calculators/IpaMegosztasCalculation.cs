@@ -292,14 +292,7 @@ namespace TaoWebApplication.Calculators
 
             var ado = f1822 - f1823 - f1824;
 
-            var f29 = service.GetFieldsByFieldIdList(new List<int> { 29 }, sessionId).FirstOrDefault().StringValue;
-            if(f29 == "feltöltés")
-            {
-                return Math.Max(0, ado);
-            }
-
             return ado;
-
         }
 
         private static decimal? Calculate1822(FieldDescriptorDto field, List<FieldDescriptorDto> fields)
